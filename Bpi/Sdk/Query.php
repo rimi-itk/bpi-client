@@ -18,6 +18,27 @@ class Query
     public function __construct(Crawler $crawler)
     {
         $this->crawler = $crawler;
+        $this->testConsistency();
+    }
+
+    /**
+     * Try crawler for consistency of data
+     *
+     * @throws Exception\InvalidHypermedia
+     *
+     * @returns bool
+     */
+    protected function testConsistency()
+    {
+        try {
+            $this->crawler->attr('href');
+            $this->crawler->filter('param');
+        } catch (\InvalidArgumentException $e) {
+            throw new Exception\UndefinedHypermedia();
+            return false;
+        }
+
+        return true;
     }
 
     /**

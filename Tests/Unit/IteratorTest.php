@@ -44,4 +44,26 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
             $i++;
         }
     }
+
+    public function testReduceItemsByAttr()
+    {
+        $doc = $this->createMockDocument('Endpoint');
+        $this->assertEquals(1, $doc->reduceItemsByAttr('name', 'node')->count(), 'One item with name=profile expected');
+
+        try
+        {
+            $doc->reduceItemsByAttr('name', mt_rand());
+            $this->fail('Exception expected trying reduce items by non existing attribute value');
+        } catch (\InvalidArgumentException $e) {
+            $this->assertTrue(true);
+        }
+
+        try
+        {
+            $doc->reduceItemsByAttr(mt_rand(), 'node');
+            $this->fail('Exception expected trying reduce items by non existing attribute');
+        } catch (\InvalidArgumentException $e) {
+            $this->assertTrue(true);
+        }
+    }
 }

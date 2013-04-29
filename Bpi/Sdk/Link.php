@@ -10,16 +10,39 @@ class Link
      * @var \Symfony\Component\DomCrawler\Crawler
      */
     protected $crawler;
-    
+
     /**
-     * 
+     * @throws Exception\UndefinedHypermedia
+     *
      * @param \Symfony\Component\DomCrawler\Crawler $crawler
      */
     public function __construct(Crawler $crawler)
     {
         $this->crawler = $crawler;
+        $this->testConsistency();
     }
     
+    /**
+     * Try crawler for consistency of data
+     * 
+     * @throws Exception\InvalidHypermedia
+     *
+     * @returns bool
+     */
+    protected function testConsistency()
+    {
+        try {
+            $this->crawler->attr('href');
+            $this->crawler->attr('rel');
+        } catch (\InvalidArgumentException $e) {
+          throw  $e;
+          throw new Exception\UndefinedHypermedia();
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * 
      * @param \Bpi\Sdk\Document $document

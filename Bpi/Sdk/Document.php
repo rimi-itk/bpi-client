@@ -10,13 +10,13 @@ class Document implements \Iterator, \Countable
     
     /**
      *
-     * @var Symfony\Component\DomCrawler\Crawler
+     * @var \Symfony\Component\DomCrawler\Crawler
      */
     protected $crawler;
     
     /**
      *
-     * @var Symfony\Component\DomCrawler\Crawler
+     * @var \Symfony\Component\DomCrawler\Crawler
      */
     protected $iterator;
     
@@ -35,11 +35,15 @@ class Document implements \Iterator, \Countable
      * @param string $method
      * @param string $uri
      * @param array $params
+     *
+     * @return \Bpi\Sdk\Document same instance
      */
     public function request($method, $uri, array $params = array())
     {
         $this->crawler = $this->http_client->request($method, $uri, $params, array(), array( 'HTTP_Content_Type' => 'application/vnd.bpi.api+xml'));
         $this->rewind();
+
+        return $this;
     }
     
     /**
@@ -54,17 +58,24 @@ class Document implements \Iterator, \Countable
     /**
      * Access hypermedia link.
      *
+     * @throws Exception\UndefinedHypermedia
      * @param string $rel
      * @return \Bpi\Sdk\Link
      */
     public function link($rel)
     {
-        $crawler = $this->crawler
-            ->filter("hypermedia > link[rel='{$rel}']")
-            ->first()
-        ;
-            
-        return new Link($crawler);
+        try {
+            $crawler = $this->crawler
+                ->filter("hypermedia > link[rel='{$rel}']")
+                ->first()
+            ;
+
+            return new Link($crawler);
+        }
+        catch (\InvalidArgumentException $e)
+        {
+            throw new Exception\UndefinedHypermedia();
+        }
     }
     
     /**
@@ -80,17 +91,25 @@ class Document implements \Iterator, \Countable
     /**
      * Access hypermedia query.
      *
+     * @throws Exception\UndefinedHypermedia
      * @param string $rel
      * @return \Bpi\Sdk\Query
      */
     public function query($rel)
     {
-        $query = $this->crawler
-              ->filter("hypermedia > query[rel='{$rel}']")
-              ->first()
-        ;
-              
-        return new Query($query);
+        try
+        {
+            $query = $this->crawler
+                  ->filter("hypermedia > query[rel='{$rel}']")
+                  ->first()
+            ;
+
+            return new Query($query);
+        }
+        catch (\InvalidArgumentException $e)
+        {
+            throw new Exception\UndefinedHypermedia();
+        }
     }
 
     /**
@@ -107,17 +126,25 @@ class Document implements \Iterator, \Countable
     /**
      * Access hypermedia template.
      *
+     * @throws Exception\UndefinedHypermedia
      * @param string $rel
      * @return \Bpi\Sdk\Template
      */
     public function template($rel)
     {
-        $query = $this->crawler
-              ->filter("hypermedia > template[rel='{$rel}']")
-              ->first()
-        ;
+        try
+        {
+            $query = $this->crawler
+                  ->filter("hypermedia > template[rel='{$rel}']")
+                  ->first()
+            ;
 
-        return new Template($query);
+            return new Template($query);
+        }
+        catch (\InvalidArgumentException $e)
+        {
+            throw new Exception\UndefinedHypermedia();
+        }
     }
 
     /**
@@ -153,7 +180,27 @@ class Document implements \Iterator, \Countable
             return array('name' => $e->tagName, 'value' => $e->nodeValue);
         });
     }
-    
+
+    /**
+     * Filter items (<item> tags) by attribute values
+     *
+     * @param string $name
+     * @param mixed $value
+     * @throws \InvalidArgumentException
+     *
+     * @return \Bpi\Sdk\Document same instance
+     */
+    public function reduceItemsByAttr($attr, $value) {
+        $this->iterator = $this->crawler
+            ->filter("item[$attr='{$value}']")
+        ;
+
+        if (!$this->iterator->count())
+            throw new \InvalidArgumentException();
+
+        return $this;
+    }
+
     /**
      * Iterator interface implementation
      * 

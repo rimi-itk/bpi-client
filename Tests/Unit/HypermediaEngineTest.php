@@ -28,7 +28,38 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://example.com/collection', $properties['href']);
         $this->assertEquals('Collection', $properties['title']);
     }
-    
+
+    public function testUndefinedHypermediaAccess()
+    {
+        $client = $this->createMockClient();
+        $doc = new Document($client);
+        $doc->request('GET', 'http://example.com');
+
+        try {
+            $doc->link(mt_rand());
+            $this->fail('Undefined link exception expected');
+        }
+        catch(\Bpi\Sdk\Exception\UndefinedHypermedia $e) {
+            $this->assertTrue(true);
+        }
+
+        try {
+            $doc->query(mt_rand());
+            $this->fail('Undefined query exception expected');
+        }
+        catch(\Bpi\Sdk\Exception\UndefinedHypermedia $e) {
+            $this->assertTrue(true);
+        }
+
+        try {
+            $doc->template(mt_rand());
+            $this->fail('Undefined template exception expected');
+        }
+        catch(\Bpi\Sdk\Exception\UndefinedHypermedia $e) {
+            $this->assertTrue(true);
+        }
+    }
+
     public function testFollowLink()
     {
         $client = $this->createMockClient();
