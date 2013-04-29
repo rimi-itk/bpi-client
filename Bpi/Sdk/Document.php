@@ -182,6 +182,27 @@ class Document implements \Iterator, \Countable
     }
 
     /**
+     * Finds first matched item by attribute value
+     *
+     * @param string $name
+     * @param mixed $value
+     * @throws \InvalidArgumentException
+     *
+     * @return \Bpi\Sdk\Document same instance
+     */
+    public function firstItem($attr, $value) {
+        $this->iterator = $this->crawler
+            ->filter("item[$attr='{$value}']")
+            ->first()
+        ;
+
+        if (!$this->iterator->count())
+            throw new \InvalidArgumentException();
+
+        return $this;
+    }
+
+    /**
      * Filter items (<item> tags) by attribute values
      *
      * @param string $name
