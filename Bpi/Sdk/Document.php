@@ -6,8 +6,18 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class Document implements \Iterator, \Countable
 {
+    /**
+     *
+     * @var \Goutte\Client
+     */
     protected $http_client;
     
+    /**
+     *
+     * @var \Bpi\Sdk\Authorization
+     */
+    protected $authorization;
+
     /**
      *
      * @var \Symfony\Component\DomCrawler\Crawler
@@ -23,10 +33,12 @@ class Document implements \Iterator, \Countable
     /**
      *
      * @param \Goutte\Client $client
+     * @param \Bpi\Sdk\Authorization $authorization
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client, Authorization $authorization)
     {
         $this->http_client = $client;
+        $this->authorization = $authorization;
     }
     
     /**
@@ -40,7 +52,12 @@ class Document implements \Iterator, \Countable
      */
     public function request($method, $uri, array $params = array())
     {
-        $this->crawler = $this->http_client->request($method, $uri, $params, array(), array( 'HTTP_Content_Type' => 'application/vnd.bpi.api+xml'));
+        $headers = array(
+            'HTTP_Authorization' => $this->authorization->toHTTPHeader(),
+            'HTTP_Content_Type' => 'application/vnd.bpi.api+xml',
+        );
+
+        $this->crawler = $this->http_client->request($method, $uri, $params, array(), $headers);
         $this->rewind();
 
         return $this;
