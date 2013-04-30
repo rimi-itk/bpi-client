@@ -30,6 +30,6 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
 
         $doc = new Document($client, $authorization);
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
     }
 }

@@ -42,6 +42,16 @@ class Document implements \Iterator, \Countable
     }
     
     /**
+     * @param string $endpoint API URL
+     * @return \Bpi\Sdk\Document same instance
+     */
+    public function loadEndpoint($endpoint)
+    {
+        $this->request('GET', $endpoint);
+        return $this;
+    }
+
+    /**
      * Gateway to make direct requests to API
      *
      * @param string $method

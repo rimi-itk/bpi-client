@@ -27,7 +27,7 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->createMockClient();
         $doc = $this->createDocument($client);
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
 
         $properties = $doc->link('collection')->toArray();
         $this->assertEquals('collection', $properties['rel']);
@@ -39,7 +39,7 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->createMockClient();
         $doc = $this->createDocument($client);
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
 
         try {
             $doc->link(mt_rand());
@@ -76,7 +76,7 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
               ->will($this->returnValue(new Crawler('<test><foo></test>')));
 
         $doc = $this->createDocument($client);
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
         $doc->followLink($doc->link('collection'));
         $this->assertEquals(1, $doc->getCrawler()->filter('foo')->count(), 'Expected foo tag in response');
     }
@@ -85,7 +85,7 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->createMockClient();
         $doc = $this->createDocument($client);
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
         $dump = $doc->query('search')->toArray();
         $this->assertEquals('search', $dump['rel']);
         $this->assertEquals('http://example.com/search', $dump['href']);
@@ -102,7 +102,7 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
 
         $doc = $this->createDocument($client);
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
         $doc->sendQuery($doc->query('search'), array('id' => 'foo'));
     }
     
@@ -113,7 +113,7 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->createMockClient();
         $doc = $this->createDocument($client);
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
         $doc->sendQuery($doc->query('search'), array('id' => 'foo', 'zoo' => 'foo'));
     }
 
@@ -121,7 +121,7 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->createMockClient();
         $doc = $this->createDocument($client);
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
         $self = $this;
         $doc->template('push')->eachField(function($field) use($self) {
             $self->assertNotEmpty((string) $field);
@@ -138,7 +138,7 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
 
         $doc = $this->createDocument($client);
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
         $doc->template('push')->eachField(function($field) {
               $field->setValue((string) $field);
         })->post($doc);

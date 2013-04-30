@@ -15,7 +15,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/' . $fixture . '.bpi'))));
         
         $doc = new Document($client, new Authorization(mt_rand(), mt_rand(), mt_rand()));
-        $doc->request('GET', 'http://example.com');
+        $doc->loadEndpoint('http://example.com');
         return $doc;
     }
 
