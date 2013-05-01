@@ -24,4 +24,11 @@
     <property name="title">COLLECTION_TITLE</property>
     <property name="teaser">COLLECTION_TEASER</property>
   </item>
+  <item type="entity">
+    <hypermedia>
+      <link rel="self" href="" />
+    </hypermedia>
+    <property name="title">COLLECTION_TITLE_BRAVO</property>
+    <property name="teaser">COLLECTION_TEASER_BRAVO</property>
+  </item>
 </bpi>

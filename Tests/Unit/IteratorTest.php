@@ -31,14 +31,14 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
     {
         $doc = $this->createMockDocument('Collection');
         
-        $this->assertEquals(2, $doc->count());
+        $this->assertEquals(3, $doc->count());
         
         $i = 0;
         foreach ($doc as $item)
         {
             if ($i == 0)
                 $this->assertTrue($item->isTypeOf('collection'));
-            elseif ($i == 1)
+            elseif ($i == 1 or $i == 2)
                 $this->assertTrue($item->isTypeOf('entity'));
             else
                 $this->fail('Unexpected');

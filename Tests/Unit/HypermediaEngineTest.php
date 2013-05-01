@@ -73,12 +73,12 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
         $client->expects($this->at(1))
               ->method('request')
               ->with($this->equalTo('GET'), $this->equalTo('http://example.com/collection'))
-              ->will($this->returnValue(new Crawler('<test><foo></test>')));
+              ->will($this->returnValue(new Crawler('<?xml version="1.0" encoding="UTF-8"?><bpi version="0.1"><item type="entity" name="foo"/></bpi>')));
 
         $doc = $this->createDocument($client);
         $doc->loadEndpoint('http://example.com');
         $doc->followLink($doc->link('collection'));
-        $this->assertEquals(1, $doc->getCrawler()->filter('foo')->count(), 'Expected foo tag in response');
+        $this->assertEquals(1, $doc->firstItem('name', 'foo')->count(), 'Expected foo tag in response');
     }
     
     public function testQuery()
@@ -98,7 +98,7 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
         $client = $this->createMockClient();
         $client->expects($this->at(1))
               ->method('request')
-              ->with($this->equalTo('GET'), $this->equalTo('http://example.com/search'), $this->equalTo(array('id' => 'foo')))
+              ->with($this->equalTo('GET'), $this->equalTo('http://example.com/search?id=foo'))
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
 
         $doc = $this->createDocument($client);

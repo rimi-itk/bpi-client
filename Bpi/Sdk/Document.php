@@ -26,12 +26,6 @@ class Document implements \Iterator, \Countable
     
     /**
      *
-     * @var \Symfony\Component\DomCrawler\Crawler
-     */
-    protected $iterator;
-    
-    /**
-     *
      * @param \Goutte\Client $client
      * @param \Bpi\Sdk\Authorization $authorization
      */
@@ -68,7 +62,8 @@ class Document implements \Iterator, \Countable
         );
 
         $this->crawler = $this->http_client->request($method, $uri, $params, array(), $headers);
-        $this->rewind();
+        $this->crawler = $this->crawler->filter('bpi > item');
+        $this->crawler->rewind();
 
         return $this;
     }
@@ -81,15 +76,6 @@ class Document implements \Iterator, \Countable
     public function dumpRawResponse()
     {
         return $this->http_client->getResponse();
-    }
-
-    /**
-     *
-     * @return \Symfony\Component\DomCrawler\Crawler crawler copy
-     */
-    public function getCrawler()
-    {
-        return clone $this->crawler;
     }
 
     /**
@@ -202,7 +188,7 @@ class Document implements \Iterator, \Countable
      */
     public function isTypeOf($type)
     {
-        return $this->iterator->current()->getAttribute('type') == $type;
+        return $this->crawler->current()->getAttribute('type') == $type;
     }
 
     /**
@@ -210,7 +196,7 @@ class Document implements \Iterator, \Countable
      */
     public function walkProperties($callback)
     {
-        $crawler = new Crawler($this->iterator->current());
+        $crawler = new Crawler($this->crawler->current());
         return $crawler->filter('item property')->each(function($e) use($callback) {
             $sxml = simplexml_import_dom($e);
             $callback(current($sxml->attributes()) + array('@value' => (string) $sxml));
@@ -227,15 +213,15 @@ class Document implements \Iterator, \Countable
      * @return \Bpi\Sdk\Document same instance
      */
     public function firstItem($attr, $value) {
-        $this->iterator = $this->crawler
+        $this->crawler = $this->crawler
             ->filter("item[$attr='{$value}']")
             ->first()
         ;
 
-        if (!$this->iterator->count())
-            throw new \InvalidArgumentException(sprintf('Item with attribute %s and value %s was not found', $attr, $value));
+        if (!$this->crawler->count())
+            throw new \InvalidArgumentException(sprintf('Item with attribute "%s" and value "%s" was not found', $attr, $value));
 
-        $this->iterator->rewind();
+        $this->crawler->rewind();
         return $this;
     }
 
@@ -249,26 +235,25 @@ class Document implements \Iterator, \Countable
      * @return \Bpi\Sdk\Document same instance
      */
     public function reduceItemsByAttr($attr, $value) {
-        $this->iterator = $this->crawler
+        $this->crawler = $this->crawler
             ->filter("item[$attr='{$value}']")
         ;
 
-        if (!$this->iterator->count())
+        if (!$this->crawler->count())
             throw new \InvalidArgumentException();
 
-        $this->iterator->rewind();
+        $this->crawler->rewind();
         return $this;
     }
 
     /**
      * Iterator interface implementation
-     * 
+     *
      * @group Iterator
      */
-    function rewind() 
+    function rewind()
     {
-        $this->iterator = $this->crawler->filter('bpi > item');
-        $this->iterator->rewind();
+        $this->crawler->rewind();
     }
 
     /**
@@ -289,7 +274,7 @@ class Document implements \Iterator, \Countable
      */
     function key() 
     {
-        return $this->iterator->key();
+        return $this->crawler->key();
     }
 
     /**
@@ -299,7 +284,7 @@ class Document implements \Iterator, \Countable
      */
     function next() 
     {
-        $this->iterator->next();
+        $this->crawler->next();
     }
 
     /**
@@ -310,7 +295,7 @@ class Document implements \Iterator, \Countable
      */
     function valid() 
     {
-        return $this->iterator->valid();
+        return $this->crawler->valid();
     }
     
     /**
@@ -320,6 +305,6 @@ class Document implements \Iterator, \Countable
      */
     public function count()
     {
-        return $this->iterator->count();
+        return $this->crawler->count();
     }
 }
