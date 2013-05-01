@@ -74,6 +74,16 @@ class Document implements \Iterator, \Countable
     }
     
     /**
+     * Dump latest raw response data
+     *
+     * @return string
+     */
+    public function dumpRawResponse()
+    {
+        return $this->http_client->getResponse();
+    }
+
+    /**
      *
      * @return \Symfony\Component\DomCrawler\Crawler crawler copy
      */
@@ -196,15 +206,14 @@ class Document implements \Iterator, \Countable
     }
 
     /**
-     * Returns all available properties of current item
-     * 
-     * @return array
+     * Iterates over all properties of current item
      */
-    public function getProperties()
+    public function walkProperties($callback)
     {
         $crawler = new Crawler($this->iterator->current());
-        return $crawler->children()->filter('*[type]')->each(function($e) {
-            return array('name' => $e->tagName, 'value' => $e->nodeValue);
+        return $crawler->filter('item property')->each(function($e) use($callback) {
+            $sxml = simplexml_import_dom($e);
+            $callback(current($sxml->attributes()) + array('@value' => (string) $sxml));
         });
     }
 
@@ -224,8 +233,9 @@ class Document implements \Iterator, \Countable
         ;
 
         if (!$this->iterator->count())
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException(sprintf('Item with attribute %s and value %s was not found', $attr, $value));
 
+        $this->iterator->rewind();
         return $this;
     }
 
@@ -246,6 +256,7 @@ class Document implements \Iterator, \Countable
         if (!$this->iterator->count())
             throw new \InvalidArgumentException();
 
+        $this->iterator->rewind();
         return $this;
     }
 

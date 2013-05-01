@@ -24,7 +24,7 @@
         </fields>
       </template>
     </hypermedia>
-    <title type="property">TITLE</title>
-    <teaser type="property">TEASER</teaser>
+    <property name="title">TITLE</property>
+    <property name="teaser">TEASER</property>
   </item>
 </bpi>
