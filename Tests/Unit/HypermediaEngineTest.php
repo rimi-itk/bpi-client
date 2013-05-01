@@ -3,6 +3,7 @@ namespace Bpi\Sdk\Tests\Unit;
 
 use Symfony\Component\DomCrawler\Crawler;
 use Bpi\Sdk\Document;
+use Bpi\Sdk\Authorization;
 
 class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,12 +18,17 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
         return $client;
     }
 
+    protected function createDocument($client)
+    {
+        return new Document($client, new Authorization(mt_rand(), mt_rand(), mt_rand()));
+    }
+
     public function testLink()
     {
         $client = $this->createMockClient();
-        
-        $doc = new Document($client);
-        $doc->request('GET', 'http://example.com');
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
+
         $properties = $doc->link('collection')->toArray();
         $this->assertEquals('collection', $properties['rel']);
         $this->assertEquals('http://example.com/collection', $properties['href']);
@@ -32,8 +38,8 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     public function testUndefinedHypermediaAccess()
     {
         $client = $this->createMockClient();
-        $doc = new Document($client);
-        $doc->request('GET', 'http://example.com');
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
 
         try {
             $doc->link(mt_rand());
@@ -68,9 +74,9 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
               ->method('request')
               ->with($this->equalTo('GET'), $this->equalTo('http://example.com/collection'))
               ->will($this->returnValue(new Crawler('<test><foo></test>')));
-        
-        $doc = new Document($client);
-        $doc->request('GET', 'http://example.com');
+
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
         $doc->followLink($doc->link('collection'));
         $this->assertEquals(1, $doc->getCrawler()->filter('foo')->count(), 'Expected foo tag in response');
     }
@@ -78,9 +84,8 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     public function testQuery()
     {
         $client = $this->createMockClient();
-        
-        $doc = new Document($client);
-        $doc->request('GET', 'http://example.com');
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
         $dump = $doc->query('search')->toArray();
         $this->assertEquals('search', $dump['rel']);
         $this->assertEquals('http://example.com/search', $dump['href']);
@@ -95,9 +100,9 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
               ->method('request')
               ->with($this->equalTo('GET'), $this->equalTo('http://example.com/search'), $this->equalTo(array('id' => 'foo')))
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
-        
-        $doc = new Document($client);
-        $doc->request('GET', 'http://example.com');
+
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
         $doc->sendQuery($doc->query('search'), array('id' => 'foo'));
     }
     
@@ -107,18 +112,16 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     public function testSendQuery_WithInvalidParameter()
     {
         $client = $this->createMockClient();
-        
-        $doc = new Document($client);
-        $doc->request('GET', 'http://example.com');
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
         $doc->sendQuery($doc->query('search'), array('id' => 'foo', 'zoo' => 'foo'));
     }
 
     public function testTemplate()
     {
         $client = $this->createMockClient();
-
-        $doc = new Document($client);
-        $doc->request('GET', 'http://example.com');
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
         $self = $this;
         $doc->template('push')->eachField(function($field) use($self) {
             $self->assertNotEmpty((string) $field);
@@ -134,8 +137,8 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
               ->with($this->equalTo('POST'), $this->equalTo('http://example.com/node'), $this->equalTo($post_data))
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
 
-        $doc = new Document($client);
-        $doc->request('GET', 'http://example.com');
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
         $doc->template('push')->eachField(function($field) {
               $field->setValue((string) $field);
         })->post($doc);

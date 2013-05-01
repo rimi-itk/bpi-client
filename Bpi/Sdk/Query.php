@@ -92,6 +92,7 @@ class Query
     public function send(Document $document, array $params)
     {
         $this->validate($params);
-        $document->request('GET', $this->crawler->attr('href'), $params);
+        $prefix = parse_url($this->crawler->attr('href'), PHP_URL_QUERY) === null ? '?' : '&';
+        $document->request('GET', $this->crawler->attr('href') . $prefix . http_build_query($params, '', '&'));
     }
 }

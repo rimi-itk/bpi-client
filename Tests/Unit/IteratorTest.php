@@ -3,6 +3,7 @@ namespace Bpi\Sdk\Tests\Unit;
 
 use Symfony\Component\DomCrawler\Crawler;
 use Bpi\Sdk\Document;
+use Bpi\Sdk\Authorization;
 
 class IteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,8 +14,8 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
               ->method('request')
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/' . $fixture . '.bpi'))));
         
-        $doc = new Document($client);
-        $doc->request('GET', 'http://example.com');
+        $doc = new Document($client, new Authorization(mt_rand(), mt_rand(), mt_rand()));
+        $doc->loadEndpoint('http://example.com');
         return $doc;
     }
 

@@ -21,7 +21,7 @@
     <hypermedia>
       <link rel="self" href="" />
     </hypermedia>
-    <title type="property">COLLECTION_TITLE</title>
-    <teaser type="property">COLLECTION_TEASER</teaser>
+    <property name="title">COLLECTION_TITLE</property>
+    <property name="teaser">COLLECTION_TEASER</property>
   </item>
 </bpi>

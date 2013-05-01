@@ -6,8 +6,18 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class Document implements \Iterator, \Countable
 {
+    /**
+     *
+     * @var \Goutte\Client
+     */
     protected $http_client;
     
+    /**
+     *
+     * @var \Bpi\Sdk\Authorization
+     */
+    protected $authorization;
+
     /**
      *
      * @var \Symfony\Component\DomCrawler\Crawler
@@ -23,12 +33,24 @@ class Document implements \Iterator, \Countable
     /**
      *
      * @param \Goutte\Client $client
+     * @param \Bpi\Sdk\Authorization $authorization
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client, Authorization $authorization)
     {
         $this->http_client = $client;
+        $this->authorization = $authorization;
     }
     
+    /**
+     * @param string $endpoint API URL
+     * @return \Bpi\Sdk\Document same instance
+     */
+    public function loadEndpoint($endpoint)
+    {
+        $this->request('GET', $endpoint);
+        return $this;
+    }
+
     /**
      * Gateway to make direct requests to API
      *
@@ -40,12 +62,27 @@ class Document implements \Iterator, \Countable
      */
     public function request($method, $uri, array $params = array())
     {
-        $this->crawler = $this->http_client->request($method, $uri, $params, array(), array( 'HTTP_Content_Type' => 'application/vnd.bpi.api+xml'));
+        $headers = array(
+            'HTTP_Authorization' => $this->authorization->toHTTPHeader(),
+            'HTTP_Content_Type' => 'application/vnd.bpi.api+xml',
+        );
+
+        $this->crawler = $this->http_client->request($method, $uri, $params, array(), $headers);
         $this->rewind();
 
         return $this;
     }
     
+    /**
+     * Dump latest raw response data
+     *
+     * @return string
+     */
+    public function dumpRawResponse()
+    {
+        return $this->http_client->getResponse();
+    }
+
     /**
      *
      * @return \Symfony\Component\DomCrawler\Crawler crawler copy
@@ -169,15 +206,14 @@ class Document implements \Iterator, \Countable
     }
 
     /**
-     * Returns all available properties of current item
-     * 
-     * @return array
+     * Iterates over all properties of current item
      */
-    public function getProperties()
+    public function walkProperties($callback)
     {
         $crawler = new Crawler($this->iterator->current());
-        return $crawler->children()->filter('*[type]')->each(function($e) {
-            return array('name' => $e->tagName, 'value' => $e->nodeValue);
+        return $crawler->filter('item property')->each(function($e) use($callback) {
+            $sxml = simplexml_import_dom($e);
+            $callback(current($sxml->attributes()) + array('@value' => (string) $sxml));
         });
     }
 
@@ -197,8 +233,9 @@ class Document implements \Iterator, \Countable
         ;
 
         if (!$this->iterator->count())
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException(sprintf('Item with attribute %s and value %s was not found', $attr, $value));
 
+        $this->iterator->rewind();
         return $this;
     }
 
@@ -219,6 +256,7 @@ class Document implements \Iterator, \Countable
         if (!$this->iterator->count())
             throw new \InvalidArgumentException();
 
+        $this->iterator->rewind();
         return $this;
     }
 
