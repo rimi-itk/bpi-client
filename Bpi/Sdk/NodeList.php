@@ -3,7 +3,7 @@ namespace Bpi\Sdk;
 
 use Bpi\Sdk\Document;
 
-class NodeList implements \Iterator
+class NodeList implements \Iterator, \Countable
 {
     protected $document;
 
@@ -62,5 +62,14 @@ class NodeList implements \Iterator
     function valid()
     {
         return $this->document->valid();
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    function count()
+    {
+        return $this->document->count();
     }
 }
