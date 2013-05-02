@@ -1,5 +1,4 @@
 <?php
-namespace Bpi\Sdk;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
@@ -12,7 +11,7 @@ class Bpi
     public function __construct($endpoint, $agency_id, $api_key, $secret_key)
     {
         $this->client = new \Goutte\Client();
-        $this->authorization = new Authorization($agency_id, $api_key, $secret_key);
+        $this->authorization = new \Bpi\Sdk\Authorization($agency_id, $api_key, $secret_key);
         $this->endpoint = $this->createDocument();
         $this->endpoint->loadEndpoint($endpoint);
     }
@@ -24,7 +23,7 @@ class Bpi
      */
     protected function createDocument()
     {
-        return new Document($this->client, $this->authorization);
+        return new \Bpi\Sdk\Document($this->client, $this->authorization);
     }
 
     /**
@@ -44,6 +43,6 @@ class Bpi
             ->send($nodes, $queries);
 
         $nodes->reduceItemsByAttr('type', 'entity');
-        return new NodeList($nodes);
+        return new \Bpi\Sdk\NodeList($nodes);
     }
 }
