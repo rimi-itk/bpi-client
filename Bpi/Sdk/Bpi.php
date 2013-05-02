@@ -40,7 +40,7 @@ class Bpi
             ->follow($nodes);
 
         $nodes->firstItem('type', 'collection')
-            ->query('pagination')
+            ->query('refinement')
             ->send($nodes, $queries);
 
         $nodes->reduceItemsByAttr('type', 'entity');
