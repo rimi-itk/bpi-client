@@ -34,7 +34,7 @@ class Query
             $this->crawler->attr('href');
             $this->crawler->filter('param');
         } catch (\InvalidArgumentException $e) {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia('Query has no href attribute or parameters inside');
             return false;
         }
 
