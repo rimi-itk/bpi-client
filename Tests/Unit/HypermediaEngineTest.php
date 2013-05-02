@@ -7,13 +7,13 @@ use Bpi\Sdk\Authorization;
 
 class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
 {
-    protected function createMockClient()
+    protected function createMockClient($fixture = 'Node')
     {
         $client = $this->getMock('Goutte\Client');
         $client->expects($this->at(0))
               ->method('request')
               ->with($this->equalTo('GET'), $this->equalTo('http://example.com'))
-              ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
+              ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/' . $fixture . '.bpi'))));
         
         return $client;
     }
@@ -115,6 +115,46 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
         $doc = $this->createDocument($client);
         $doc->loadEndpoint('http://example.com');
         $doc->sendQuery($doc->query('search'), array('id' => 'foo', 'zoo' => 'foo'));
+    }
+
+    public function testSendQuery_WithMultipleValues()
+    {
+        $client = $this->createMockClient('Collection');
+        $client->expects($this->at(1))
+              ->method('request')
+              ->with($this->equalTo('GET'), $this->equalTo('http://example.com/collection?filter%5Btitle%5D=foo&filter%5Bbody%5D=zoo'))
+              ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
+
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
+        $doc->sendQuery($doc->query('filter'), array('filter' => array('title' => 'foo', 'body' => 'zoo')));
+    }
+
+    public function testSendQuery_WithMultipleValues_Exceptions()
+    {
+        $client = $this->createMockClient('Collection');
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
+
+        try
+        {
+            $doc->sendQuery($doc->query('filter'), array('filter' => 'flat_value'));
+            $this->fail('Exception expected');
+        }
+        catch(\Bpi\Sdk\Exception\InvalidQueryParameter $e)
+        {
+            $this->assertTrue(true);
+        }
+
+        try
+        {
+            $doc->sendQuery($doc->query('search'), array('id' => array(1)));
+            $this->fail('Exception expected');
+        }
+        catch(\Bpi\Sdk\Exception\InvalidQueryParameter $e)
+        {
+            $this->assertTrue(true);
+        }
     }
 
     public function testTemplate()

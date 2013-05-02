@@ -9,10 +9,9 @@
           <param name="id"/>
         </params>
       </query>
-      <query rel="filter" href="xyz" title="Filtration">
+      <query rel="filter" href="http://example.com/collection" title="Filtration">
         <params>
-          <param name="name"/>
-          <param name="title"/>
+          <param name="filter" type="multiple"/>
         </params>
       </query>
     </hypermedia>
