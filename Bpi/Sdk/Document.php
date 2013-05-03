@@ -65,9 +65,30 @@ class Document implements \Iterator, \Countable
         $this->crawler = $this->crawler->filter('bpi > item');
         $this->crawler->rewind();
 
+        if ($this->status()->isError())
+        {
+            if ($this->status()->isClientError())
+                throw new Exception\HTTP\ClientError($this->http_client->getResponse()->getContent(), $this->status()->getCode());
+
+            if ($this->status()->isServerError())
+                throw new Exception\HTTP\ServerError($this->http_client->getResponse()->getContent(), $this->status()->getCode());
+
+            throw new Exception\HTTP\Error($this->http_client->getResponse()->getContent(), $this->status()->getCode());
+        }
+
         return $this;
     }
-    
+
+    /**
+     * Get last response status
+     *
+     * @return \Bpi\Sdk\ResponseStatus
+     */
+    public function status()
+    {
+        return new ResponseStatus($this->http_client->getResponse()->getStatus());
+    }
+
     /**
      * Dump latest raw response data
      *

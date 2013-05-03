@@ -68,6 +68,6 @@ class Bpi
                 $field->setValue($data[(string) $field]);
             })->post($node);
 
-        return new Item\Node($node);
+        return new \Bpi\Sdk\Item\Node($node);
     }
 }
