@@ -11,7 +11,7 @@ class Document implements \Iterator, \Countable
      * @var \Goutte\Client
      */
     protected $http_client;
-    
+
     /**
      *
      * @var \Bpi\Sdk\Authorization
@@ -23,7 +23,7 @@ class Document implements \Iterator, \Countable
      * @var \Symfony\Component\DomCrawler\Crawler
      */
     protected $crawler;
-    
+
     /**
      *
      * @param \Goutte\Client $client
@@ -34,7 +34,7 @@ class Document implements \Iterator, \Countable
         $this->http_client = $client;
         $this->authorization = $authorization;
     }
-    
+
     /**
      * @param string $endpoint API URL
      * @return \Bpi\Sdk\Document same instance
@@ -100,6 +100,18 @@ class Document implements \Iterator, \Countable
     }
 
     /**
+     * Debug method, must be removed
+     *
+     * @todo Remove this method
+     *
+     * @return mixed
+     */
+    public function dumpRawRequest()
+    {
+        return print_r($this->http_client->getRequest(), true);
+    }
+
+    /**
      * Access hypermedia link.
      *
      * @throws Exception\UndefinedHypermedia
@@ -121,7 +133,7 @@ class Document implements \Iterator, \Countable
             throw new Exception\UndefinedHypermedia();
         }
     }
-    
+
     /**
      * Click on link.
      *
@@ -131,7 +143,7 @@ class Document implements \Iterator, \Countable
     {
         $link->follow($this);
     }
-    
+
     /**
      * Access hypermedia query.
      *
@@ -158,7 +170,7 @@ class Document implements \Iterator, \Countable
 
     /**
      * Send query.
-     * 
+     *
      * @param \Bpi\Sdk\Query $query
      * @param array $params
      */
@@ -203,7 +215,7 @@ class Document implements \Iterator, \Countable
 
     /**
      * Checks current item type
-     * 
+     *
      * @param string $type
      * @return bool
      */
@@ -279,49 +291,49 @@ class Document implements \Iterator, \Countable
 
     /**
      * Returns same instance but with internal pointer to current item in collection
-     * 
+     *
      * @group Iterator
      * @return \Bpi\Sdk\Document will return same instance
      */
-    function current() 
+    function current()
     {
         return $this;
     }
 
     /**
      * Key of current iteration position
-     * 
+     *
      * @group Iterator
      */
-    function key() 
+    function key()
     {
         return $this->crawler->key();
     }
 
     /**
      * Iterate to next item
-     * 
+     *
      * @group Iterator
      */
-    function next() 
+    function next()
     {
         $this->crawler->next();
     }
 
     /**
      * Checks if is ready for iteration
-     * 
+     *
      * @group Iterator
      * @return boolean
      */
-    function valid() 
+    function valid()
     {
         return $this->crawler->valid();
     }
-    
+
     /**
      * Length of items in document
-     * 
+     *
      * @group Iterator
      */
     public function count()
