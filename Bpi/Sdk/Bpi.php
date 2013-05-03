@@ -28,8 +28,10 @@ class Bpi
     }
 
     /**
+     * Get list of node based on some conditions
      *
-     * @param array $queries
+     * @param array $queries available keys are: amount, offset, filter, sort
+     *   filter and sort requires nested arrays
      * @return \Bpi\Sdk\NodeList
      */
     public function searchNodes(array $queries = array())
@@ -45,5 +47,28 @@ class Bpi
 
         $nodes->reduceItemsByAttr('type', 'entity');
         return new NodeList($nodes);
+    }
+
+    /**
+     * Push new node to BPI
+     *
+     * @param array $data
+     * @throws \InvalidArgumentException
+     * @return \Bpi\Sdk\Item\Node
+     */
+    public function push(array $data)
+    {
+        $node = $this->createDocument();
+        $nodes = clone $this->endpoint;
+        $nodes->firstItem('name', 'node')
+            ->template('push')
+            ->eachField(function ($field) use ($data) {
+                if (!isset($data[(string)$field]))
+                    throw new \InvalidArgumentException(sprintf('Field [%s] is required', (string) $field));
+
+                $field->setValue($data[(string) $field]);
+            })->post($node);
+
+        return new Item\Node($node);
     }
 }
