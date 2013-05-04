@@ -2,6 +2,7 @@
 namespace Bpi\Sdk\Tests\Unit;
 
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\BrowserKit\Response;
 use Bpi\Sdk\Document;
 use Bpi\Sdk\Authorization;
 
@@ -28,6 +29,8 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
                 ))
             )
             ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
+
+        $client->expects($this->once())->method('getResponse')->will($this->returnValue(new Response()));
 
         $doc = new Document($client, $authorization);
         $doc->loadEndpoint('http://example.com');

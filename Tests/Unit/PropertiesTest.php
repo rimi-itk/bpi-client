@@ -2,6 +2,7 @@
 namespace Bpi\Sdk\Tests\Unit;
 
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\BrowserKit\Response;
 use Bpi\Sdk\Document;
 use Bpi\Sdk\Authorization;
 
@@ -13,7 +14,9 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
         $client->expects($this->at(0))
               ->method('request')
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/' . $fixture . '.bpi'))));
-        
+
+        $client->expects($this->any())->method('getResponse')->will($this->returnValue(new Response()));
+
         $doc = new Document($client, new Authorization(mt_rand(), mt_rand(), mt_rand()));
         $doc->loadEndpoint('http://example.com');
         return $doc;
