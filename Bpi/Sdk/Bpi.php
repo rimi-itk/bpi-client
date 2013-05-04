@@ -70,4 +70,20 @@ class Bpi
 
         return new \Bpi\Sdk\Item\Node($node);
     }
+
+    /**
+     * Mark node as syndicated
+     * @param string $id BPI node ID
+     */
+    public function syndicateNode($id)
+    {
+        $result = $this->createDocument();
+
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'node')
+            ->query('syndicated')
+            ->send($result, array('id'=>$id));
+
+        return $result->status()->isSuccess();
+    }
 }
