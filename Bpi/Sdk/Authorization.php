@@ -38,6 +38,6 @@ class Authorization
      */
     public function toHTTPHeader()
     {
-        return sprintf('BPI agency="%s", pk="%s", token="%s"', $this->agency_id, $this->public_key, $this->token);
+        return sprintf('BPI agency="%s", token="%s"', $this->agency_id, $this->token);
     }
 }
