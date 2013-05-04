@@ -98,11 +98,6 @@ class Document implements \Iterator, \Countable
     {
         return $this->http_client->getResponse();
     }
-    public function dumpRawRequest()
-    {
-        return $this->http_client->getRequest();
-    }
-
 
     /**
      * Debug method, must be removed
@@ -135,7 +130,7 @@ class Document implements \Iterator, \Countable
         }
         catch (\InvalidArgumentException $e)
         {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia(sprintf('There is no such link [%s]', $rel));
         }
     }
 
@@ -169,7 +164,7 @@ class Document implements \Iterator, \Countable
         }
         catch (\InvalidArgumentException $e)
         {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia(sprintf('There is no query [%s]', $rel));
         }
     }
 
@@ -204,7 +199,7 @@ class Document implements \Iterator, \Countable
         }
         catch (\InvalidArgumentException $e)
         {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia(sprintf('There is no such template [%s]', $rel));
         }
     }
 
