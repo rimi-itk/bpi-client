@@ -130,7 +130,7 @@ class Document implements \Iterator, \Countable
         }
         catch (\InvalidArgumentException $e)
         {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia(sprintf('There is no such link [%s]', $rel));
         }
     }
 
@@ -164,7 +164,7 @@ class Document implements \Iterator, \Countable
         }
         catch (\InvalidArgumentException $e)
         {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia(sprintf('There is no query [%s]', $rel));
         }
     }
 
@@ -199,7 +199,7 @@ class Document implements \Iterator, \Countable
         }
         catch (\InvalidArgumentException $e)
         {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia(sprintf('There is no such template [%s]', $rel));
         }
     }
 

@@ -73,7 +73,9 @@ class Bpi
 
     /**
      * Mark node as syndicated
+     *
      * @param string $id BPI node ID
+     * @return boolean operation status
      */
     public function syndicateNode($id)
     {
@@ -82,14 +84,16 @@ class Bpi
         $endpoint = clone $this->endpoint;
         $endpoint->firstItem('name', 'node')
             ->query('syndicated')
-            ->send($result, array('id'=>$id));
+            ->send($result, array('id' => $id));
 
         return $result->status()->isSuccess();
     }
 
     /**
      * Mark node as deleted
+     *
      * @param string $id BPI node ID
+     * @return boolean operation status
      */
     public function deleteNode($id)
     {
@@ -98,8 +102,26 @@ class Bpi
         $endpoint = clone $this->endpoint;
         $endpoint->firstItem('name', 'node')
             ->query('delete')
-            ->send($result, array('id'=>$id));
+            ->send($result, array('id' => $id));
 
         return $result->status()->isSuccess();
+    }
+
+    /**
+     * Get single Node by ID
+     *
+     * @param string $id BPI node ID
+     * @return \Bpi\Sdk\Item\Node
+     */
+    public function getNode($id)
+    {
+        $result = $this->createDocument();
+
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'node')
+            ->query('item')
+            ->send($result, array('id' => $id));
+
+        return new \Bpi\Sdk\Item\Node($result);
     }
 }
