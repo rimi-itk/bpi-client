@@ -1,13 +1,19 @@
 <?php
-
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class Bpi
 {
-  protected $client;
-  protected $authorization;
-  protected $endpoint;
+    protected $client;
+    protected $authorization;
+    protected $endpoint;
 
+    /**
+     * Create Bpi Client
+     * @param string $endpoint URL
+     * @param string $agency_id Agency ID
+     * @param string $api_key App key
+     * @param string $secret_key
+     */
     public function __construct($endpoint, $agency_id, $api_key, $secret_key)
     {
         $this->client = new \Goutte\Client();
@@ -49,6 +55,7 @@ class Bpi
     }
 
     /**
+<<<<<<< HEAD
      * Push new node to BPI
      *
      * @param array $data
@@ -101,5 +108,24 @@ class Bpi
             ->send($result, array('id'=>$id));
 
         return $result->status()->isSuccess();
+    }
+
+    /**
+     * Get statistics
+     * Parameterformat: Y-m-d
+     * @param string $dateFrom
+     * @param string $dateTo
+     */
+    public function getStatistics($dateFrom, $dateTo)
+    {
+        $result = $this->createDocument();
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'node')
+            ->query('statistics')
+            ->send($result, array('dateFrom'=>$dateFrom, 'dateTo'=>$dateTo));
+
+        $item = new \Bpi\Sdk\Item\BaseItem($result);
+
+        return $item;
     }
 }

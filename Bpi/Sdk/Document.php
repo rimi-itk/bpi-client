@@ -98,6 +98,11 @@ class Document implements \Iterator, \Countable
     {
         return $this->http_client->getResponse();
     }
+    public function dumpRawRequest()
+    {
+        return $this->http_client->getRequest();
+    }
+
 
     /**
      * Debug method, must be removed
@@ -268,12 +273,11 @@ class Document implements \Iterator, \Countable
      * @return \Bpi\Sdk\Document same instance
      */
     public function reduceItemsByAttr($attr, $value) {
-        $this->crawler = $this->crawler
-            ->filter("item[$attr='{$value}']")
-        ;
+        $this->crawler = $this->crawler->filter("item[$attr='{$value}']");
 
-        if (!$this->crawler->count())
+        if (!$this->crawler->count()) {
             throw new \InvalidArgumentException();
+        }
 
         $this->crawler->rewind();
         return $this;
