@@ -57,7 +57,7 @@ class Document implements \Iterator, \Countable
     public function request($method, $uri, array $params = array())
     {
         $headers = array(
-            'HTTP_Authorization' => $this->authorization->toHTTPHeader(),
+            'HTTP_Auth' => $this->authorization->toHTTPHeader(),
             'HTTP_Content_Type' => 'application/vnd.bpi.api+xml',
         );
 

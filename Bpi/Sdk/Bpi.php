@@ -86,4 +86,20 @@ class Bpi
 
         return $result->status()->isSuccess();
     }
+
+    /**
+     * Mark node as deleted
+     * @param string $id BPI node ID
+     */
+    public function deleteNode($id)
+    {
+        $result = $this->createDocument();
+
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'node')
+            ->query('delete')
+            ->send($result, array('id'=>$id));
+
+        return $result->status()->isSuccess();
+    }
 }
