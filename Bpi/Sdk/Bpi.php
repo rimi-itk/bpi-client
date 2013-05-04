@@ -55,7 +55,6 @@ class Bpi
     }
 
     /**
-<<<<<<< HEAD
      * Push new node to BPI
      *
      * @param array $data
