@@ -36,7 +36,8 @@ class Template
      */
     protected function testConsistency()
     {
-        try {
+        try
+        {
             $this->crawler->attr('href');
             $this->crawler->filter('param');
         } catch (\InvalidArgumentException $e) {
@@ -52,9 +53,11 @@ class Template
      *
      * @return array
      */
-    protected function render() {
+    protected function render()
+    {
         $data = array();
-        foreach($this->fields as $field) {
+        foreach($this->fields as $field)
+        {
             $field->assignToList($data);
         }
         return $data;
@@ -75,9 +78,12 @@ class Template
      * @param callback $callback
      * @return \Bpi\Sdk\Template
      */
-    public function eachField($callback) {
-        foreach ($this->crawler->filter('field') as $node) {
-            $callback($this->fields[] = new Template\Field($node));
+    public function eachField($callback)
+    {
+        foreach ($this->crawler->filter('field') as $node)
+        {
+            $this->fields[] = $field = new Template\Field($node);
+            $callback($field);
         }
 
         return $this;
