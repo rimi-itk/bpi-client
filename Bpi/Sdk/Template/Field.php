@@ -30,7 +30,8 @@ class Field
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->node->getAttribute('name');
     }
 
@@ -39,7 +40,8 @@ class Field
      *
      * @param mixed $value
      */
-    public function setValue($value) {
+    public function setValue($value)
+    {
         $this->value = $value;
     }
 
@@ -48,7 +50,8 @@ class Field
      *
      * @param array $list
      */
-    public function assignToList(array &$list) {
+    public function assignToList(array &$list)
+    {
         $list[(string) $this] = $this->value;
     }
 }

@@ -1,18 +1,24 @@
 <?php
-namespace Bpi\Sdk;
-
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class Bpi
 {
-  protected $client;
-  protected $authorization;
-  protected $endpoint;
+    protected $client;
+    protected $authorization;
+    protected $endpoint;
 
+    /**
+     * Create Bpi Client
+     *
+     * @param string $endpoint URL
+     * @param string $agency_id Agency ID
+     * @param string $api_key App key
+     * @param string $secret_key
+     */
     public function __construct($endpoint, $agency_id, $api_key, $secret_key)
     {
         $this->client = new \Goutte\Client();
-        $this->authorization = new Authorization($agency_id, $api_key, $secret_key);
+        $this->authorization = new \Bpi\Sdk\Authorization($agency_id, $api_key, $secret_key);
         $this->endpoint = $this->createDocument();
         $this->endpoint->loadEndpoint($endpoint);
     }
@@ -24,7 +30,7 @@ class Bpi
      */
     protected function createDocument()
     {
-        return new Document($this->client, $this->authorization);
+        return new \Bpi\Sdk\Document($this->client, $this->authorization);
     }
 
     /**
@@ -42,11 +48,10 @@ class Bpi
             ->follow($nodes);
 
         $nodes->firstItem('type', 'collection')
-            ->query('pagination')
+            ->query('refinement')
             ->send($nodes, $queries);
 
-        $nodes->reduceItemsByAttr('type', 'entity');
-        return new NodeList($nodes);
+        return new \Bpi\Sdk\NodeList($nodes);
     }
 
     /**
@@ -69,6 +74,80 @@ class Bpi
                 $field->setValue($data[(string) $field]);
             })->post($node);
 
-        return new Item\Node($node);
+        return new \Bpi\Sdk\Item\Node($node);
+    }
+
+    /**
+     * Mark node as syndicated
+     *
+     * @param string $id BPI node ID
+     * @return boolean operation status
+     */
+    public function syndicateNode($id)
+    {
+        $result = $this->createDocument();
+
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'node')
+            ->query('syndicated')
+            ->send($result, array('id' => $id));
+
+        return $result->status()->isSuccess();
+    }
+
+    /**
+     * Mark node as deleted
+     *
+     * @param string $id BPI node ID
+     * @return boolean operation status
+     */
+    public function deleteNode($id)
+    {
+        $result = $this->createDocument();
+
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'node')
+            ->query('delete')
+            ->send($result, array('id' => $id));
+
+        return $result->status()->isSuccess();
+    }
+
+    /**
+     * Get statistics
+     * Parameterformat: Y-m-d
+     *
+     * @param string $dateFrom
+     * @param string $dateTo
+     */
+    public function getStatistics($dateFrom, $dateTo)
+    {
+        $result = $this->createDocument();
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'node')
+            ->query('statistics')
+            ->send($result, array('dateFrom'=>$dateFrom, 'dateTo'=>$dateTo));
+
+        $item = new \Bpi\Sdk\Item\BaseItem($result);
+
+        return $item;
+    }
+
+    /**
+     * Get single Node by ID
+     *
+     * @param string $id BPI node ID
+     * @return \Bpi\Sdk\Item\Node
+     */
+    public function getNode($id)
+    {
+        $result = $this->createDocument();
+
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'node')
+            ->query('item')
+            ->send($result, array('id' => $id));
+
+        return new \Bpi\Sdk\Item\Node($result);
     }
 }

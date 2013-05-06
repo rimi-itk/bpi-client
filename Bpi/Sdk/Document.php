@@ -11,7 +11,7 @@ class Document implements \Iterator, \Countable
      * @var \Goutte\Client
      */
     protected $http_client;
-    
+
     /**
      *
      * @var \Bpi\Sdk\Authorization
@@ -23,7 +23,7 @@ class Document implements \Iterator, \Countable
      * @var \Symfony\Component\DomCrawler\Crawler
      */
     protected $crawler;
-    
+
     /**
      *
      * @param \Goutte\Client $client
@@ -34,7 +34,7 @@ class Document implements \Iterator, \Countable
         $this->http_client = $client;
         $this->authorization = $authorization;
     }
-    
+
     /**
      * @param string $endpoint API URL
      * @return \Bpi\Sdk\Document same instance
@@ -57,7 +57,7 @@ class Document implements \Iterator, \Countable
     public function request($method, $uri, array $params = array())
     {
         $headers = array(
-            'HTTP_Authorization' => $this->authorization->toHTTPHeader(),
+            'HTTP_Auth' => $this->authorization->toHTTPHeader(),
             'HTTP_Content_Type' => 'application/vnd.bpi.api+xml',
         );
 
@@ -65,9 +65,30 @@ class Document implements \Iterator, \Countable
         $this->crawler = $this->crawler->filter('bpi > item');
         $this->crawler->rewind();
 
+        if ($this->status()->isError())
+        {
+            if ($this->status()->isClientError())
+                throw new Exception\HTTP\ClientError($this->http_client->getResponse()->getContent(), $this->status()->getCode());
+
+            if ($this->status()->isServerError())
+                throw new Exception\HTTP\ServerError($this->http_client->getResponse()->getContent(), $this->status()->getCode());
+
+            throw new Exception\HTTP\Error($this->http_client->getResponse()->getContent(), $this->status()->getCode());
+        }
+
         return $this;
     }
-    
+
+    /**
+     * Get last response status
+     *
+     * @return \Bpi\Sdk\ResponseStatus
+     */
+    public function status()
+    {
+        return new ResponseStatus($this->http_client->getResponse()->getStatus());
+    }
+
     /**
      * Dump latest raw response data
      *
@@ -76,6 +97,16 @@ class Document implements \Iterator, \Countable
     public function dumpRawResponse()
     {
         return $this->http_client->getResponse();
+    }
+
+    /**
+     * Dump latest raw request data
+     *
+     * @return string
+     */
+    public function dumpRawRequest()
+    {
+        return print_r($this->http_client->getRequest(), true);
     }
 
     /**
@@ -97,10 +128,10 @@ class Document implements \Iterator, \Countable
         }
         catch (\InvalidArgumentException $e)
         {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia(sprintf('There is no such link [%s]', $rel));
         }
     }
-    
+
     /**
      * Click on link.
      *
@@ -110,7 +141,7 @@ class Document implements \Iterator, \Countable
     {
         $link->follow($this);
     }
-    
+
     /**
      * Access hypermedia query.
      *
@@ -131,13 +162,13 @@ class Document implements \Iterator, \Countable
         }
         catch (\InvalidArgumentException $e)
         {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia(sprintf('There is no query [%s]', $rel));
         }
     }
 
     /**
      * Send query.
-     * 
+     *
      * @param \Bpi\Sdk\Query $query
      * @param array $params
      */
@@ -166,7 +197,7 @@ class Document implements \Iterator, \Countable
         }
         catch (\InvalidArgumentException $e)
         {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia(sprintf('There is no such template [%s]', $rel));
         }
     }
 
@@ -182,7 +213,7 @@ class Document implements \Iterator, \Countable
 
     /**
      * Checks current item type
-     * 
+     *
      * @param string $type
      * @return bool
      */
@@ -235,12 +266,11 @@ class Document implements \Iterator, \Countable
      * @return \Bpi\Sdk\Document same instance
      */
     public function reduceItemsByAttr($attr, $value) {
-        $this->crawler = $this->crawler
-            ->filter("item[$attr='{$value}']")
-        ;
+        $this->crawler = $this->crawler->filter("item[$attr='{$value}']");
 
-        if (!$this->crawler->count())
-            throw new \InvalidArgumentException();
+        if (!$this->crawler->count()) {
+            throw new \InvalidArgumentException(sprintf('No items remain after reduce was made by attr [%s], value [%s]', $attr, $value));
+        }
 
         $this->crawler->rewind();
         return $this;
@@ -258,49 +288,49 @@ class Document implements \Iterator, \Countable
 
     /**
      * Returns same instance but with internal pointer to current item in collection
-     * 
+     *
      * @group Iterator
      * @return \Bpi\Sdk\Document will return same instance
      */
-    function current() 
+    function current()
     {
         return $this;
     }
 
     /**
      * Key of current iteration position
-     * 
+     *
      * @group Iterator
      */
-    function key() 
+    function key()
     {
         return $this->crawler->key();
     }
 
     /**
      * Iterate to next item
-     * 
+     *
      * @group Iterator
      */
-    function next() 
+    function next()
     {
         $this->crawler->next();
     }
 
     /**
      * Checks if is ready for iteration
-     * 
+     *
      * @group Iterator
      * @return boolean
      */
-    function valid() 
+    function valid()
     {
         return $this->crawler->valid();
     }
-    
+
     /**
      * Length of items in document
-     * 
+     *
      * @group Iterator
      */
     public function count()
