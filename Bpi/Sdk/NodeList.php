@@ -27,7 +27,7 @@ class NodeList implements \Iterator, \Countable
         $this->document = clone $document;
         $this->document->reduceItemsByAttr('type', 'entity');
         $self = $this;
-        $document->findFirst('type', 'collection')
+        $document->firstItem('type', 'collection')
             ->walkProperties(function($property) use ($self) {
                 $self->$property['name'] = $property['@value'];
             });
