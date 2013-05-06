@@ -10,7 +10,7 @@ class NodeList implements \Iterator, \Countable
      *
      * @var int
      */
-    public $total;
+    public $total = 0;
 
     /**
      *
@@ -24,13 +24,20 @@ class NodeList implements \Iterator, \Countable
      */
     public function __construct(Document $document)
     {
-        $this->document = clone $document;
-        $this->document->reduceItemsByAttr('type', 'entity');
-        $self = $this;
-        $document->firstItem('type', 'collection')
-            ->walkProperties(function($property) use ($self) {
-                $self->$property['name'] = $property['@value'];
-            });
+        try
+        {
+            $this->document = clone $document;
+            $this->document->reduceItemsByAttr('type', 'entity');
+            $self = $this;
+            $document->firstItem('type', 'collection')
+                ->walkProperties(function($property) use ($self) {
+                    $self->$property['name'] = $property['@value'];
+                });
+        }
+        catch (Exception\EmptyList $e)
+        {
+            $this->document->clear();
+        }
     }
 
     /**
