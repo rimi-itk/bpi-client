@@ -5,6 +5,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\BrowserKit\Response;
 use Bpi\Sdk\Document;
 use Bpi\Sdk\Authorization;
+use Bpi\Sdk\Exception;
 
 class IteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,7 +59,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
         {
             $doc->reduceItemsByAttr('name', mt_rand());
             $this->fail('Exception expected trying reduce items by non existing attribute value');
-        } catch (\InvalidArgumentException $e) {
+        } catch (Exception\EmptyList $e) {
             $this->assertTrue(true);
         }
 
@@ -66,7 +67,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
         {
             $doc->reduceItemsByAttr(mt_rand(), 'node');
             $this->fail('Exception expected trying reduce items by non existing attribute');
-        } catch (\InvalidArgumentException $e) {
+        } catch (Exception\EmptyList $e) {
             $this->assertTrue(true);
         }
     }

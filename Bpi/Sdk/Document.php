@@ -261,7 +261,7 @@ class Document implements \Iterator, \Countable
      *
      * @param string $name
      * @param mixed $value
-     * @throws \InvalidArgumentException
+     * @throws \Bpi\Sdk\Exception\EmptyList
      *
      * @return \Bpi\Sdk\Document same instance
      */
@@ -269,11 +269,19 @@ class Document implements \Iterator, \Countable
         $this->crawler = $this->crawler->filter("item[$attr='{$value}']");
 
         if (!$this->crawler->count()) {
-            throw new \InvalidArgumentException(sprintf('No items remain after reduce was made by attr [%s], value [%s]', $attr, $value));
+            throw new Exception\EmptyList(sprintf('No items remain after reduce was made by attr [%s], value [%s]', $attr, $value));
         }
 
         $this->crawler->rewind();
         return $this;
+    }
+
+    /**
+     * Clear previous response if any
+     */
+    public function clear()
+    {
+        $this->crawler = new Crawler();
     }
 
     /**
