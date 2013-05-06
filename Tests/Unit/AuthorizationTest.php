@@ -24,7 +24,7 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo(array()),
                 $this->equalTo(array()),
                 $this->equalTo(array(
-                    'HTTP_Authorization' => $authorization->toHTTPHeader(),
+                    'HTTP_Auth' => $authorization->toHTTPHeader(),
                     'HTTP_Content_Type' => 'application/vnd.bpi.api+xml',
                 ))
             )

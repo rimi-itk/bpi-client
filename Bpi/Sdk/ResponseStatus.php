@@ -11,7 +11,7 @@ class ResponseStatus
      */
     public function __construct($status_code)
     {
-        $this->status = (int) $status_code;
+        $this->status = (string) $status_code;
 
         if ($this->status <= 0)
             throw new \InvalidArgumentException('Incorrect HTTP status code [' . $status_code . ']');
@@ -29,17 +29,17 @@ class ResponseStatus
 
     public function isSuccess()
     {
-        return $this->status{1} == 2;
+        return $this->status[0] == 2;
     }
 
     public function isClientError()
     {
-        return $this->status{1} == 4;
+        return $this->status[0] == 4;
     }
 
     public function isServerError()
     {
-        return $this->status{1} == 5;
+        return $this->status[0] == 5;
     }
 
     public function isError()
