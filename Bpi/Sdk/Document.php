@@ -100,11 +100,9 @@ class Document implements \Iterator, \Countable
     }
 
     /**
-     * Debug method, must be removed
+     * Dump latest raw request data
      *
-     * @todo Remove this method
-     *
-     * @return mixed
+     * @return string
      */
     public function dumpRawRequest()
     {
@@ -271,7 +269,7 @@ class Document implements \Iterator, \Countable
         $this->crawler = $this->crawler->filter("item[$attr='{$value}']");
 
         if (!$this->crawler->count()) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException(sprintf('No items remain after reduce was made by attr [%s], value [%s]', $attr, $value));
         }
 
         $this->crawler->rewind();
