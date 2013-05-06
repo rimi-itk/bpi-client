@@ -42,10 +42,11 @@ class Bpi
      */
     public function searchNodes(array $queries = array())
     {
-        $nodes = clone $this->endpoint;
-        $nodes->firstItem('name', 'node')
+        $nodes = $this->createDocument();
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'node')
             ->link('collection')
-            ->follow($nodes);
+            ->get($nodes);
 
         $nodes->firstItem('type', 'collection')
             ->query('refinement')
@@ -149,5 +150,33 @@ class Bpi
             ->send($result, array('id' => $id));
 
         return new \Bpi\Sdk\Item\Node($result);
+    }
+
+    /**
+     * Get list of dictionaries
+     *
+     * @return array
+     */
+    public function getDictionaries()
+    {
+        $result = $this->createDocument();
+
+        $endpoint = clone $this->endpoint;
+        $endpoint->firstItem('name', 'profile')
+            ->link('dictionary')
+            ->get($result);
+
+        $dictionary = array();
+        foreach ($result as $item)
+        {
+            $properties = array();
+            $item->walkProperties(function($property) use (&$properties){
+                $properties[$property['name']] = $property['@value'];
+            });
+
+            $dictionary[$properties['group']][] = $properties['name'];
+        }
+
+        return $dictionary;
     }
 }
