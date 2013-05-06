@@ -235,6 +235,20 @@ class Document implements \Iterator, \Countable
     }
 
     /**
+     *
+     * @return array
+     */
+    public function propertiesToArray()
+    {
+        $properties = array();
+        $this->walkProperties(function($p) use(&$properties){
+            $properties[$p['name']] = $p['@value'];
+        });
+
+        return $properties;
+    }
+
+    /**
      * Finds first matched item by attribute value
      *
      * @param string $name
