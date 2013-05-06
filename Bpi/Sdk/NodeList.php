@@ -5,11 +5,32 @@ use Bpi\Sdk\Document;
 
 class NodeList implements \Iterator, \Countable
 {
+    /**
+     * Total amount of items on server
+     *
+     * @var int
+     */
+    public $total;
+
+    /**
+     *
+     * @var \Bpi\Sdk\Document
+     */
     protected $document;
 
+    /**
+     *
+     * @param \Bpi\Sdk\Document $document
+     */
     public function __construct(Document $document)
     {
-        $this->document = $document;
+        $this->document = clone $document;
+        $this->document->reduceItemsByAttr('type', 'entity');
+        $self = $this;
+        $document->findFirst('type', 'collection')
+            ->walkProperties(function($property) use ($self) {
+                $self->$property['name'] = $property['@value'];
+            });
     }
 
     /**

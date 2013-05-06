@@ -51,7 +51,6 @@ class Bpi
             ->query('refinement')
             ->send($nodes, $queries);
 
-        $nodes->reduceItemsByAttr('type', 'entity');
         return new \Bpi\Sdk\NodeList($nodes);
     }
 
