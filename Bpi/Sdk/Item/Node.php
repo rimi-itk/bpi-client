@@ -13,7 +13,7 @@ class Node extends BaseItem
         $result = array();
         foreach ($this->getProperties() as $key => $val)
         {
-            if (stripos($key, 'asset'))
+            if (strpos($key, 'asset') !== FALSE)
             {
                 $result[$key] = $val;
             }
