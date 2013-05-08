@@ -3,9 +3,29 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 class Bpi
 {
+    /**
+     *
+     * @var \Goutte\Client
+     */
     protected $client;
+
+    /**
+     *
+     * @var \Bpi\Sdk\Authorization
+     */
     protected $authorization;
+
+    /**
+     *
+     * @var \Bpi\Sdk\Document
+     */
     protected $endpoint;
+
+    /**
+     *
+     * @var \Bpi\Sdk\Document
+     */
+    protected $current_document;
 
     /**
      * Create Bpi Client
@@ -19,7 +39,7 @@ class Bpi
     {
         $this->client = new \Goutte\Client();
         $this->authorization = new \Bpi\Sdk\Authorization($agency_id, $api_key, $secret_key);
-        $this->endpoint = $this->createDocument();
+        $this->current_document = $this->endpoint = $this->createDocument();
         $this->endpoint->loadEndpoint($endpoint);
     }
 
@@ -52,6 +72,8 @@ class Bpi
             ->query('refinement')
             ->send($nodes, $queries);
 
+        $this->current_document = $nodes;
+
         return new \Bpi\Sdk\NodeList($nodes);
     }
 
@@ -75,6 +97,8 @@ class Bpi
                 $field->setValue($data[(string) $field]);
             })->post($node);
 
+        $this->current_document = $node;
+
         return new \Bpi\Sdk\Item\Node($node);
     }
 
@@ -92,6 +116,8 @@ class Bpi
         $endpoint->firstItem('name', 'node')
             ->query('syndicated')
             ->send($result, array('id' => $id));
+
+        $this->current_document = $result;
 
         return $result->status()->isSuccess();
     }
@@ -111,6 +137,8 @@ class Bpi
             ->query('delete')
             ->send($result, array('id' => $id));
 
+        $this->current_document = $result;
+
         return $result->status()->isSuccess();
     }
 
@@ -129,9 +157,9 @@ class Bpi
             ->query('statistics')
             ->send($result, array('dateFrom'=>$dateFrom, 'dateTo'=>$dateTo));
 
-        $item = new \Bpi\Sdk\Item\BaseItem($result);
+        $this->current_document = $result;
 
-        return $item;
+        return new \Bpi\Sdk\Item\BaseItem($result);
     }
 
     /**
@@ -148,6 +176,8 @@ class Bpi
         $endpoint->firstItem('name', 'node')
             ->query('item')
             ->send($result, array('id' => $id));
+
+        $this->current_document = $result;
 
         return new \Bpi\Sdk\Item\Node($result);
     }
@@ -166,6 +196,8 @@ class Bpi
             ->link('dictionary')
             ->get($result);
 
+        $this->current_document = $result;
+
         $dictionary = array();
         foreach ($result as $item)
         {
@@ -178,5 +210,14 @@ class Bpi
         }
 
         return $dictionary;
+    }
+
+    /**
+     *
+     * @return \Bpi\Sdk\Document
+     */
+    public function _getCurrentDocument()
+    {
+        return $this->current_document;
     }
 }
