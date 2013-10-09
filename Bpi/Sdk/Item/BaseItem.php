@@ -20,8 +20,18 @@ class BaseItem
     {
         $properties = array();
         $this->document->walkProperties(function($e) use(&$properties) {
-            $properties[$e['name']] = $e['@value'];
+            if (isset($properties[$e['name']])) {
+                if (is_array($properties[$e['name']])) {
+                    $properties[$e['name']][] = $e['@value'];
+                } else {
+                    $properties[$e['name']] = array($properties[$e['name']], $e['@value']);
+                }
+            } else {
+                $properties[$e['name']] = $e['@value'];
+            }
         });
+
+
         return $properties;
     }
 }
