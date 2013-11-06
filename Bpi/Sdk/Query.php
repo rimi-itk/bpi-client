@@ -34,7 +34,7 @@ class Query
             $this->crawler->attr('href');
             $this->crawler->filter('param');
         } catch (\InvalidArgumentException $e) {
-            throw new Exception\UndefinedHypermedia();
+            throw new Exception\UndefinedHypermedia('Query has no href attribute or parameters inside');
             return false;
         }
 
@@ -50,9 +50,20 @@ class Query
     {
         foreach ($params as $user_param => $value)
         {
-            if ($this->crawler->filter("param[name='{$user_param}']")->count() <= 0)
+            $param = $this->crawler->filter("param[name='{$user_param}']");
+            if ($param->count() <= 0)
             {
                 throw new Exception\InvalidQueryParameter(sprintf('The API has no such query parameter [%s] on page [%s]', $user_param, $this->crawler->attr('href')));
+            }
+
+            if ($param->attr('type') == 'multiple' && !is_array($value))
+            {
+                throw new Exception\InvalidQueryParameter(sprintf('The API has declared a multiple value query parameter [%s], array expected', $user_param));
+            }
+
+            if (is_array($value) && $param->attr('type') != 'multiple')
+            {
+                throw new Exception\InvalidQueryParameter(sprintf('The API has declared query parameter [%s] as single value, array was given', $user_param));
             }
         }
     }
@@ -85,14 +96,24 @@ class Query
     }
 
     /**
+     *
+     * @param array $params
+     * @return string URI
+     */
+    protected function buildURI(array $params)
+    {
+        $query_separator = parse_url($this->crawler->attr('href'), PHP_URL_QUERY) === null ? '?' : '&';
+        return $this->crawler->attr('href') . $query_separator . http_build_query($params, '', '&');
+    }
+
+    /**
      * 
      * @param \Bpi\Sdk\Document $document
-     * @param array $params
+     * @param array $params multidimensional arrays as well
      */
     public function send(Document $document, array $params)
     {
         $this->validate($params);
-        $prefix = parse_url($this->crawler->attr('href'), PHP_URL_QUERY) === null ? '?' : '&';
-        $document->request('GET', $this->crawler->attr('href') . $prefix . http_build_query($params, '', '&'));
+        $document->request('GET', $this->buildURI($params));
     }
 }

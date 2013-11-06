@@ -2,8 +2,10 @@
 namespace Bpi\Sdk\Tests\Unit;
 
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\BrowserKit\Response;
 use Bpi\Sdk\Document;
 use Bpi\Sdk\Authorization;
+use Bpi\Sdk\Exception;
 
 class IteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +15,9 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
         $client->expects($this->at(0))
               ->method('request')
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/' . $fixture . '.bpi'))));
-        
+
+        $client->expects($this->any())->method('getResponse')->will($this->returnValue(new Response()));
+
         $doc = new Document($client, new Authorization(mt_rand(), mt_rand(), mt_rand()));
         $doc->loadEndpoint('http://example.com');
         return $doc;
@@ -31,14 +35,14 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
     {
         $doc = $this->createMockDocument('Collection');
         
-        $this->assertEquals(2, $doc->count());
+        $this->assertEquals(3, $doc->count());
         
         $i = 0;
         foreach ($doc as $item)
         {
             if ($i == 0)
                 $this->assertTrue($item->isTypeOf('collection'));
-            elseif ($i == 1)
+            elseif ($i == 1 or $i == 2)
                 $this->assertTrue($item->isTypeOf('entity'));
             else
                 $this->fail('Unexpected');
@@ -55,7 +59,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
         {
             $doc->reduceItemsByAttr('name', mt_rand());
             $this->fail('Exception expected trying reduce items by non existing attribute value');
-        } catch (\InvalidArgumentException $e) {
+        } catch (Exception\EmptyList $e) {
             $this->assertTrue(true);
         }
 
@@ -63,7 +67,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
         {
             $doc->reduceItemsByAttr(mt_rand(), 'node');
             $this->fail('Exception expected trying reduce items by non existing attribute');
-        } catch (\InvalidArgumentException $e) {
+        } catch (Exception\EmptyList $e) {
             $this->assertTrue(true);
         }
     }

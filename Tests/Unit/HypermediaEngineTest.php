@@ -2,19 +2,22 @@
 namespace Bpi\Sdk\Tests\Unit;
 
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\BrowserKit\Response;
 use Bpi\Sdk\Document;
 use Bpi\Sdk\Authorization;
 
 class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
 {
-    protected function createMockClient()
+    protected function createMockClient($fixture = 'Node')
     {
         $client = $this->getMock('Goutte\Client');
         $client->expects($this->at(0))
               ->method('request')
               ->with($this->equalTo('GET'), $this->equalTo('http://example.com'))
-              ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
-        
+              ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/' . $fixture . '.bpi'))));
+
+        $client->expects($this->any())->method('getResponse')->will($this->returnValue(new Response()));
+
         return $client;
     }
 
@@ -70,15 +73,17 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->createMockClient();
         
-        $client->expects($this->at(1))
+        $client->expects($this->at(2))
               ->method('request')
               ->with($this->equalTo('GET'), $this->equalTo('http://example.com/collection'))
-              ->will($this->returnValue(new Crawler('<test><foo></test>')));
+              ->will($this->returnValue(new Crawler('<?xml version="1.0" encoding="UTF-8"?><bpi version="0.1"><item type="entity" name="foo"/></bpi>')));
 
         $doc = $this->createDocument($client);
-        $doc->loadEndpoint('http://example.com');
-        $doc->followLink($doc->link('collection'));
-        $this->assertEquals(1, $doc->getCrawler()->filter('foo')->count(), 'Expected foo tag in response');
+        $doc->loadEndpoint('http://example.com')
+            ->link('collection')
+            ->follow($doc);
+
+        $this->assertEquals(1, $doc->firstItem('name', 'foo')->count(), 'Expected foo tag in response');
     }
     
     public function testQuery()
@@ -96,9 +101,9 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     public function testSendQuery()
     {
         $client = $this->createMockClient();
-        $client->expects($this->at(1))
+        $client->expects($this->at(2))
               ->method('request')
-              ->with($this->equalTo('GET'), $this->equalTo('http://example.com/search'), $this->equalTo(array('id' => 'foo')))
+              ->with($this->equalTo('GET'), $this->equalTo('http://example.com/search?id=foo'))
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
 
         $doc = $this->createDocument($client);
@@ -117,6 +122,46 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
         $doc->sendQuery($doc->query('search'), array('id' => 'foo', 'zoo' => 'foo'));
     }
 
+    public function testSendQuery_WithMultipleValues()
+    {
+        $client = $this->createMockClient('Collection');
+        $client->expects($this->at(2))
+              ->method('request')
+              ->with($this->equalTo('GET'), $this->equalTo('http://example.com/collection?filter%5Btitle%5D=foo&filter%5Bbody%5D=zoo'))
+              ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
+
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
+        $doc->sendQuery($doc->query('filter'), array('filter' => array('title' => 'foo', 'body' => 'zoo')));
+    }
+
+    public function testSendQuery_WithMultipleValues_Exceptions()
+    {
+        $client = $this->createMockClient('Collection');
+        $doc = $this->createDocument($client);
+        $doc->loadEndpoint('http://example.com');
+
+        try
+        {
+            $doc->sendQuery($doc->query('filter'), array('filter' => 'flat_value'));
+            $this->fail('Exception expected');
+        }
+        catch(\Bpi\Sdk\Exception\InvalidQueryParameter $e)
+        {
+            $this->assertTrue(true);
+        }
+
+        try
+        {
+            $doc->sendQuery($doc->query('search'), array('id' => array(1)));
+            $this->fail('Exception expected');
+        }
+        catch(\Bpi\Sdk\Exception\InvalidQueryParameter $e)
+        {
+            $this->assertTrue(true);
+        }
+    }
+
     public function testTemplate()
     {
         $client = $this->createMockClient();
@@ -131,16 +176,16 @@ class HypermediaEngineTest extends \PHPUnit_Framework_TestCase
     public function testPostTemplate()
     {
         $client = $this->createMockClient();
-        $post_data = array('title' => 'title', 'teaser' => 'teaser', 'body' => 'body', 'type' => 'type');
-        $client->expects($this->at(1))
+        $post_data = array('title' => 'title_a', 'teaser' => 'teaser_a', 'body' => 'body_a', 'type' => 'article');
+        $client->expects($this->at(2))
               ->method('request')
               ->with($this->equalTo('POST'), $this->equalTo('http://example.com/node'), $this->equalTo($post_data))
               ->will($this->returnValue(new Crawler(file_get_contents(__DIR__ . '/Fixtures/Node.bpi'))));
 
         $doc = $this->createDocument($client);
         $doc->loadEndpoint('http://example.com');
-        $doc->template('push')->eachField(function($field) {
-              $field->setValue((string) $field);
+        $doc->template('push')->eachField(function($field) use($post_data) {
+              $field->setValue($post_data[(string) $field]);
         })->post($doc);
     }
 }

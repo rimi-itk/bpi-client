@@ -49,7 +49,47 @@ class Link
      */
     public function follow(Document $document)
     {
+        $this->get($document);
+    }
+
+    /**
+     * Perform HTTP GET for given URI
+     *
+     * @param \Bpi\Sdk\Document $document
+     */
+    public function get(Document $document)
+    {
         $document->request('GET', $this->crawler->attr('href'));
+    }
+
+    /**
+     * Perform HTTP POST for given URI
+     *
+     * @param \Bpi\Sdk\Document $document
+     */
+    public function post(Document $document)
+    {
+        $document->request('POST', $this->crawler->attr('href'));
+    }
+
+    /**
+     * Perform HTTP DELETE for given URI
+     *
+     * @param \Bpi\Sdk\Document $document
+     */
+    public function delete(Document $document)
+    {
+        $document->request('DELETE', $this->crawler->attr('href'));
+    }
+
+    /**
+     * Perform HTTP PUT for given URI
+     *
+     * @param \Bpi\Sdk\Document $document
+     */
+    public function put(Document $document)
+    {
+        $document->request('PUT', $this->crawler->attr('href'));
     }
 
     /**
