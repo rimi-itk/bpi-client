@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+/**
+ * TODO please add a general description about the purpose of this class.
+ */
 class Bpi
 {
     /**
@@ -80,7 +83,7 @@ class Bpi
     /**
      * Push new node to BPI
      *
-     * @param array $data
+     * @param array $data TODO please add some documentation of this property.
      * @throws \InvalidArgumentException
      * @return \Bpi\Sdk\Item\Node
      */
