@@ -94,7 +94,7 @@ class Bpi
         $nodes->firstItem('name', 'node')
             ->template('push')
             ->eachField(function ($field) use ($data) {
-                if (!isset($data[(string)$field]))
+                if (!empty($data[(string)$field]))
                     throw new \InvalidArgumentException(sprintf('Field [%s] is required', (string) $field));
 
                 $field->setValue($data[(string) $field]);
@@ -148,6 +148,9 @@ class Bpi
     /**
      * Get statistics
      * Parameterformat: Y-m-d
+     *
+     * TODO How about using DateTimes here and convert to string when calling the
+     * API?
      *
      * @param string $dateFrom
      * @param string $dateTo
@@ -216,6 +219,8 @@ class Bpi
     }
 
     /**
+     * TODO This is a public function prefixed with an _ signalling that it is
+     * not to be used for public consumption. Why is this necessary?
      *
      * @return \Bpi\Sdk\Document
      */
