@@ -94,7 +94,7 @@ class Bpi
         $nodes->firstItem('name', 'node')
             ->template('push')
             ->eachField(function ($field) use ($data) {
-                if (!empty($data[(string)$field]))
+                if (!isset($data[(string)$field])) // nb: check on empty() produce errors.
                     throw new \InvalidArgumentException(sprintf('Field [%s] is required', (string) $field));
 
                 $field->setValue($data[(string) $field]);
