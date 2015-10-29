@@ -10,16 +10,16 @@ class Node extends BaseItem
      */
     public function getAssets()
     {
-        $result = array();
-        foreach ($this->getProperties() as $key => $val)
-        {
-            if (strpos($key, 'asset') !== FALSE)
-            {
-                $result[$key] = $val;
+        $assets = array();
+        $this->document->walkAssets(function($e) use(&$assets) {
+            $type = $e['type'];
+            if (!isset($assets[$type])) {
+                $assets[$type] = array();
             }
-        }
+            $assets[$type][$e['name']] = $e;
+        });
 
-        return $result;
+        return $assets;
     }
 
     public function syndicate()
