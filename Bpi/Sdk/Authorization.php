@@ -9,7 +9,6 @@ class Authorization
     protected $agency_id;
     protected $public_key;
     protected $secret_key;
-    protected $salt;
     protected $token;
 
     /**
@@ -17,14 +16,12 @@ class Authorization
      * @param string $agency_id
      * @param string $public_key
      * @param string $secret_key
-     * @param string $salt
      */
-    public function __construct($agency_id, $public_key, $secret_key, $salt = '')
+    public function __construct($agency_id, $public_key, $secret_key)
     {
         $this->agency_id = $agency_id;
         $this->public_key = $public_key;
         $this->secret_key = $secret_key;
-        $this->salt = $salt;
         $this->generateToken();
     }
 
@@ -33,7 +30,7 @@ class Authorization
      */
     protected function generateToken()
     {
-        $this->token = crypt($this->agency_id . $this->public_key . $this->secret_key, $this->salt);
+        $this->token = password_hash($this->agency_id . $this->public_key . $this->secret_key, PASSWORD_BCRYPT);
     }
 
     /**

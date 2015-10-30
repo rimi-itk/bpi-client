@@ -37,12 +37,11 @@ class Bpi
      * @param string $agency_id Agency ID
      * @param string $api_key App key
      * @param string $secret_key
-     * @param string $salt
      */
-    public function __construct($endpoint, $agency_id, $api_key, $secret_key, $salt = '')
+    public function __construct($endpoint, $agency_id, $api_key, $secret_key)
     {
         $this->client = new \Goutte\Client();
-        $this->authorization = new \Bpi\Sdk\Authorization($agency_id, $api_key, $secret_key, $salt);
+        $this->authorization = new \Bpi\Sdk\Authorization($agency_id, $api_key, $secret_key);
         $this->current_document = $this->endpoint = $this->createDocument();
         $this->endpoint->loadEndpoint($endpoint);
     }
