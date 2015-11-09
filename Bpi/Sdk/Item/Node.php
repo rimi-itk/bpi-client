@@ -16,7 +16,7 @@ class Node extends BaseItem
             if (!isset($assets[$type])) {
                 $assets[$type] = array();
             }
-            $assets[$type][$e['name']] = $e;
+            $assets[$type][] = $e;
         });
 
         return $assets;
