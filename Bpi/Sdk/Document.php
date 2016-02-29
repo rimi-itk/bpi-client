@@ -288,6 +288,18 @@ class Document implements \Iterator, \Countable
     }
 
     /**
+     * Iterates over all assets of current item
+     */
+    public function walkAssets($callback)
+    {
+        $crawler = new Crawler($this->crawler->current());
+        return $crawler->filter('item assets file')->each(function($e) use($callback) {
+            $sxml = simplexml_import_dom($e);
+            $callback(current($sxml->attributes()) + array('@value' => (string) $sxml));
+        });
+    }
+
+    /**
      *
      * @return array
      */
