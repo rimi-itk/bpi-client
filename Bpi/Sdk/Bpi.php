@@ -26,6 +26,12 @@ class Bpi
 
     /**
      *
+     * @var string
+     */
+    protected $endpoint_url;
+
+    /**
+     *
      * @var \Bpi\Sdk\Document
      */
     protected $current_document;
@@ -44,6 +50,7 @@ class Bpi
         $this->authorization = new \Bpi\Sdk\Authorization($agency_id, $api_key, $secret_key);
         $this->current_document = $this->endpoint = $this->createDocument();
         $this->endpoint->loadEndpoint($endpoint);
+        $this->endpoint_url = $endpoint;
     }
 
     /**
@@ -228,5 +235,264 @@ class Bpi
     public function _getCurrentDocument()
     {
         return $this->current_document;
+    }
+
+
+    // -----------------------------------------------------------------------------
+
+    public function searchChannels($query = array()) {
+        $channels = $this->createGenericDocument();
+        $channels->request('GET', $this->endpoint_url . '/channel/');
+
+        return new \Bpi\Sdk\ChannelList($channels);
+    }
+
+    /**
+     * @param string $name
+     * @param string $description
+     * @param string $adminId
+     */
+    public function createChannel(array $data) {
+        $this->checkRequired($data, [ 'name', 'description', 'adminId' ]);
+        $values = $this->apiRename($data, [
+            'name' => 'name',
+            'description' => 'channelDescription',
+            'adminId' => 'editorId',
+        ]);
+
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/', $values);
+
+        return new \Bpi\Sdk\Item\Channel($channels);
+    }
+
+    /**
+     * @param string $id
+     */
+    public function getChannel($id) {
+        $channels = $this->createGenericDocument();
+        $channels->request('GET', $this->endpoint_url . '/channel/' . $id);
+
+        return new \Bpi\Sdk\Item\Channel($channels);
+    }
+
+    /**
+     * @param string $name
+     * @param string $description
+     * @param string $adminId
+     */
+    public function updateChannel($channelId, array $data) {
+        $this->checkRequired($data, [ 'name', 'description' ]);
+
+        $values = $this->apiRename($data, [
+            'name' => 'channelName',
+            'description' => 'channelDescription',
+        ]);
+
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/edit/' . $channelId, $values);
+
+        return new \Bpi\Sdk\Item\Channel($channels);
+    }
+
+    /**
+     * @param string $name
+     * @param string $description
+     * @param string $adminId
+     */
+    public function deleteChannel($channelId) {
+        $channels = $this->createGenericDocument();
+        $channels->request('DELETE', $this->endpoint_url . '/channel/remove/' . $channelId);
+
+        return !$channels->status()->isError();
+    }
+
+    public function addEditorToChannel($channelId, $adminId, $editorIds) {
+        if (!is_array($editorIds)) {
+            $editorIds = [ $editorIds ];
+        }
+        $values = [
+            'channelId' => $channelId,
+            'adminId' => $adminId,
+            'users' => array_map(function($editorId) {
+                return [ 'editorId' => $editorId ];
+            }, $editorIds),
+        ];
+
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/add/editor', $values);
+
+        $successes = [];
+        // @see http://api.symfony.com/3.0/Symfony/Component/DomCrawler/Crawler.html
+        $channels->filterXPath('result/success_list/item')->each(function($el) use (&$successes) {
+            $successes[] = $el->textContent;
+        });
+
+        return count($successes) == count($editorIds);
+    }
+
+    public function removeEditorFromChannel($channelId, $adminId, $editorIds) {
+        if (!is_array($editorIds)) {
+            $editorIds = [ $editorIds ];
+        }
+        $values = [
+            'channelId' => $channelId,
+            'adminId' => $adminId,
+            'users' => array_map(function($editorId) {
+                return [ 'editorId' => $editorId ];
+            }, $editorIds),
+        ];
+
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/remove/editor', $values);
+
+        $successes = [];
+        $channels->filterXPath('result/success_list/item')->each(function($el) use (&$successes) {
+            $successes[] = $el->textContent;
+        });
+
+        return count($successes) == count($editorIds);
+    }
+
+    public function getChannelsByUser($userId) {
+        $channels = $this->createGenericDocument();
+        $channels->request('GET', $this->endpoint_url . '/channel/user/' . $userId);
+
+        return new \Bpi\Sdk\ChannelList($channels);
+    }
+
+    public function addNodeToChannel($channelId, $editorId, $nodeIds) {
+        if (!is_array($nodeIds)) {
+            $nodeIds = [ $nodeIds ];
+        }
+        $values = [
+            'channelId' => $channelId,
+            'editorId' => $editorId,
+            'nodes' => array_map(function($nodeId) {
+                return [ 'nodeId' => $nodeId ];
+            }, $nodeIds),
+        ];
+
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/add/node', $values);
+
+        $successes = [];
+        $channels->filterXPath('result/success_list/item')->each(function($el) use (&$successes) {
+            $successes[] = $el->textContent;
+        });
+
+        return count($successes) == count($nodeIds);
+    }
+
+    public function removeNodeFromChannel($channelId, $editorId, $nodeIds) {
+        if (!is_array($nodeIds)) {
+            $nodeIds = [ $nodeIds ];
+        }
+        $values = [
+            'channelId' => $channelId,
+            'editorId' => $editorId,
+            'nodes' => array_map(function($nodeId) {
+                return [ 'nodeId' => $nodeId ];
+            }, $nodeIds),
+        ];
+
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/remove/node', $values);
+
+        $successes = [];
+        $channels->filterXPath('result/success_list/item')->each(function($el) use (&$successes) {
+            $successes[] = $el->textContent;
+        });
+
+        return count($successes) == count($nodeIds);
+    }
+
+    protected function createGenericDocument()
+    {
+        return new \Bpi\Sdk\GenericDocument($this->client, $this->authorization);
+    }
+
+    // -----------------------------------------------------------------------------
+
+    public function searchUsers($query = array()) {
+        $users = $this->createGenericDocument();
+        $users->request('GET', $this->endpoint_url . '/user/');
+
+        // var_export([ $users->getRawResponse() ]); die(__FILE__);
+
+        return new \Bpi\Sdk\UserList($users);
+    }
+
+    public function createUser(array $data) {
+        $this->checkRequired($data, [ 'externalId', 'email' ]);
+
+        $values = $this->apiRename($data, [
+            'externalId' => 'externalId',
+            'email' => 'email',
+            'firstName' => 'userFirstName',
+            'lastName' => 'userLastName',
+        ]);
+
+        $users = $this->createGenericDocument();
+        $users->request('POST', $this->endpoint_url . '/user/', $values);
+
+        return new \Bpi\Sdk\Item\User($users);
+    }
+
+    public function getUser($id) {
+        $users = $this->createGenericDocument();
+        $users->request('GET', $this->endpoint_url . '/user/' . $id);
+
+        return new \Bpi\Sdk\Item\User($users);
+    }
+
+    /**
+     * @param string $userId
+     * @param array $data
+     */
+    public function updateUser($userId, array $data) {
+        $this->checkRequired($data, []);
+
+        $values = $this->apiRename($data, [
+            'externalId' => 'externalId',
+            'email' => 'email',
+            'firstName' => 'userFirstName',
+            'lastName' => 'userLastName',
+        ]);
+
+        $users = $this->createGenericDocument();
+        $users->request('POST', $this->endpoint_url . '/user/edit/' . $userId, $values);
+
+        return new \Bpi\Sdk\Item\User($users);
+    }
+
+    /**
+     * @param string $name
+     * @param string $description
+     * @param string $adminId
+     */
+    public function deleteUser($userId) {
+        $users = $this->createGenericDocument();
+        $users->request('DELETE', $this->endpoint_url . '/user/remove/' . $userId);
+
+        return !$users->status()->isError();
+    }
+
+    protected function checkRequired(array $data, array $required) {
+        foreach ($required as $name) {
+            if (!isset($data[$name])) {
+                throw new \InvalidArgumentException(sprintf('Field [%s] is required', (string)$name));
+            }
+        }
+    }
+
+    protected function apiRename(array $data, array $apiNames) {
+        $values = [];
+        foreach ($data as $name => $value) {
+            if (isset($apiNames[$name])) {
+                $values[$apiNames[$name]] = $value;
+            }
+        }
+        return $values;
     }
 }
