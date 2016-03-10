@@ -70,4 +70,22 @@ class GenericDocument extends Document {
     public function filterXPath($xpath) {
         return $this->crawler->filterXPath($xpath);
     }
+
+    /**
+     * Get last response status
+     *
+     * @FIXME: This is a workaround for https://inlead.atlassian.net/browse/BPI-130.
+     *
+     * @return \Bpi\Sdk\ResponseStatus
+     */
+    public function status()
+    {
+        $status = NULL;
+        $this->filterXPath('error/code')->each(function($el) use (&$status) {
+            $status = new ResponseStatus($el->textContent);
+        });
+        $this->rewind();
+
+        return $status ? $status : parent::status();
+    }
 }
