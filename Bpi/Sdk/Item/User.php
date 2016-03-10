@@ -110,6 +110,13 @@ class User {
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getName() {
+        return trim($this->getFirstName() . ' ' . $this->getLastName());
+    }
+
     public function __construct($el) {
         $values = [];
 
