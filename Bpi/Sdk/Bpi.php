@@ -304,7 +304,7 @@ class Bpi
         $channels = $this->createGenericDocument();
         $channels->request('DELETE', $this->endpoint_url . '/channel/remove/' . $channelId);
 
-        return !$channels->status()->isError();
+        return $channels->status()->isSuccess();
     }
 
     public function addEditorToChannel($channelId, $adminId, $editorIds) {
@@ -418,8 +418,6 @@ class Bpi
         $users = $this->createGenericDocument();
         $users->request('GET', $this->endpoint_url . '/user/');
 
-        // var_export([ $users->getRawResponse() ]); die(__FILE__);
-
         return new \Bpi\Sdk\UserList($users);
     }
 
@@ -475,7 +473,7 @@ class Bpi
         $users = $this->createGenericDocument();
         $users->request('DELETE', $this->endpoint_url . '/user/remove/' . $userId);
 
-        return !$users->status()->isError();
+        return $users->status()->isSuccess();
     }
 
     protected function checkRequired(array $data, array $required) {
