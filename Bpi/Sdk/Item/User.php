@@ -21,6 +21,11 @@ class User {
     private $agencyId;
 
     /**
+     * @var Agency
+     */
+    private $agency;
+
+    /**
      * @var string
      */
     private $firstName;
@@ -59,6 +64,22 @@ class User {
      */
     public function setAgencyId($agencyId) {
         $this->agencyId = $agencyId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAgency() {
+        return $this->agency;
+    }
+
+    /**
+     * @param string $agency
+     * @return User
+     */
+    public function setAgency($agency) {
+        $this->agency = $agency;
         return $this;
     }
 
@@ -121,7 +142,7 @@ class User {
         $values = [];
 
         if ($el instanceof GenericDocument) {
-            $el->walkElements('> *', function($el) use (&$values) {
+            $el->walkElements('user > *', function($el) use (&$values) {
                 $name = $el->getName();
                 $value = (string)$el;
                 switch ($name) {
@@ -140,6 +161,9 @@ class User {
                     case 'agency_id':
                         $values['agencyId'] = $value;
                         break;
+                    case 'agency':
+                      $values['agency'] = new Agency($el);
+                      break;
                 }
             });
 
@@ -150,6 +174,7 @@ class User {
             $values['firstName'] = (string)$el->user_first_name;
             $values['lastName'] = (string)$el->user_last_name;
             $values['agencyId'] = (string)$el->agency_id;
+            $values['agency'] = new Agency($el);
         }
         else if (is_string($el)) {
             $values['id'] = (string)$el;
@@ -169,6 +194,9 @@ class User {
         }
         if (isset($values['agencyId'])) {
             $this->setAgencyId($values['agencyId']);
+        }
+        if (isset($values['agency'])) {
+            $this->setAgency($values['agency']);
         }
     }
 }
