@@ -276,6 +276,31 @@ class Document implements \Iterator, \Countable
     }
 
     /**
+     * Iterates over all tags of current item
+     */
+    public function walkTags($callback)
+    {
+        $crawler = new Crawler($this->crawler->current());
+        return $crawler->filter('item tags tag')->each(function($e) use($callback) {
+            $sxml = simplexml_import_dom($e);
+            $callback(current($sxml->attributes()) + array('@value' => (string) $sxml));
+        });
+    }
+
+    /**
+     * Iterates over all assets of current item
+     */
+    public function walkAssets($callback)
+    {
+        $crawler = new Crawler($this->crawler->current());
+        return $crawler->filter('item assets file')->each(function($e) use($callback) {
+            $sxml = simplexml_import_dom($e);
+            $callback(current($sxml->attributes()) + array('@value' => (string) $sxml));
+        });
+    }
+
+    /**
+     *
      * @return array
      */
     public function propertiesToArray()
