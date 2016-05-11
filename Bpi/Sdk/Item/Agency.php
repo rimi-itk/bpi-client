@@ -46,32 +46,20 @@ class Agency {
         return $this;
     }
 
-  public function __construct($el) {
+    public function __construct($el) {
         $values = [];
 
         if ($el instanceof GenericDocument) {
-            $el->walkElements('> *', function($el) use (&$values) {
+            $el->walkElements('agency > *', function($el) use (&$values) {
                 $name = $el->getName();
                 $value = (string)$el;
                 switch ($name) {
                     case 'id':
-                        $values['id'] = $value;
-                        break;
-                    case 'email':
-                        $values['email'] = $value;
-                        break;
-                    case 'user_first_name':
-                        $values['firstName'] = $value;
-                        break;
-                    case 'user_last_name':
-                        $values['lastName'] = $value;
-                        break;
-                    case 'agency_id':
-                        $values['agencyId'] = $value;
-                        break;
-                    case 'agency':
-                      $values['agency'] = new Agency((string)$el->agency->id, (string)$el->agency->name);
-                      break;
+                      $values['id'] = $value;
+                    break;
+                  case 'name':
+                    $values['name'] = $value;
+                    break;
                 }
             });
 
@@ -79,6 +67,9 @@ class Agency {
         else if ($el instanceof SimpleXMLElement) {
             $values['id'] = (string)$el->id;
             $values['name'] = (string)$el->name;
+        }
+        else if (is_string($el)) {
+            $values['id'] = (string)$el;
         } else {
             throw new \Exception('Invalid constructor call ' . get_class($el));
         }

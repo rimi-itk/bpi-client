@@ -16,11 +16,6 @@ class User {
     private $email;
 
     /**
-     * @var string
-     */
-    private $agencyId;
-
-    /**
      * @var Agency
      */
     private $agency;
@@ -48,22 +43,6 @@ class User {
      */
     protected function setId($id) {
         $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAgencyId() {
-        return $this->agencyId;
-    }
-
-    /**
-     * @param string $agencyId
-     * @return User
-     */
-    public function setAgencyId($agencyId) {
-        $this->agencyId = $agencyId;
         return $this;
     }
 
@@ -158,9 +137,6 @@ class User {
                     case 'user_last_name':
                         $values['lastName'] = $value;
                         break;
-                    case 'agency_id':
-                        $values['agencyId'] = $value;
-                        break;
                     case 'agency':
                       $values['agency'] = new Agency($el);
                       break;
@@ -173,8 +149,7 @@ class User {
             $values['email'] = (string)$el->email;
             $values['firstName'] = (string)$el->user_first_name;
             $values['lastName'] = (string)$el->user_last_name;
-            $values['agencyId'] = (string)$el->agency_id;
-            $values['agency'] = new Agency($el);
+            $values['agency'] = new Agency($el->agency);
         }
         else if (is_string($el)) {
             $values['id'] = (string)$el;
@@ -191,9 +166,6 @@ class User {
         }
         if (isset($values['lastName'])) {
             $this->setLastName($values['lastName']);
-        }
-        if (isset($values['agencyId'])) {
-            $this->setAgencyId($values['agencyId']);
         }
         if (isset($values['agency'])) {
             $this->setAgency($values['agency']);

@@ -416,7 +416,16 @@ class Bpi
 
     public function searchUsers($query = array()) {
         $users = $this->createGenericDocument();
-        $users->request('GET', $this->endpoint_url . '/user/');
+        if (empty($query)) {
+          $users->request('GET', $this->endpoint_url . '/user/');
+        }
+        else {
+          $params = $this->apiRename($query, [
+                      'name' => 'userIternalName',
+                      'agencyId' => 'agencyId',
+                    ]);
+          $users->request('POST', $this->endpoint_url . '/user/autocompletions', $params);
+        }
 
         return new \Bpi\Sdk\UserList($users);
     }
