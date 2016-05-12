@@ -159,8 +159,8 @@ class User {
                         $values['lastName'] = $value;
                         break;
                     case 'agency':
-                      $values['agency'] = new Agency($el);
-                      break;
+                        $values['agency'] = new Agency($el);
+                        break;
                     case 'subscriptions':
                         foreach ($el->entry as $subscription) {
                             if (!isset($values['subscriptions'])) {
