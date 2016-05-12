@@ -41,6 +41,11 @@ class Channel {
     private $nodes;
 
     /**
+     * @var DateTime
+     */
+    private $nodeLastAddedAt;
+
+    /**
      * @return string
      */
     public function getId() {
@@ -133,6 +138,13 @@ class Channel {
         return $this->nodes;
     }
 
+    /**
+     * @return DateTime
+     */
+    public function getNodeLastAddedAt() {
+        return $this->nodeLastAddedAt;
+    }
+
     public function __construct(GenericDocument $document) {
         $values = [];
 
@@ -152,6 +164,9 @@ class Channel {
                     break;
                 case 'channelAdmin':
                     $values['adminId'] = $value;
+                    break;
+                case 'nodeLastAddedAt':
+                    $values['nodeLastAddedAt'] = $value;
                     break;
             }
         });
@@ -189,6 +204,9 @@ class Channel {
                         $values['nodes'][] = (string)$node;
                     }
                     break;
+                case 'node_last_added_at':
+                    $values['nodeLastAddedAt'] = $value;
+                    break;
             }
         });
 
@@ -210,6 +228,9 @@ class Channel {
         }
         if (isset($values['nodes'])) {
             $this->nodes = $values['nodes'];
+        }
+        if (isset($values['nodeLastAddedAt'])) {
+            $this->nodeLastAddedAt = new \DateTime($values['nodeLastAddedAt']);
         }
     }
 }
