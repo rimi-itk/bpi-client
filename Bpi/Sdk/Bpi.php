@@ -485,6 +485,41 @@ class Bpi
         return $users->status()->isSuccess();
     }
 
+    /**
+     * @param string $userId
+     * @param array $data
+     *
+     * @return Subscription
+     */
+    public function createSubscription($userId, array $data) {
+        $this->checkRequired($data, [ 'title', 'filter' ]);
+
+        $values = $data;
+        $values['filter'] = json_encode($values['filter']);
+        $values['userId'] = $userId;
+
+        $users = $this->createGenericDocument();
+        $users->request('POST', $this->endpoint_url . '/user/subscription', $values);
+
+        return new \Bpi\Sdk\Item\User($users);
+    }
+
+    /**
+     * @param string $userId
+     * @param string $title
+     */
+    public function deleteSubscription($userId, $title) {
+        $values = array(
+            'userId' => $userId,
+            'subscriptionTitle' => $title,
+        );
+
+        $users = $this->createGenericDocument();
+        $users->request('POST', $this->endpoint_url . '/user/subscription/remove', $values);
+
+        return new \Bpi\Sdk\Item\User($users);
+    }
+
     protected function checkRequired(array $data, array $required) {
         foreach ($required as $name) {
             if (!isset($data[$name])) {

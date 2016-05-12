@@ -31,6 +31,11 @@ class User {
     private $lastName;
 
     /**
+     * @var array of Subscription
+     */
+    private $subscriptions;
+
+    /**
      * @return string
      */
     public function getId() {
@@ -97,6 +102,22 @@ class User {
     /**
      * @return string
      */
+    public function getSubscriptions() {
+        return $this->subscriptions;
+    }
+
+    /**
+     * @param string $subscriptions
+     * @return User
+     */
+    public function setSubscriptions($subscriptions) {
+        $this->subscriptions = $subscriptions;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getLastName() {
         return $this->lastName;
     }
@@ -140,6 +161,14 @@ class User {
                     case 'agency':
                       $values['agency'] = new Agency($el);
                       break;
+                    case 'subscriptions':
+                        foreach ($el->entry as $subscription) {
+                            if (!isset($values['subscriptions'])) {
+                                $values['subscriptions'] = [];
+                            }
+                            $values['subscriptions'][] = new Subscription($subscription);
+                        }
+                        break;
                 }
             });
 
@@ -150,6 +179,15 @@ class User {
             $values['firstName'] = (string)$el->user_first_name;
             $values['lastName'] = (string)$el->user_last_name;
             $values['agency'] = new Agency($el->agency);
+
+            if (isset($el->subscriptions->entry)) {
+                foreach ($el->subscriptions->entry as $subscription) {
+                    if (!isset($values['subscriptions'])) {
+                        $values['subscriptions'] = [];
+                    }
+                    $values['subscriptions'][] = new Subscription($subscription);
+                }
+            }
         }
         else if (is_string($el)) {
             $values['id'] = (string)$el;
@@ -169,6 +207,9 @@ class User {
         }
         if (isset($values['agency'])) {
             $this->setAgency($values['agency']);
+        }
+        if (isset($values['subscriptions'])) {
+            $this->setSubscriptions($values['subscriptions']);
         }
     }
 }
