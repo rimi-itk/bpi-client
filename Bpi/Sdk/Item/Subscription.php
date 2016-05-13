@@ -63,7 +63,7 @@ class Subscription {
         }
 
         if (isset($values['title'])) {
-            $this->setTitle($values['title']);
+            $this->setTitle(htmlspecialchars_decode($values['title'], ENT_QUOTES));
         }
         if (isset($values['filter'])) {
             $this->setFilter(htmlspecialchars_decode($values['filter'], ENT_QUOTES));
