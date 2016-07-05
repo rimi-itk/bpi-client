@@ -2,6 +2,7 @@
 namespace Bpi\Sdk;
 
 use Bpi\Sdk\GenericDocument;
+use Bpi\Sdk\Exception\EmptyList;
 
 /**
  * TODO please add a general description about the purpose of this class.
@@ -17,8 +18,9 @@ class UserList extends NodeList
         {
             $this->document = clone $document;
             $this->document->reduceByName('user');
+            $this->total = $this->document->total;
         }
-        catch (Exception\EmptyList $e)
+        catch (EmptyList $e)
         {
             $this->document->clear();
         }

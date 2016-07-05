@@ -53,7 +53,7 @@ class Subscription {
     }
 
     public function __construct($el) {
-        $values = [];
+        $values = array();
 
         if ($el instanceof SimpleXMLElement) {
             $values['title'] = (string)$el->title;

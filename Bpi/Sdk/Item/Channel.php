@@ -146,30 +146,7 @@ class Channel {
     }
 
     public function __construct(GenericDocument $document) {
-        $values = [];
-
-        $document->walkProperties(function($el) use (&$values) {
-            $name = $el['name'];
-            $value = $el['@value'];
-
-            switch ($name) {
-                case 'id':
-                    $values['id'] = $value;
-                    break;
-                case 'channelName':
-                    $values['name'] = $value;
-                    break;
-                case 'channelDescription':
-                    $values['description'] = $value;
-                    break;
-                case 'channelAdmin':
-                    $values['adminId'] = $value;
-                    break;
-                case 'nodeLastAddedAt':
-                    $values['nodeLastAddedAt'] = $value;
-                    break;
-            }
-        });
+        $values = array();
 
         $document->walkElements('channel > *', function(SimpleXMLElement $el) use (&$values) {
             $name = $el->getName();
@@ -191,7 +168,7 @@ class Channel {
                 case 'users':
                     foreach ($el->user as $user) {
                         if (!isset($values['editors'])) {
-                            $values['editors'] = [];
+                            $values['editors'] = array();
                         }
                         $values['editors'][] = new User($user);
                     }
@@ -199,7 +176,7 @@ class Channel {
                 case 'nodes':
                     foreach ($el->node as $node) {
                         if (!isset($values['nodes'])) {
-                            $values['nodes'] = [];
+                            $values['nodes'] = array();
                         }
                         $values['nodes'][] = (string)$node;
                     }

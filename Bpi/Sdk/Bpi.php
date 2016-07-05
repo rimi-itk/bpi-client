@@ -50,7 +50,7 @@ class Bpi
         $this->authorization = new \Bpi\Sdk\Authorization($agency_id, $api_key, $secret_key);
         $this->current_document = $this->endpoint = $this->createDocument();
         $this->endpoint->loadEndpoint($endpoint);
-        $this->endpoint_url = $endpoint;
+        $this->endpoint_url = rtrim($endpoint, '/');
     }
 
     /**
@@ -240,14 +240,24 @@ class Bpi
 
     // -----------------------------------------------------------------------------
 
+    /**
+     * Get list of channels.
+     *
+     * @param array $query available keys are: amount, offset, filter, sort
+     *   filter and sort requires nested arrays
+     * @return \Bpi\Sdk\NodeList
+     */
     public function searchChannels($query = array()) {
         $channels = $this->createGenericDocument();
-        $channels->request('GET', $this->endpoint_url . '/channel/');
+        $channels->request('GET', $this->endpoint_url . '/channel/?' . http_build_query($query));
+        $channels->setFacets();
 
         return new \Bpi\Sdk\ChannelList($channels);
     }
 
     /**
+     * Create a new channel.
+     *
      * @param string $name
      * @param string $description
      * @param string $adminId
@@ -267,7 +277,13 @@ class Bpi
     }
 
     /**
+     * Get a channel by Id.
+     *
      * @param string $id
+     *   The channel id.
+     *
+     * @return Channel
+     *   The channel if found.
      */
     public function getChannel($id) {
         $channels = $this->createGenericDocument();
@@ -414,18 +430,17 @@ class Bpi
 
     // -----------------------------------------------------------------------------
 
+    /**
+     * Get list of users based on conditions
+     *
+     * @param array $queries available keys are: search, amount, offset, filter, sort
+     *   filter and sort requires nested arrays
+     * @return \Bpi\Sdk\UserList
+     */
     public function searchUsers($query = array()) {
         $users = $this->createGenericDocument();
-        if (empty($query)) {
-          $users->request('GET', $this->endpoint_url . '/user/');
-        }
-        else {
-          $params = $this->apiRename($query, [
-                      'name' => 'userIternalName',
-                      'agencyId' => 'agencyId',
-                    ]);
-          $users->request('POST', $this->endpoint_url . '/user/autocompletions', $params);
-        }
+        $users->request('GET', $this->endpoint_url . '/user/?' . http_build_query($query));
+        $users->setFacets();
 
         return new \Bpi\Sdk\UserList($users);
     }

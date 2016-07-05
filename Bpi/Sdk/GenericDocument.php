@@ -1,9 +1,14 @@
 <?php
 namespace Bpi\Sdk;
 
+use Bpi\Sdk\Item\Facet;
 use Symfony\Component\DomCrawler\Crawler;
 
 class GenericDocument extends Document {
+    public $total;
+    public $offset;
+    public $amount;
+
     /**
      * {@inheritdoc}
      */
@@ -16,6 +21,10 @@ class GenericDocument extends Document {
 
         $this->crawler = $this->http_client->request($method, $uri, $params, array(), $headers);
         $this->crawler->rewind();
+
+        $this->total = $this->crawler->attr('total');
+        $this->offset = $this->crawler->attr('offset');
+        $this->amount = $this->crawler->attr('amount');
 
         if ($this->status()->isError())
         {
@@ -71,21 +80,15 @@ class GenericDocument extends Document {
         return $this->crawler->filterXPath($xpath);
     }
 
-    /**
-     * Get last response status
-     *
-     * @FIXME: This is a workaround for https://inlead.atlassian.net/browse/BPI-130.
-     *
-     * @return \Bpi\Sdk\ResponseStatus
-     */
-    public function status()
-    {
-        $status = NULL;
-        $this->filterXPath('error/code')->each(function($el) use (&$status) {
-            $status = new ResponseStatus($el->textContent);
+    public function setFacets() {
+        $this->facets = new Facets();
+        $this->walkElements('* > facet', function(\SimpleXMLElement $el) {
+            $facet = new Facet();
+            $facet->setFacetName((string)$el->attributes()->name);
+            foreach ($el->term as $term) {
+                $facet->addFacetTerm((string)$term->attributes()->name, (string)$term->attributes()->title, (string)$term);
+            }
+            $this->facets->addFacets($facet);
         });
-        $this->rewind();
-
-        return $status ? $status : parent::status();
     }
 }

@@ -139,7 +139,7 @@ class User {
     }
 
     public function __construct($el) {
-        $values = [];
+        $values = array();
 
         if ($el instanceof GenericDocument) {
             $el->walkElements('user > *', function($el) use (&$values) {
@@ -164,7 +164,7 @@ class User {
                     case 'subscriptions':
                         foreach ($el->entry as $subscription) {
                             if (!isset($values['subscriptions'])) {
-                                $values['subscriptions'] = [];
+                                $values['subscriptions'] = array();
                             }
                             $values['subscriptions'][] = new Subscription($subscription);
                         }
@@ -183,7 +183,7 @@ class User {
             if (isset($el->subscriptions->entry)) {
                 foreach ($el->subscriptions->entry as $subscription) {
                     if (!isset($values['subscriptions'])) {
-                        $values['subscriptions'] = [];
+                        $values['subscriptions'] = array();
                     }
                     $values['subscriptions'][] = new Subscription($subscription);
                 }
