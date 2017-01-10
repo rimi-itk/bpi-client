@@ -1,9 +1,5 @@
 <?php
 
-if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
-    require_once __DIR__ . '/../../vendor/autoload.php';
-}
-
 use Bpi\Sdk\Authorization;
 use Bpi\Sdk\Exception\SDKException;
 use Bpi\Sdk\Item\BaseItem;

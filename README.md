@@ -13,8 +13,11 @@ Usage
 ```
 <?php
 include_once __DIR__ . '/vendor/autoload.php';
-new Bpi\Sdk\Document(new Goutte\Client());
-?>
+include_once __DIR__ . '/Bpi/Sdk/Bpi.php';
+
+$bpi = new Bpi(…);
+$nodes = $bpi->searchNodes([]);
+…
 ```
 
 Running tests
