@@ -5,8 +5,9 @@ use Bpi\Sdk\Exception\SDKException;
 use Bpi\Sdk\Item\BaseItem;
 use Bpi\Sdk\Item\Node;
 use Bpi\Sdk\NodeList;
-use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Exception\ClientException as GuzzleClientException;
+use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\ClientException as HttpClientException;
+use GuzzleHttp\ClientInterface as HttpClientInterface;
 
 /**
  * TODO please add a general description about the purpose of this class.
@@ -15,8 +16,7 @@ use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 class Bpi
 {
     /**
-     *
-     * @var \Goutte\Client
+     * @var \GuzzleHttp\ClientInterface
      */
     protected $client;
 
@@ -35,31 +35,35 @@ class Bpi
     /**
      * Create Bpi Client
      *
-     * @param string $endpoint URL
+     * @param string|\GuzzleHttp\ClientInterface $endpoint
      * @param string $agencyId Agency ID
      * @param string $publicKey App key
      * @param string $secret
      */
-    public function __construct($endpoint, $agencyId, $publicKey, $secret)
+    public function __construct($endpoint, $agencyId = null, $publicKey = null, $secret = null)
     {
-        $this->endpoint = $endpoint;
-        $this->authorization = new Authorization($agencyId, $publicKey, $secret);
-    }
-
-    private function request($method, $url, array $data = [])
-    {
-        try {
-            $this->client = new GuzzleHttpClient([
+        if ($endpoint instanceof HttpClientInterface) {
+            $this->client = $endpoint;
+        } else {
+            $this->endpoint = $endpoint;
+            $this->authorization = new Authorization($agencyId, $publicKey,
+                $secret);
+            $this->client = new HttpClient([
                 'base_uri' => $this->endpoint,
                 'headers' => [
                     'Auth' => $this->authorization->toHTTPHeader(),
                 ],
             ]);
+        }
+    }
 
+    private function request($method, $url, array $data = [])
+    {
+        try {
             $result = $this->client->request($method, $url, $data);
 
             return $result;
-        } catch (GuzzleClientException $e) {
+        } catch (HttpClientException $e) {
             throw new SDKException($e->getMessage(), $e->getCode(), $e);
         }
     }
