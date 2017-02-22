@@ -1,9 +1,17 @@
 <?php
-require_once __DIR__ . '/../../vendor/autoload.php';
+
+use Bpi\Sdk\Authorization;
+use Bpi\Sdk\Exception\SDKException;
+use Bpi\Sdk\Item\BaseItem;
+use Bpi\Sdk\Item\Node;
+use Bpi\Sdk\NodeList;
+use GuzzleHttp\Client as GuzzleHttpClient;
+use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 
 /**
  * TODO please add a general description about the purpose of this class.
  */
+// @codingStandardsIgnoreLine
 class Bpi
 {
     /**
@@ -20,47 +28,40 @@ class Bpi
 
     /**
      *
-     * @var \Bpi\Sdk\Document
-     */
-    protected $endpoint;
-
-    /**
-     *
      * @var string
      */
-    protected $endpoint_url;
-
-    /**
-     *
-     * @var \Bpi\Sdk\Document
-     */
-    protected $current_document;
+    protected $endpoint;
 
     /**
      * Create Bpi Client
      *
      * @param string $endpoint URL
-     * @param string $agency_id Agency ID
-     * @param string $api_key App key
-     * @param string $secret_key
+     * @param string $agencyId Agency ID
+     * @param string $publicKey App key
+     * @param string $secret
      */
-    public function __construct($endpoint, $agency_id, $api_key, $secret_key)
+    public function __construct($endpoint, $agencyId, $publicKey, $secret)
     {
-        $this->client = new \Goutte\Client();
-        $this->authorization = new \Bpi\Sdk\Authorization($agency_id, $api_key, $secret_key);
-        $this->current_document = $this->endpoint = $this->createDocument();
-        $this->endpoint->loadEndpoint($endpoint);
-        $this->endpoint_url = rtrim($endpoint, '/');
+        $this->endpoint = $endpoint;
+        $this->authorization = new Authorization($agencyId, $publicKey, $secret);
     }
 
-    /**
-     * Create new document
-     *
-     * @return \Bpi\Sdk\Document
-     */
-    protected function createDocument()
+    private function request($method, $url, array $data = [])
     {
-        return new \Bpi\Sdk\Document($this->client, $this->authorization);
+        try {
+            $this->client = new GuzzleHttpClient([
+                'base_uri' => $this->endpoint,
+                'headers' => [
+                    'Auth' => $this->authorization->toHTTPHeader(),
+                ],
+            ]);
+
+            $result = $this->client->request($method, $url, $data);
+
+            return $result;
+        } catch (GuzzleClientException $e) {
+            throw new SDKException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -70,21 +71,14 @@ class Bpi
      *   filter and sort requires nested arrays
      * @return \Bpi\Sdk\NodeList
      */
-    public function searchNodes(array $queries = array())
+    public function searchNodes(array $query = array())
     {
-        $nodes = $this->createDocument();
-        $endpoint = clone $this->endpoint;
-        $endpoint->firstItem('name', 'node')
-            ->link('collection')
-            ->get($nodes);
+        $result = $this->request('GET', '/node/collection', [
+            'query' => $query,
+        ]);
+        $element = new \SimpleXMLElement((string)$result->getBody());
 
-        $nodes->firstItem('type', 'collection')
-            ->query('refinement')
-            ->send($nodes, $queries);
-        $nodes->setFacets();
-        $this->current_document = $nodes;
-
-        return new \Bpi\Sdk\NodeList($nodes);
+        return new NodeList($element);
     }
 
     /**
@@ -96,21 +90,10 @@ class Bpi
      */
     public function push(array $data)
     {
-        $node = $this->createDocument();
-        $nodes = clone $this->endpoint;
-        $nodes->firstItem('name', 'node')
-            ->template('push')
-            ->eachField(function ($field) use ($data) {
-                // nb: variable $data[(string)$field] may be empty.
-                if (!isset($data[(string)$field])) {
-                    throw new \InvalidArgumentException(sprintf('Field [%s] is required', (string) $field));
-                }
-                $field->setValue($data[(string) $field]);
-            })->post($node);
+        $result = $this->request('POST', '/node', ['form_params' => $data]);
+        $element = new \SimpleXMLElement((string)$result->getBody());
 
-        $this->current_document = $node;
-
-        return new \Bpi\Sdk\Item\Node($node);
+        return new Node($element->item[0]);
     }
 
     /**
@@ -121,16 +104,9 @@ class Bpi
      */
     public function syndicateNode($id)
     {
-        $result = $this->createDocument();
+        $result = $this->request('GET', '/node/syndicated', ['query' => ['id' => $id]]);
 
-        $endpoint = clone $this->endpoint;
-        $endpoint->firstItem('name', 'node')
-            ->query('syndicated')
-            ->send($result, array('id' => $id));
-
-        $this->current_document = $result;
-
-        return $result->status()->isSuccess();
+        return $result->getStatusCode() === 200;
     }
 
     /**
@@ -141,16 +117,9 @@ class Bpi
      */
     public function deleteNode($id)
     {
-        $result = $this->createDocument();
+        $result = $this->request('GET', '/node/delete', ['query' => ['id' => $id]]);
 
-        $endpoint = clone $this->endpoint;
-        $endpoint->firstItem('name', 'node')
-            ->query('delete')
-            ->send($result, array('id' => $id));
-
-        $this->current_document = $result;
-
-        return $result->status()->isSuccess();
+        return $result->getStatusCode() === 200;
     }
 
     /**
@@ -165,15 +134,10 @@ class Bpi
      */
     public function getStatistics($dateFrom, $dateTo)
     {
-        $result = $this->createDocument();
-        $endpoint = clone $this->endpoint;
-        $endpoint->firstItem('name', 'node')
-            ->query('statistics')
-            ->send($result, array('dateFrom'=>$dateFrom, 'dateTo'=>$dateTo));
+        $result = $this->request('GET', '/statistics', ['query' => ['dateFrom' => $dateFrom, 'dateTo' => $dateTo]]);
+        $element = new \SimpleXMLElement((string)$result->getBody());
 
-        $this->current_document = $result;
-
-        return new \Bpi\Sdk\Item\BaseItem($result);
+        return new BaseItem($element);
     }
 
     /**
@@ -184,16 +148,10 @@ class Bpi
      */
     public function getNode($id)
     {
-        $result = $this->createDocument();
+        $result = $this->request('GET', '/node/item/' . $id);
+        $element = new \SimpleXMLElement((string)$result->getBody());
 
-        $endpoint = clone $this->endpoint;
-        $endpoint->firstItem('name', 'node')
-            ->query('item')
-            ->send($result, array('id' => $id));
-
-        $this->current_document = $result;
-
-        return new \Bpi\Sdk\Item\Node($result);
+        return new Node($element->item[0]);
     }
 
     /**
@@ -203,353 +161,19 @@ class Bpi
      */
     public function getDictionaries()
     {
-        $result = $this->createDocument();
+        $result = $this->request('GET', '/profile/dictionary');
+        $element = new \SimpleXMLElement((string)$result->getBody());
 
-        $endpoint = clone $this->endpoint;
-        $endpoint->firstItem('name', 'profile')
-            ->link('dictionary')
-            ->get($result);
-
-        $this->current_document = $result;
-
-        $dictionary = array();
-        foreach ($result as $item)
-        {
-            $properties = array();
-            $item->walkProperties(function($property) use (&$properties){
-                $properties[$property['name']] = $property['@value'];
-            });
-
-            $dictionary[$properties['group']][] = $properties['name'];
+        $dictionary = [];
+        foreach ($element->xpath('/bpi/item') as $item) {
+            $group = (string)$item->xpath('properties/property[@name = "group"]')[0];
+            $name = (string)$item->xpath('properties/property[@name = "name"]')[0];
+            if (!isset($dictionary[$group])) {
+                $dictionary[$group] = [];
+            }
+            $dictionary[$group][] = $name;
         }
 
         return $dictionary;
-    }
-
-    /**
-     * TODO This is a public function prefixed with an _ signalling that it is
-     * not to be used for public consumption. Why is this necessary?
-     *
-     * @return \Bpi\Sdk\Document
-     */
-    public function _getCurrentDocument()
-    {
-        return $this->current_document;
-    }
-
-
-    // -----------------------------------------------------------------------------
-
-    /**
-     * Get list of channels.
-     *
-     * @param array $query available keys are: amount, offset, filter, sort
-     *   filter and sort requires nested arrays
-     * @return \Bpi\Sdk\NodeList
-     */
-    public function searchChannels($query = array()) {
-        $channels = $this->createGenericDocument();
-        $channels->request('GET', $this->endpoint_url . '/channel/?' . http_build_query($query));
-        $channels->setFacets();
-
-        return new \Bpi\Sdk\ChannelList($channels);
-    }
-
-    /**
-     * Create a new channel.
-     *
-     * @param string $name
-     * @param string $description
-     * @param string $adminId
-     */
-    public function createChannel(array $data) {
-        $this->checkRequired($data, [ 'name', 'description', 'adminId' ]);
-        $values = $this->apiRename($data, [
-            'name' => 'name',
-            'description' => 'channelDescription',
-            'adminId' => 'editorId',
-        ]);
-
-        $channels = $this->createGenericDocument();
-        $channels->request('POST', $this->endpoint_url . '/channel/', $values);
-
-        return new \Bpi\Sdk\Item\Channel($channels);
-    }
-
-    /**
-     * Get a channel by Id.
-     *
-     * @param string $id
-     *   The channel id.
-     *
-     * @return Channel
-     *   The channel if found.
-     */
-    public function getChannel($id) {
-        $channels = $this->createGenericDocument();
-        $channels->request('GET', $this->endpoint_url . '/channel/' . $id);
-
-        return new \Bpi\Sdk\Item\Channel($channels);
-    }
-
-    /**
-     * @param string $name
-     * @param string $description
-     * @param string $adminId
-     */
-    public function updateChannel($channelId, array $data) {
-        $this->checkRequired($data, [ 'name', 'description' ]);
-
-        $values = $this->apiRename($data, [
-            'name' => 'channelName',
-            'description' => 'channelDescription',
-        ]);
-
-        $channels = $this->createGenericDocument();
-        $channels->request('POST', $this->endpoint_url . '/channel/edit/' . $channelId, $values);
-
-        return new \Bpi\Sdk\Item\Channel($channels);
-    }
-
-    /**
-     * @param string $name
-     * @param string $description
-     * @param string $adminId
-     */
-    public function deleteChannel($channelId) {
-        $channels = $this->createGenericDocument();
-        $channels->request('DELETE', $this->endpoint_url . '/channel/remove/' . $channelId);
-
-        return $channels->status()->isSuccess();
-    }
-
-    public function addEditorToChannel($channelId, $adminId, $editorIds) {
-        if (!is_array($editorIds)) {
-            $editorIds = [ $editorIds ];
-        }
-        $values = [
-            'channelId' => $channelId,
-            'adminId' => $adminId,
-            'users' => array_map(function($editorId) {
-                return [ 'editorId' => $editorId ];
-            }, $editorIds),
-        ];
-
-        $channels = $this->createGenericDocument();
-        $channels->request('POST', $this->endpoint_url . '/channel/add/editor', $values);
-
-        $successes = [];
-        // @see http://api.symfony.com/3.0/Symfony/Component/DomCrawler/Crawler.html
-        $channels->filterXPath('result/success_list/item')->each(function($el) use (&$successes) {
-            $successes[] = $el->textContent;
-        });
-
-        return count($successes) == count($editorIds);
-    }
-
-    public function removeEditorFromChannel($channelId, $adminId, $editorIds) {
-        if (!is_array($editorIds)) {
-            $editorIds = [ $editorIds ];
-        }
-        $values = [
-            'channelId' => $channelId,
-            'adminId' => $adminId,
-            'users' => array_map(function($editorId) {
-                return [ 'editorId' => $editorId ];
-            }, $editorIds),
-        ];
-
-        $channels = $this->createGenericDocument();
-        $channels->request('POST', $this->endpoint_url . '/channel/remove/editor', $values);
-
-        $successes = [];
-        $channels->filterXPath('result/success_list/item')->each(function($el) use (&$successes) {
-            $successes[] = $el->textContent;
-        });
-
-        return count($successes) == count($editorIds);
-    }
-
-    public function getChannelsByUser($userId) {
-        $channels = $this->createGenericDocument();
-        $channels->request('GET', $this->endpoint_url . '/channel/user/' . $userId);
-
-        return new \Bpi\Sdk\ChannelList($channels);
-    }
-
-    public function addNodeToChannel($channelId, $editorId, $nodeIds) {
-        if (!is_array($nodeIds)) {
-            $nodeIds = [ $nodeIds ];
-        }
-        $values = [
-            'channelId' => $channelId,
-            'editorId' => $editorId,
-            'nodes' => array_map(function($nodeId) {
-                return [ 'nodeId' => $nodeId ];
-            }, $nodeIds),
-        ];
-
-        $channels = $this->createGenericDocument();
-        $channels->request('POST', $this->endpoint_url . '/channel/add/node', $values);
-
-        $successes = [];
-        $channels->filterXPath('result/success_list/item')->each(function($el) use (&$successes) {
-            $successes[] = $el->textContent;
-        });
-
-        return count($successes) == count($nodeIds);
-    }
-
-    public function removeNodeFromChannel($channelId, $editorId, $nodeIds) {
-        if (!is_array($nodeIds)) {
-            $nodeIds = [ $nodeIds ];
-        }
-        $values = [
-            'channelId' => $channelId,
-            'editorId' => $editorId,
-            'nodes' => array_map(function($nodeId) {
-                return [ 'nodeId' => $nodeId ];
-            }, $nodeIds),
-        ];
-
-        $channels = $this->createGenericDocument();
-        $channels->request('POST', $this->endpoint_url . '/channel/remove/node', $values);
-
-        $successes = [];
-        $channels->filterXPath('result/success_list/item')->each(function($el) use (&$successes) {
-            $successes[] = $el->textContent;
-        });
-
-        return count($successes) == count($nodeIds);
-    }
-
-    protected function createGenericDocument()
-    {
-        return new \Bpi\Sdk\GenericDocument($this->client, $this->authorization);
-    }
-
-    // -----------------------------------------------------------------------------
-
-    /**
-     * Get list of users based on conditions
-     *
-     * @param array $queries available keys are: search, amount, offset, filter, sort
-     *   filter and sort requires nested arrays
-     * @return \Bpi\Sdk\UserList
-     */
-    public function searchUsers($query = array()) {
-        $users = $this->createGenericDocument();
-        $users->request('GET', $this->endpoint_url . '/user/?' . http_build_query($query));
-        $users->setFacets();
-
-        return new \Bpi\Sdk\UserList($users);
-    }
-
-    public function createUser(array $data) {
-        $this->checkRequired($data, [ 'externalId', 'email' ]);
-
-        $values = $this->apiRename($data, [
-            'externalId' => 'externalId',
-            'email' => 'email',
-            'firstName' => 'userFirstName',
-            'lastName' => 'userLastName',
-        ]);
-
-        $users = $this->createGenericDocument();
-        $users->request('POST', $this->endpoint_url . '/user/', $values);
-
-        return new \Bpi\Sdk\Item\User($users);
-    }
-
-    public function getUser($id) {
-        $users = $this->createGenericDocument();
-        $users->request('GET', $this->endpoint_url . '/user/' . $id);
-
-        return new \Bpi\Sdk\Item\User($users);
-    }
-
-    /**
-     * @param string $userId
-     * @param array $data
-     */
-    public function updateUser($userId, array $data) {
-        $this->checkRequired($data, []);
-
-        $values = $this->apiRename($data, [
-            'externalId' => 'externalId',
-            'email' => 'email',
-            'firstName' => 'userFirstName',
-            'lastName' => 'userLastName',
-        ]);
-
-        $users = $this->createGenericDocument();
-        $users->request('POST', $this->endpoint_url . '/user/edit/' . $userId, $values);
-
-        return new \Bpi\Sdk\Item\User($users);
-    }
-
-    /**
-     * @param string $name
-     * @param string $description
-     * @param string $adminId
-     */
-    public function deleteUser($userId) {
-        $users = $this->createGenericDocument();
-        $users->request('DELETE', $this->endpoint_url . '/user/remove/' . $userId);
-
-        return $users->status()->isSuccess();
-    }
-
-    /**
-     * @param string $userId
-     * @param array $data
-     *
-     * @return Subscription
-     */
-    public function createSubscription($userId, array $data) {
-        $this->checkRequired($data, [ 'title', 'filter' ]);
-
-        $values = $data;
-        $values['filter'] = json_encode($values['filter']);
-        $values['userId'] = $userId;
-
-        $users = $this->createGenericDocument();
-        $users->request('POST', $this->endpoint_url . '/user/subscription', $values);
-
-        return new \Bpi\Sdk\Item\User($users);
-    }
-
-    /**
-     * @param string $userId
-     * @param string $title
-     */
-    public function deleteSubscription($userId, $title) {
-        $values = array(
-            'userId' => $userId,
-            'subscriptionTitle' => $title,
-        );
-
-        $users = $this->createGenericDocument();
-        $users->request('POST', $this->endpoint_url . '/user/subscription/remove', $values);
-
-        return new \Bpi\Sdk\Item\User($users);
-    }
-
-    protected function checkRequired(array $data, array $required) {
-        foreach ($required as $name) {
-            if (!isset($data[$name])) {
-                throw new \InvalidArgumentException(sprintf('Field [%s] is required', (string)$name));
-            }
-        }
-    }
-
-    protected function apiRename(array $data, array $apiNames) {
-        $values = [];
-        foreach ($data as $name => $value) {
-            if (isset($apiNames[$name])) {
-                $values[$apiNames[$name]] = $value;
-            }
-        }
-        return $values;
     }
 }
