@@ -44,14 +44,15 @@ class NodeList implements \Iterator, \Countable
     public function __construct(\SimpleXMLElement $element)
     {
         $this->element = $element;
-        try {
-            $collection = $this->element->xpath('/bpi/item[@type = "collection"]')[0];
-            $this->total = (int)($collection->xpath('properties/property[@name = "total"]')[0]);
+
+        $collections = $this->element->xpath('/bpi/item[@type = "collection"]');
+        if ($collections) {
+            $collection = $collections[0];
+            $this->total = (int) ($collection->xpath('properties/property[@name = "total"]')[0]);
 
             foreach ($this->element->xpath('/bpi/item[@type = "entity"]') as $node) {
                 $this->nodes[] = new Node($node);
             }
-        } catch (Exception\EmptyList $e) {
         }
     }
 
@@ -69,6 +70,8 @@ class NodeList implements \Iterator, \Countable
      * Returns same instance but with internal pointer to current item in collection
      *
      * @group Iterator
+     *
+     * @return Node
      */
     public function current()
     {
@@ -79,6 +82,8 @@ class NodeList implements \Iterator, \Countable
      * Key of current iteration position
      *
      * @group Iterator
+     *
+     * @return int
      */
     public function key()
     {
@@ -99,6 +104,7 @@ class NodeList implements \Iterator, \Countable
      * Checks if is ready for iteration
      *
      * @group Iterator
+     *
      * @return boolean
      */
     public function valid()
@@ -107,7 +113,6 @@ class NodeList implements \Iterator, \Countable
     }
 
     /**
-     *
      * @return integer
      */
     public function count()
