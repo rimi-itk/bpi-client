@@ -4,22 +4,42 @@ namespace Bpi\Sdk\Item;
 class Node extends BaseItem
 {
     /**
+     * @var array
+     */
+    protected $assets;
+
+    /**
+     * @var array
+     */
+    protected $tags;
+
+    /**
      * Get node assets (images)
      *
      * @return array
      */
     public function getAssets()
     {
-        $assets = array();
-        $this->document->walkAssets(function($e) use(&$assets) {
-            $type = $e['type'];
-            if (!isset($assets[$type])) {
-                $assets[$type] = array();
-            }
-            $assets[$type][] = $e;
-        });
+        if (!$this->assets) {
+            $assets = array();
 
-        return $assets;
+            foreach ($this->element->xpath('assets/file') as $asset) {
+                $type = (string)$asset['type'];
+                if (!isset($assets[$type])) {
+                    $assets[$type] = array();
+                }
+                // Convert attributes to associative array.
+                $properties = array();
+                foreach ($asset->attributes() as $name => $value) {
+                    $properties[$name] = (string)$value;
+                }
+                $assets[$type][] = $properties;
+            }
+
+            $this->assets = $assets;
+        }
+
+        return $this->assets;
     }
 
     /**
@@ -29,14 +49,19 @@ class Node extends BaseItem
      */
     public function getTags()
     {
-        $tags = array();
-        $this->document->walkTags(function($e) use(&$tags) {
-            if (!empty($e['tag_name'])) {
-                $tags[] = $e['tag_name'];
-            }
-        });
+        if (!$this->tags) {
+            $tags = array();
 
-        return $tags;
+            foreach ($this->element->xpath('tags/tag') as $tag) {
+                $name = (string)$tag['tag_name'];
+                if (!empty($name)) {
+                    $tags[] = $name;
+                }
+            }
+
+            $this->tags = $tags;
+        }
+        return $this->tags;
     }
 
     public function syndicate()
