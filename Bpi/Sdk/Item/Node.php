@@ -17,10 +17,8 @@ class Node extends BaseItem
     {
         if (!$this->assets) {
             $assets = [];
-            foreach ($this->getProperties() as $key => $val)
-            {
-                if (strpos($key, 'asset') !== FALSE)
-                {
+            foreach ($this->getProperties() as $key => $val) {
+                if (strpos($key, 'asset') !== false) {
                     $assets[$key] = $val;
                 }
             }

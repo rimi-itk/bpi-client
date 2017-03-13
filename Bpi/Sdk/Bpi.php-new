@@ -4,15 +4,10 @@ use Bpi\Sdk\Authorization;
 use Bpi\Sdk\Exception\SDKException;
 use Bpi\Sdk\Item\BaseItem;
 use Bpi\Sdk\Item\Node;
-use Bpi\Sdk\Item\User;
-use Bpi\Sdk\ChannelList;
 use Bpi\Sdk\NodeList;
 use Bpi\Sdk\UserList;
 use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Client as HttpClient;
-use GuzzleHttp\ClientInterface as HttpClientInterface;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
-use GuzzleHttp\Exception\ClientException as HttpClientException;
 
 /**
  * TODO please add a general description about the purpose of this class.
@@ -21,7 +16,8 @@ use GuzzleHttp\Exception\ClientException as HttpClientException;
 class Bpi
 {
     /**
-     * @var \GuzzleHttp\ClientInterface
+     *
+     * @var \Goutte\Client
      */
     protected $client;
 
@@ -40,38 +36,31 @@ class Bpi
     /**
      * Create Bpi Client
      *
-     * @param string|\GuzzleHttp\ClientInterface $endpoint
+     * @param string $endpoint URL
      * @param string $agencyId Agency ID
      * @param string $publicKey App key
      * @param string $secret
      */
-    public function __construct($endpoint, $agencyId = null, $publicKey = null, $secret = null)
+    public function __construct($endpoint, $agencyId, $publicKey, $secret)
     {
-        if ($endpoint instanceof HttpClientInterface) {
-            $this->client = $endpoint;
-        } else {
-            $this->endpoint = $endpoint;
-            $this->authorization = new Authorization(
-                $agencyId,
-                $publicKey,
-                $secret
-            );
-            $this->client = new HttpClient([
-                'base_uri' => $this->endpoint,
-                'headers' => [
-                    'Auth' => $this->authorization->toHTTPHeader(),
-                ],
-            ]);
-        }
+        $this->endpoint = $endpoint;
+        $this->authorization = new Authorization($agencyId, $publicKey, $secret);
     }
 
     private function request($method, $url, array $data = [])
     {
         try {
+            $this->client = new GuzzleHttpClient([
+                'base_uri' => $this->endpoint,
+                'headers' => [
+                    'Auth' => $this->authorization->toHTTPHeader(),
+                ],
+            ]);
+
             $result = $this->client->request($method, $url, $data);
 
             return $result;
-        } catch (HttpClientException $e) {
+        } catch (GuzzleClientException $e) {
             throw new SDKException($e->getMessage(), $e->getCode(), $e);
         }
     }
@@ -200,12 +189,11 @@ class Bpi
      */
     public function searchChannels($query = [])
     {
-        $result = $this->request('GET', '/channel/', [
-            'query' => $query,
-        ]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('GET', $this->endpoint_url . '/channel/?' . http_build_query($query));
+        $channels->setFacets();
 
-        return new ChannelList($element);
+        return new \Bpi\Sdk\ChannelList($channels);
     }
 
     /**
@@ -224,10 +212,10 @@ class Bpi
             'adminId' => 'editorId',
         ]);
 
-        $result = $this->request('POST', '/channel/', ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/', $values);
 
-        return new Channel($element->channel[0]);
+        return new \Bpi\Sdk\Item\Channel($channels);
     }
 
     /**
@@ -241,10 +229,10 @@ class Bpi
      */
     public function getChannel($id)
     {
-        $result = $this->request('GET', '/channel/' . $id);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('GET', $this->endpoint_url . '/channel/' . $id);
 
-        return new Channel($element->channel[0]);
+        return new \Bpi\Sdk\Item\Channel($channels);
     }
 
     /**
@@ -261,10 +249,10 @@ class Bpi
             'description' => 'channelDescription',
         ]);
 
-        $result = $this->request('POST', '/channel/edit/' . $userId, ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/edit/' . $channelId, $values);
 
-        return new Channel($element->channel[0]);
+        return new \Bpi\Sdk\Item\Channel($channels);
     }
 
     /**
@@ -274,10 +262,9 @@ class Bpi
      */
     public function deleteChannel($channelId)
     {
-        $result = $this->request('DELETE', '/channel/remove/' . $channelId);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('DELETE', $this->endpoint_url . '/channel/remove/' . $channelId);
 
-        // @FIXME:
         return $channels->status()->isSuccess();
     }
 
@@ -294,10 +281,9 @@ class Bpi
             }, $editorIds),
         ];
 
-        $result = $this->request('POST', '/channel/add/editor', ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/add/editor', $values);
 
-        // @FIXME:
         $successes = [];
         // @see http://api.symfony.com/3.0/Symfony/Component/DomCrawler/Crawler.html
         $channels->filterXPath('result/success_list/item')->each(function ($el) use (&$successes) {
@@ -320,10 +306,9 @@ class Bpi
             }, $editorIds),
         ];
 
-        $result = $this->request('POST', '/channel/remove/editor', ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/remove/editor', $values);
 
-        // @FIXME:
         $successes = [];
         $channels->filterXPath('result/success_list/item')->each(function ($el) use (&$successes) {
             $successes[] = $el->textContent;
@@ -334,10 +319,10 @@ class Bpi
 
     public function getChannelsByUser($userId)
     {
-        $result = $this->request('GET', '/channel/' . $userId);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('GET', $this->endpoint_url . '/channel/user/' . $userId);
 
-        return new ChannelList($element);
+        return new \Bpi\Sdk\ChannelList($channels);
     }
 
     public function addNodeToChannel($channelId, $editorId, $nodeIds)
@@ -353,10 +338,9 @@ class Bpi
             }, $nodeIds),
         ];
 
-        $result = $this->request('POST', '/channel/add/node', ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/add/node', $values);
 
-        // @FIXME:
         $successes = [];
         $channels->filterXPath('result/success_list/item')->each(function ($el) use (&$successes) {
             $successes[] = $el->textContent;
@@ -378,10 +362,9 @@ class Bpi
             }, $nodeIds),
         ];
 
-        $result = $this->request('POST', '/channel/remove/node', ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $channels = $this->createGenericDocument();
+        $channels->request('POST', $this->endpoint_url . '/channel/remove/node', $values);
 
-        // @FIXME:
         $successes = [];
         $channels->filterXPath('result/success_list/item')->each(function ($el) use (&$successes) {
             $successes[] = $el->textContent;
@@ -420,18 +403,18 @@ class Bpi
             'lastName' => 'userLastName',
         ]);
 
-        $result = $this->request('POST', '/user/', ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $users = $this->createGenericDocument();
+        $users->request('POST', $this->endpoint_url . '/user/', $values);
 
-        return new User($element->user[0]);
+        return new \Bpi\Sdk\Item\User($users);
     }
 
     public function getUser($id)
     {
-        $result = $this->request('GET', '/user/' . $id);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $users = $this->createGenericDocument();
+        $users->request('GET', $this->endpoint_url . '/user/' . $id);
 
-        return new User($element);
+        return new \Bpi\Sdk\Item\User($users);
     }
 
     /**
@@ -449,10 +432,10 @@ class Bpi
             'lastName' => 'userLastName',
         ]);
 
-        $result = $this->request('POST', '/user/edit/' . $userId, ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $users = $this->createGenericDocument();
+        $users->request('POST', $this->endpoint_url . '/user/edit/' . $userId, $values);
 
-        return new User($element->user[0]);
+        return new \Bpi\Sdk\Item\User($users);
     }
 
     /**
@@ -462,11 +445,10 @@ class Bpi
      */
     public function deleteUser($userId)
     {
-        $result = $this->request('DELETE', '/user/remove/' . $userId);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $users = $this->createGenericDocument();
+        $users->request('DELETE', $this->endpoint_url . '/user/remove/' . $userId);
 
-        // @FIXME: Handle response.
-        return $element->status()->isSuccess();
+        return $users->status()->isSuccess();
     }
 
     /**
@@ -483,10 +465,10 @@ class Bpi
         $values['filter'] = json_encode($values['filter']);
         $values['userId'] = $userId;
 
-        $result = $this->request('POST', '/user/subscription', ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $users = $this->createGenericDocument();
+        $users->request('POST', $this->endpoint_url . '/user/subscription', $values);
 
-        return new User($element->user[0]);
+        return new \Bpi\Sdk\Item\User($users);
     }
 
     /**
@@ -500,10 +482,10 @@ class Bpi
             'subscriptionTitle' => $title,
         ];
 
-        $result = $this->request('POST', '/user/subscription/remove', ['form_params' => $values]);
-        $element = new \SimpleXMLElement((string)$result->getBody());
+        $users = $this->createGenericDocument();
+        $users->request('POST', $this->endpoint_url . '/user/subscription/remove', $values);
 
-        return new User($element);
+        return new \Bpi\Sdk\Item\User($users);
     }
 
     protected function checkRequired(array $data, array $required)

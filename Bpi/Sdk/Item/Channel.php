@@ -1,10 +1,8 @@
 <?php
 namespace Bpi\Sdk\Item;
 
-use Bpi\Sdk\GenericDocument;
-use SimpleXMLElement;
-
-class Channel {
+class Channel
+{
     /**
      * @var string
      */
@@ -48,14 +46,16 @@ class Channel {
     /**
      * @return string
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
      * @return string
      */
-    private function setId($id) {
+    private function setId($id)
+    {
         $this->id = $id;
         return $this;
     }
@@ -63,7 +63,8 @@ class Channel {
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
@@ -71,7 +72,8 @@ class Channel {
      * @param string $name
      * @return Channel
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
         return $this;
     }
@@ -79,7 +81,8 @@ class Channel {
     /**
      * @return string
      */
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
@@ -87,7 +90,8 @@ class Channel {
      * @param string $description
      * @return Channel
      */
-    public function setDescription($description) {
+    public function setDescription($description)
+    {
         $this->description = $description;
         return $this;
     }
@@ -95,7 +99,8 @@ class Channel {
     /**
      * @return string
      */
-    public function getAdminId() {
+    public function getAdminId()
+    {
         return $this->adminId;
     }
 
@@ -103,7 +108,8 @@ class Channel {
      * @param string $adminId
      * @return Channel
      */
-    public function setAdminId($adminId) {
+    public function setAdminId($adminId)
+    {
         $this->adminId = $adminId;
         return $this;
     }
@@ -111,7 +117,8 @@ class Channel {
     /**
      * @return User
      */
-    public function getAdmin() {
+    public function getAdmin()
+    {
         return $this->admin;
     }
 
@@ -119,7 +126,8 @@ class Channel {
      * @param User $admin
      * @return Channel
      */
-    public function setAdmin($admin) {
+    public function setAdmin($admin)
+    {
         $this->admin = $admin;
         return $this;
     }
@@ -127,30 +135,34 @@ class Channel {
     /**
      * @return array
      */
-    public function getEditors() {
+    public function getEditors()
+    {
         return $this->editors;
     }
 
     /**
      * @return array
      */
-    public function getNodes() {
+    public function getNodes()
+    {
         return $this->nodes;
     }
 
     /**
      * @return DateTime
      */
-    public function getNodeLastAddedAt() {
+    public function getNodeLastAddedAt()
+    {
         return $this->nodeLastAddedAt;
     }
 
-    public function __construct(GenericDocument $document) {
-        $values = array();
+    public function __construct(\SimpleXMLElement $el)
+    {
+        $values = [];
 
-        $document->walkElements('channel > *', function(SimpleXMLElement $el) use (&$values) {
-            $name = $el->getName();
-            $value = (string)$el;
+        foreach ($el->children() as $child) {
+            $name = $child->getName();
+            $value = (string)$child;
 
             switch ($name) {
                 case 'id':
@@ -163,10 +175,10 @@ class Channel {
                     $values['description'] = $value;
                     break;
                 case 'channel_admin':
-                    $values['admin'] = new User($el);
+                    $values['admin'] = new User($child);
                     break;
                 case 'users':
-                    foreach ($el->user as $user) {
+                    foreach ($child->user as $user) {
                         if (!isset($values['editors'])) {
                             $values['editors'] = array();
                         }
@@ -174,7 +186,7 @@ class Channel {
                     }
                     break;
                 case 'nodes':
-                    foreach ($el->node as $node) {
+                    foreach ($child->node as $node) {
                         if (!isset($values['nodes'])) {
                             $values['nodes'] = array();
                         }
@@ -185,7 +197,7 @@ class Channel {
                     $values['nodeLastAddedAt'] = $value;
                     break;
             }
-        });
+        }
 
         $this->setId($values['id']);
         if (isset($values['name'])) {

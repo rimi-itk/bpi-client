@@ -14,7 +14,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
 {
     protected $client;
 
-    protected function getClient($fixturePath) {
+    protected function getClient($fixturePath)
+    {
         $status = -1;
         $headers = [];
         $body = '';
@@ -30,8 +31,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
             } elseif (!trim($line)) {
                 // Skip blank lines.
             } else {
-              $body = implode(PHP_EOL, array_slice($lines, $index));
-              break;
+                $body = implode(PHP_EOL, array_slice($lines, $index));
+                break;
             }
         }
 

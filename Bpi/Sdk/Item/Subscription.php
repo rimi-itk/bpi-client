@@ -4,7 +4,8 @@ namespace Bpi\Sdk\Item;
 use Bpi\Sdk\GenericDocument;
 use SimpleXMLElement;
 
-class Subscription {
+class Subscription
+{
     /**
      * @var string
      */
@@ -18,7 +19,8 @@ class Subscription {
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->title;
     }
 
@@ -26,7 +28,8 @@ class Subscription {
      * @param string $title
      * @return Title
      */
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         $this->title = $title;
         return $this;
     }
@@ -34,7 +37,8 @@ class Subscription {
     /**
      * @return array
      */
-    public function getFilter() {
+    public function getFilter()
+    {
         return $this->filter;
     }
 
@@ -42,17 +46,18 @@ class Subscription {
      * @param mixed $filter
      * @return User
      */
-    public function setFilter($filter) {
-      if (is_string($filter)) {
-        $this->filter = json_decode($filter, TRUE);
-      }
-      else {
-        $this->filter = $filter;
-      }
-      return $this;
+    public function setFilter($filter)
+    {
+        if (is_string($filter)) {
+            $this->filter = json_decode($filter, true);
+        } else {
+            $this->filter = $filter;
+        }
+        return $this;
     }
 
-    public function __construct($el) {
+    public function __construct($el)
+    {
         $values = array();
 
         if ($el instanceof SimpleXMLElement) {

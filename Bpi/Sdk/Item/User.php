@@ -1,10 +1,8 @@
 <?php
 namespace Bpi\Sdk\Item;
 
-use Bpi\Sdk\GenericDocument;
-use SimpleXMLElement;
-
-class User {
+class User
+{
     /**
      * @var string
      */
@@ -38,7 +36,8 @@ class User {
     /**
      * @return string
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -46,7 +45,8 @@ class User {
      * @param string $id
      * @return User
      */
-    protected function setId($id) {
+    protected function setId($id)
+    {
         $this->id = $id;
         return $this;
     }
@@ -54,7 +54,8 @@ class User {
     /**
      * @return string
      */
-    public function getAgency() {
+    public function getAgency()
+    {
         return $this->agency;
     }
 
@@ -62,7 +63,8 @@ class User {
      * @param string $agency
      * @return User
      */
-    public function setAgency($agency) {
+    public function setAgency($agency)
+    {
         $this->agency = $agency;
         return $this;
     }
@@ -70,7 +72,8 @@ class User {
     /**
      * @return string
      */
-    public function getEmail() {
+    public function getEmail()
+    {
         return $this->email;
     }
 
@@ -78,7 +81,8 @@ class User {
      * @param string $email
      * @return User
      */
-    public function setEmail($email) {
+    public function setEmail($email)
+    {
         $this->email = $email;
         return $this;
     }
@@ -86,7 +90,8 @@ class User {
     /**
      * @return string
      */
-    public function getFirstName() {
+    public function getFirstName()
+    {
         return $this->firstName;
     }
 
@@ -94,7 +99,8 @@ class User {
      * @param string $firstName
      * @return User
      */
-    public function setFirstName($firstName) {
+    public function setFirstName($firstName)
+    {
         $this->firstName = $firstName;
         return $this;
     }
@@ -102,7 +108,8 @@ class User {
     /**
      * @return string
      */
-    public function getSubscriptions() {
+    public function getSubscriptions()
+    {
         return $this->subscriptions;
     }
 
@@ -110,7 +117,8 @@ class User {
      * @param string $subscriptions
      * @return User
      */
-    public function setSubscriptions($subscriptions) {
+    public function setSubscriptions($subscriptions)
+    {
         $this->subscriptions = $subscriptions;
         return $this;
     }
@@ -118,7 +126,8 @@ class User {
     /**
      * @return string
      */
-    public function getLastName() {
+    public function getLastName()
+    {
         return $this->lastName;
     }
 
@@ -126,7 +135,8 @@ class User {
      * @param string $lastName
      * @return User
      */
-    public function setLastName($lastName) {
+    public function setLastName($lastName)
+    {
         $this->lastName = $lastName;
         return $this;
     }
@@ -134,46 +144,16 @@ class User {
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return trim($this->getFirstName() . ' ' . $this->getLastName());
     }
 
-    public function __construct($el) {
+    public function __construct($el)
+    {
         $values = array();
 
-        if ($el instanceof GenericDocument) {
-            $el->walkElements('user > *', function($el) use (&$values) {
-                $name = $el->getName();
-                $value = (string)$el;
-                switch ($name) {
-                    case 'id':
-                        $values['id'] = $value;
-                        break;
-                    case 'email':
-                        $values['email'] = $value;
-                        break;
-                    case 'user_first_name':
-                        $values['firstName'] = $value;
-                        break;
-                    case 'user_last_name':
-                        $values['lastName'] = $value;
-                        break;
-                    case 'agency':
-                        $values['agency'] = new Agency($el);
-                        break;
-                    case 'subscriptions':
-                        foreach ($el->entry as $subscription) {
-                            if (!isset($values['subscriptions'])) {
-                                $values['subscriptions'] = array();
-                            }
-                            $values['subscriptions'][] = new Subscription($subscription);
-                        }
-                        break;
-                }
-            });
-
-        }
-        else if ($el instanceof SimpleXMLElement) {
+        if ($el instanceof \SimpleXMLElement) {
             $values['id'] = (string)$el->id;
             $values['email'] = (string)$el->email;
             $values['firstName'] = (string)$el->user_first_name;
@@ -188,8 +168,7 @@ class User {
                     $values['subscriptions'][] = new Subscription($subscription);
                 }
             }
-        }
-        else if (is_string($el)) {
+        } else if (is_string($el)) {
             $values['id'] = (string)$el;
         } else {
             throw new \Exception('Invalid constructor call ' . get_class($el));

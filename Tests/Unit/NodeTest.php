@@ -4,8 +4,10 @@ namespace Bpi\Sdk\Tests\Unit;
 
 use Bpi\Sdk\Tests\TestCase;
 
-class NodeTest extends TestCase {
-    public function testGetNodes() {
+class NodeTest extends TestCase
+{
+    public function testGetNodes()
+    {
         $client = $this->getClient(__DIR__ . '/Fixtures/GetNodes.response');
 
         $bpi = new \Bpi($client);
@@ -19,7 +21,8 @@ class NodeTest extends TestCase {
         $this->assertEquals('Vintertid er læsetid', $properties['title']);
     }
 
-    public function testGetNodesFacets() {
+    public function testGetNodesFacets()
+    {
         $client = $this->getClient(__DIR__ . '/Fixtures/GetNodes.response');
 
         $bpi = new \Bpi($client);

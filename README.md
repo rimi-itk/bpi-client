@@ -38,5 +38,5 @@ Run all unit tests:
 Run web service tests:
 
 ```
-BPI_WS_ENDPOINT=http://bpi-web-service.vm BPI_WS_AGENCY_ID=200100 BPI_WS_API_KEY=98c645c7e2882e7431037caa75ca5134 BPI_WS_SECRET_KEY=90eb05e4fbc327d3f455fb7576c493d3872fca7f ./vendor/bin/phpunit --stop-on-failure Tests/WebService/
+BPI_WS_ENDPOINT=http://develop.bpi-web-service.vm BPI_WS_AGENCY_ID=999999 BPI_WS_API_KEY=80f5b4ce83ffb13324dc553665a5b852 BPI_WS_SECRET_KEY=608d9b0fed745573b4d4f868093073830638cbdc ./vendor/bin/phpunit --stop-on-failure Tests/WebService/
 ```

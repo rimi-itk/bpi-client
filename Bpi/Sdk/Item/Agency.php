@@ -4,7 +4,8 @@ namespace Bpi\Sdk\Item;
 use Bpi\Sdk\GenericDocument;
 use SimpleXMLElement;
 
-class Agency {
+class Agency
+{
     /**
      * @var string
      */
@@ -18,14 +19,16 @@ class Agency {
     /**
      * @return string
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
      * @return string
      */
-    private function setId($id) {
+    private function setId($id)
+    {
         $this->id = $id;
         return $this;
     }
@@ -33,7 +36,8 @@ class Agency {
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
@@ -41,34 +45,33 @@ class Agency {
      * @param string $name
      * @return Channel
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
         return $this;
     }
 
-    public function __construct($el) {
+    public function __construct($el)
+    {
         $values = [];
 
         if ($el instanceof GenericDocument) {
-            $el->walkElements('agency > *', function($el) use (&$values) {
+            $el->walkElements('agency > *', function ($el) use (&$values) {
                 $name = $el->getName();
                 $value = (string)$el;
                 switch ($name) {
                     case 'id':
-                      $values['id'] = $value;
-                    break;
-                  case 'name':
-                    $values['name'] = $value;
-                    break;
+                        $values['id'] = $value;
+                        break;
+                    case 'name':
+                        $values['name'] = $value;
+                        break;
                 }
             });
-
-        }
-        else if ($el instanceof SimpleXMLElement) {
+        } else if ($el instanceof SimpleXMLElement) {
             $values['id'] = (string)$el->id;
             $values['name'] = (string)$el->name;
-        }
-        else if (is_string($el)) {
+        } else if (is_string($el)) {
             $values['id'] = (string)$el;
         } else {
             throw new \Exception('Invalid constructor call ' . get_class($el));
@@ -79,5 +82,4 @@ class Agency {
             $this->setName($values['name']);
         }
     }
-
 }

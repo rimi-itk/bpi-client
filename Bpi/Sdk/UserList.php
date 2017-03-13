@@ -1,39 +1,24 @@
 <?php
 namespace Bpi\Sdk;
 
-use Bpi\Sdk\GenericDocument;
-use Bpi\Sdk\Exception\EmptyList;
+use Bpi\Sdk\Item\Facet;
+use Bpi\Sdk\Item\User;
 
 /**
- * TODO please add a general description about the purpose of this class.
+ * A list of users.
  */
-class UserList extends NodeList
+class UserList extends ItemList
 {
     /**
      * {@inheritdoc}
      */
-    public function __construct(GenericDocument $document)
+    protected function buildItems()
     {
-        try
-        {
-            $this->document = clone $document;
-            $this->document->reduceByName('user');
-            $this->total = $this->document->total;
+        $items = [];
+        foreach ($this->element->xpath('/users/user') as $el) {
+            $items[] = new User($el);
         }
-        catch (EmptyList $e)
-        {
-            $this->document->clear();
-        }
-    }
 
-    /**
-     * Returns same instance but with internal pointer to current item in collection
-     *
-     * @group Iterator
-     * @return \Bpi\Sdk\Document will return same instance
-     */
-    function current()
-    {
-        return new \Bpi\Sdk\Item\User($this->document->current());
+        return $items;
     }
 }
