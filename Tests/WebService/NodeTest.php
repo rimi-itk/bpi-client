@@ -8,13 +8,13 @@ class NodeWebServiceTest extends WebServiceTestCase
 {
     public function testNodes()
     {
-        $nodes = $this->client->searchNodes([]);
-        $this->assertEquals(0, count($nodes));
+        $nodes = $this->searchNodes();
+        $this->assertNotNull($nodes);
     }
 
     public function testCanCreateNode()
     {
-        $nodes = $this->client->searchNodes();
+        $nodes = $this->searchNodes();
         $numberOfNodes = count($nodes);
 
         $data = [
@@ -25,12 +25,12 @@ class NodeWebServiceTest extends WebServiceTestCase
 
         $this->assertEquals($data['title'], $node->getProperties()['title']);
 
-        $nodes = $this->client->searchNodes();
+        $nodes = $this->searchNodes();
         $newNumberOfNodes = count($nodes);
 
         $this->assertEquals($numberOfNodes + 1, $newNumberOfNodes);
 
-        $nodes = $this->client->searchNodes(['search' => $data['title']]);
+        $nodes = $this->searchNodes(['search' => $data['title']]);
         $this->assertEquals(1, count($nodes));
         $nodes->rewind();
         $this->assertEquals($data['title'], $nodes->current()->getProperties()['title']);
@@ -38,14 +38,11 @@ class NodeWebServiceTest extends WebServiceTestCase
 
     public function testCanCreateNodeWithAssets()
     {
-        $nodes = $this->client->searchNodes();
+        $nodes = $this->searchNodes();
         $numberOfNodes = count($nodes);
 
         $data = [
             'title' => uniqid(__METHOD__),
-            'category' => 'Test',
-            'audience' => 'Test',
-
             'images' => [
                 [
                     'path' => 'https://placekitten.com/200/400',
@@ -62,7 +59,7 @@ class NodeWebServiceTest extends WebServiceTestCase
 
         $node = $this->createNode($data);
 
-        $nodes = $this->client->searchNodes();
+        $nodes = $this->searchNodes();
         $newNumberOfNodes = count($nodes);
 
         $this->assertEquals($numberOfNodes + 1, $newNumberOfNodes);
@@ -76,10 +73,10 @@ class NodeWebServiceTest extends WebServiceTestCase
         $this->createNode();
         $this->createNode();
 
-        $nodes = $this->client->searchNodes();
+        $nodes = $this->searchNodes();
         $this->assertTrue(count($nodes) > 1);
 
-        $nodes = $this->client->searchNodes([
+        $nodes = $this->searchNodes([
             'amount' => 1,
         ]);
 
@@ -101,7 +98,7 @@ class NodeWebServiceTest extends WebServiceTestCase
 
     public function testCanGetFacets()
     {
-        $nodes = $this->client->searchNodes([]);
+        $nodes = $this->searchNodes();
         $facets = $nodes->getFacets()->getFacets();
 
         $this->createNode(['category' => 'Book']);
@@ -115,14 +112,14 @@ class NodeWebServiceTest extends WebServiceTestCase
 
     public function testCanFilterOnFacet()
     {
-        $nodes = $this->client->searchNodes([]);
+        $nodes = $this->searchNodes();
         $facets = $nodes->getFacets()->getFacets();
 
         if ($facets) {
             foreach ($facets as $facet) {
                 $facetName = $facet->getFacetName();
                 foreach ($facet->getFacetTerms() as $term) {
-                    $nodes = $this->client->searchNodes([
+                    $nodes = $this->searchNodes([
                         'filter' => [
                             $facetName => [
                                 $term->getName(),
@@ -147,20 +144,20 @@ class NodeWebServiceTest extends WebServiceTestCase
     {
         $node = $this->createNode();
 
-        $nodes = $this->client->searchNodes();
+        $nodes = $this->searchNodes();
         $numberOfNodes = count($nodes);
 
         $result = $this->client->deleteNode($node->getProperties()['id']);
 
         $this->assertEquals(true, $result);
 
-        $nodes = $this->client->searchNodes();
+        $nodes = $this->searchNodes();
         $this->assertEquals($numberOfNodes - 1, count($nodes));
     }
 
     public function testCanSearchByText()
     {
-        $nodes = $this->client->searchNodes([
+        $nodes = $this->searchNodes([
             'search' => uniqid(__METHOD__),
         ]);
 
@@ -201,12 +198,12 @@ class NodeWebServiceTest extends WebServiceTestCase
 
     private function canSortBy($name)
     {
-        $nodes = $this->client->searchNodes([
+        $nodes = $this->searchNodes([
             'sort' => [
                 $name => 'asc',
             ],
         ]);
-        $reversedNodes = $this->client->searchNodes([
+        $reversedNodes = $this->searchNodes([
             'sort' => [
                 $name => 'desc',
             ],
@@ -251,5 +248,10 @@ class NodeWebServiceTest extends WebServiceTestCase
         }
 
         return $node;
+    }
+
+    private function searchNodes(array $query = []) {
+        $query += ['amount' => 1000];
+        return $this->client->searchNodes($query);
     }
 }
