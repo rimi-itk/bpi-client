@@ -9,8 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="vendor/autoload.php"
->
+         bootstrap="Tests/bootstrap.php">
     <testsuites>
         <testsuite name="BPI SDK Test Suite">
             <directory>./Tests/</directory>
@@ -19,7 +18,7 @@
 
     <filter>
         <whitelist>
-            <directory>./</directory>
+            <directory>./Bpi</directory>
             <exclude>
                 <directory>./Resources</directory>
                 <directory>./Tests</directory>
