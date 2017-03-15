@@ -29,7 +29,13 @@ Install dev dependencies:
 composer install
 ```
 
-Run all unit tests:
+## Unit tests
+
+Run unit tests:
+
+```
+./vendor/bin/phpunit Tests/Unit/
+```
 
 ```
 ./vendor/bin/phpunit
