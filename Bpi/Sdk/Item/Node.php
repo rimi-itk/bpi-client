@@ -17,13 +17,30 @@ class Node extends BaseItem
     {
         if (!$this->assets) {
             $assets = [];
-            foreach ($this->getProperties() as $key => $val)
-            {
-                if (strpos($key, 'asset') !== FALSE)
-                {
-                    $assets[$key] = $val;
+
+            if (isset($this->element->assets)) {
+                foreach ($this->element->assets->file as $file) {
+                    $type = (string)$file['type'];
+                    if (!isset($assets[$type])) {
+                        $assets[$type] = [];
+                    }
+                    $assets[$type][] = [
+                        'path' => (string)$file['path'],
+                        'alt' => (string)$file['alt'],
+                        'title' => (string)$file['title'],
+                        'type' => (string)$file['type'],
+                        'name' => (string)$file['name'],
+                        'extension' => (string)$file['extension'],
+                    ];
+                }
+            } else {
+                foreach ($this->getProperties() as $key => $val) {
+                    if (strpos($key, 'asset') !== false) {
+                        $assets[$key] = $val;
+                    }
                 }
             }
+
             $this->assets = $assets;
         }
 
