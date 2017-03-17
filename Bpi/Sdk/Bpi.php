@@ -85,7 +85,7 @@ class Bpi
      */
     public function searchNodes(array $query = array())
     {
-        $result = $this->request('GET', '/node/collection', [
+        $result = $this->request('GET', 'node/collection', [
             'query' => $query,
         ]);
         $element = new \SimpleXMLElement((string)$result->getBody());
@@ -102,7 +102,7 @@ class Bpi
      */
     public function push(array $data)
     {
-        $result = $this->request('POST', '/node', ['form_params' => $data]);
+        $result = $this->request('POST', 'node', ['form_params' => $data]);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new Node($element->item[0]);
@@ -116,7 +116,7 @@ class Bpi
      */
     public function syndicateNode($id)
     {
-        $result = $this->request('GET', '/node/syndicated', ['query' => ['id' => $id]]);
+        $result = $this->request('GET', 'node/syndicated', ['query' => ['id' => $id]]);
 
         return $result->getStatusCode() === 200;
     }
@@ -129,7 +129,7 @@ class Bpi
      */
     public function deleteNode($id)
     {
-        $result = $this->request('GET', '/node/delete', ['query' => ['id' => $id]]);
+        $result = $this->request('GET', 'node/delete', ['query' => ['id' => $id]]);
 
         return $result->getStatusCode() === 200;
     }
@@ -146,7 +146,7 @@ class Bpi
      */
     public function getStatistics($dateFrom, $dateTo)
     {
-        $result = $this->request('GET', '/statistics', ['query' => ['dateFrom' => $dateFrom, 'dateTo' => $dateTo]]);
+        $result = $this->request('GET', 'statistics', ['query' => ['dateFrom' => $dateFrom, 'dateTo' => $dateTo]]);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new BaseItem($element->item[0]);
@@ -160,7 +160,7 @@ class Bpi
      */
     public function getNode($id)
     {
-        $result = $this->request('GET', '/node/item/' . $id);
+        $result = $this->request('GET', 'node/item/' . $id);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new Node($element->item[0]);
@@ -173,7 +173,7 @@ class Bpi
      */
     public function getDictionaries()
     {
-        $result = $this->request('GET', '/profile/dictionary');
+        $result = $this->request('GET', 'profile/dictionary');
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         $dictionary = [];
@@ -200,7 +200,7 @@ class Bpi
      */
     public function searchChannels($query = [])
     {
-        $result = $this->request('GET', '/channel/', [
+        $result = $this->request('GET', 'channel/', [
             'query' => $query,
         ]);
         $element = new \SimpleXMLElement((string)$result->getBody());
@@ -224,7 +224,7 @@ class Bpi
             'adminId' => 'editorId',
         ]);
 
-        $result = $this->request('POST', '/channel/', ['form_params' => $values]);
+        $result = $this->request('POST', 'channel/', ['form_params' => $values]);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new Channel($element->channel[0]);
@@ -241,7 +241,7 @@ class Bpi
      */
     public function getChannel($id)
     {
-        $result = $this->request('GET', '/channel/' . $id);
+        $result = $this->request('GET', 'channel/' . $id);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new Channel($element->channel[0]);
@@ -261,7 +261,7 @@ class Bpi
             'description' => 'channelDescription',
         ]);
 
-        $result = $this->request('POST', '/channel/edit/' . $channelId, ['form_params' => $values]);
+        $result = $this->request('POST', 'channel/edit/' . $channelId, ['form_params' => $values]);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new Channel($element->channel[0]);
@@ -274,7 +274,7 @@ class Bpi
      */
     public function deleteChannel($channelId)
     {
-        $result = $this->request('DELETE', '/channel/remove/' . $channelId);
+        $result = $this->request('DELETE', 'channel/remove/' . $channelId);
 
         return $result->getStatusCode() === 200;
     }
@@ -292,7 +292,7 @@ class Bpi
             }, $editorIds),
         ];
 
-        $result = $this->request('POST', '/channel/add/editor', ['form_params' => $values]);
+        $result = $this->request('POST', 'channel/add/editor', ['form_params' => $values]);
 
         if ($result->getStatusCode() !== 200) {
             return false;
@@ -317,7 +317,7 @@ class Bpi
             }, $editorIds),
         ];
 
-        $result = $this->request('POST', '/channel/remove/editor', ['form_params' => $values]);
+        $result = $this->request('POST', 'channel/remove/editor', ['form_params' => $values]);
 
         if ($result->getStatusCode() !== 200) {
             return false;
@@ -331,7 +331,7 @@ class Bpi
 
     public function getChannelsByUser($userId)
     {
-        $result = $this->request('GET', '/channel/user/' . $userId);
+        $result = $this->request('GET', 'channel/user/' . $userId);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new ChannelList($element);
@@ -350,7 +350,7 @@ class Bpi
             }, $nodeIds),
         ];
 
-        $result = $this->request('POST', '/channel/add/node', ['form_params' => $values]);
+        $result = $this->request('POST', 'channel/add/node', ['form_params' => $values]);
 
         if ($result->getStatusCode() !== 200) {
             return false;
@@ -375,7 +375,7 @@ class Bpi
             }, $nodeIds),
         ];
 
-        $result = $this->request('POST', '/channel/remove/node', ['form_params' => $values]);
+        $result = $this->request('POST', 'channel/remove/node', ['form_params' => $values]);
 
         if ($result->getStatusCode() !== 200) {
             return false;
@@ -398,7 +398,7 @@ class Bpi
      */
     public function searchUsers($query = [])
     {
-        $result = $this->request('GET', '/user/', [
+        $result = $this->request('GET', 'user/', [
             'query' => $query,
         ]);
         $element = new \SimpleXMLElement((string)$result->getBody());
@@ -417,7 +417,7 @@ class Bpi
             'lastName' => 'userLastName',
         ]);
 
-        $result = $this->request('POST', '/user/', ['form_params' => $values]);
+        $result = $this->request('POST', 'user/', ['form_params' => $values]);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new User($element->user[0]);
@@ -425,7 +425,7 @@ class Bpi
 
     public function getUser($id)
     {
-        $result = $this->request('GET', '/user/' . $id);
+        $result = $this->request('GET', 'user/' . $id);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new User($element->user[0]);
@@ -446,7 +446,7 @@ class Bpi
             'lastName' => 'userLastName',
         ]);
 
-        $result = $this->request('POST', '/user/edit/' . $userId, ['form_params' => $values]);
+        $result = $this->request('POST', 'user/edit/' . $userId, ['form_params' => $values]);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new User($element->user[0]);
@@ -476,7 +476,7 @@ class Bpi
         $values['filter'] = json_encode($values['filter']);
         $values['userId'] = $userId;
 
-        $result = $this->request('POST', '/user/subscription', ['form_params' => $values]);
+        $result = $this->request('POST', 'user/subscription', ['form_params' => $values]);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new User($element->user[0]);
@@ -493,7 +493,7 @@ class Bpi
             'subscriptionTitle' => $title,
         ];
 
-        $result = $this->request('POST', '/user/subscription/remove', ['form_params' => $values]);
+        $result = $this->request('POST', 'user/subscription/remove', ['form_params' => $values]);
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new User($element);
