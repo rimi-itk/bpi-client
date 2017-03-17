@@ -41,8 +41,6 @@ class NodeTest extends WebServiceTestCase
 
         $data = [
             'title' => uniqid(__METHOD__),
-            'category' => 'Test',
-            'audience' => 'Test',
 
             'assets' => [
                 [
