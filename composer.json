@@ -21,6 +21,9 @@
     "autoload": {
         "psr-0": { "Bpi\\Sdk": "." }
     },
+    "autoload-dev": {
+        "psr-4": { "Bpi\\Sdk\\Tests\\": "Tests/" }
+    },
     "require-dev": {
         "phpunit/phpunit": "^5.7"
     }

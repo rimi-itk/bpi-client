@@ -1,20 +1,17 @@
 <?php
 namespace Bpi\Sdk;
 
-use Bpi\Sdk\Facets;
-use Bpi\Sdk\Item\FacetTerm;
-use Bpi\Sdk\Item\Node;
 use Bpi\Sdk\Item\Facet;
 
 /**
- * TODO please add a general description about the purpose of this class.
+ * A generic item list.
  */
-class NodeList implements \Iterator, \Countable
+abstract class ItemList implements \Iterator, \Countable
 {
     /**
      * @var \Bpi\Sdk\SimpleXMLElement|\SimpleXMLElement
      */
-    private $element;
+    protected $element;
 
     /**
      * Total amount of items on server
@@ -26,16 +23,19 @@ class NodeList implements \Iterator, \Countable
     /**
      * @var int
      *
-     * Position in nodes array.
+     * Position in $items array.
      */
     private $position = 0;
 
     /**
      * @var array
      */
-    protected $nodes = [];
+    protected $items = [];
 
-    protected $facets = [];
+    /**
+     * @var array
+     */
+    protected $facets = null;
 
     /**
      *
@@ -44,16 +44,8 @@ class NodeList implements \Iterator, \Countable
     public function __construct(\SimpleXMLElement $element)
     {
         $this->element = $element;
-
-        $collections = $this->element->xpath('/bpi/item[@type = "collection"]');
-        if ($collections) {
-            $collection = $collections[0];
-            $this->total = (int) ($collection->xpath('properties/property[@name = "total"]')[0]);
-
-            foreach ($this->element->xpath('/bpi/item[@type = "entity"]') as $node) {
-                $this->nodes[] = new Node($node);
-            }
-        }
+        $this->total = $this->buildTotal();
+        $this->items = $this->buildItems();
     }
 
     /**
@@ -70,20 +62,16 @@ class NodeList implements \Iterator, \Countable
      * Returns same instance but with internal pointer to current item in collection
      *
      * @group Iterator
-     *
-     * @return Node
      */
     public function current()
     {
-        return $this->nodes[$this->position];
+        return $this->items[$this->position];
     }
 
     /**
      * Key of current iteration position
      *
      * @group Iterator
-     *
-     * @return int
      */
     public function key()
     {
@@ -104,20 +92,20 @@ class NodeList implements \Iterator, \Countable
      * Checks if is ready for iteration
      *
      * @group Iterator
-     *
      * @return boolean
      */
     public function valid()
     {
-        return isset($this->nodes[$this->position]);
+        return isset($this->items[$this->position]);
     }
 
     /**
+     *
      * @return integer
      */
     public function count()
     {
-        return count($this->nodes);
+        return count($this->items);
     }
 
     /**
@@ -128,18 +116,48 @@ class NodeList implements \Iterator, \Countable
     public function getFacets()
     {
         if (!$this->facets) {
-            $facets = new Facets();
-            foreach ($this->element->xpath('/bpi/item[@type = "facet"]') as $el) {
-                $facet = new Facet();
-                $facet->setFacetName((string)$el['name']);
-                foreach ($el->xpath('properties/property') as $property) {
-                    $facet->addFacetTerm((string)$property['name'], (string)$property['title'], (int)$property);
-                }
-                $facets->addFacet($facet);
-            }
-            $this->facets = $facets;
+            $this->facets = $this->buildFacets();
         }
 
         return $this->facets;
+    }
+
+    /**
+     * Build list of items.
+     *
+     * @return array
+     *   An array of items.
+     */
+    abstract protected function buildItems();
+
+    /**
+     * Get total number of items.
+     *
+     * @return int
+     *   The total number of items.
+     */
+    protected function buildTotal()
+    {
+        return (int)$this->element['total'];
+    }
+
+    /**
+     * Build item facets.
+     *
+     * @return Facets
+     */
+    protected function buildFacets()
+    {
+        $facets = new Facets();
+        foreach ($this->element->xpath('/*/facet') as $el) {
+            $facet = new Facet();
+            $facet->setFacetName((string)$el['name']);
+            foreach ($el->xpath('term') as $term) {
+                $facet->addFacetTerm((string)$term['name'], (string)$term['title'], (int)$term);
+            }
+            $facets->addFacet($facet);
+        }
+
+        return $facets;
     }
 }
