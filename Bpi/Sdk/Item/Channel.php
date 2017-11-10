@@ -182,6 +182,6 @@ class Channel
             $this->nodes = $nodes;
         }
 
-        $this->nodeLastAddedAt = new \DateTime((string)$el->node_last_added_at);
+        $this->nodeLastAddedAt = (string)$el->node_last_added_at ? new \DateTime((string)$el->node_last_added_at) : null;
     }
 }
