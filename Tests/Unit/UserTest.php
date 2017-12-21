@@ -8,7 +8,7 @@ class UserTest extends UnitTestCase
     {
         $client = $this->getClient(__DIR__ . '/Fixtures/GetUsers.response');
 
-        $bpi = new \Bpi($client);
+        $bpi = new BpiClient($client);
         $users = $bpi->searchUsers([]);
         $this->assertEquals(87, $users->total);
         $this->assertEquals(3, count($users));
@@ -33,7 +33,7 @@ class UserTest extends UnitTestCase
     {
         $client = $this->getClient(__DIR__ . '/Fixtures/GetUsers.response');
 
-        $bpi = new \Bpi($client);
+        $bpi = new BpiClient($client);
         $users = $bpi->searchUsers([]);
         $facets = $users->getFacets()->getFacets();
         $this->assertEquals(1, count($facets));
