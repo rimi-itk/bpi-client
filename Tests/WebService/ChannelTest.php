@@ -232,26 +232,6 @@ class ChannelTest extends WebServiceTestCase
         $this->canSortBy('description');
     }
 
-    public function testCanSortByAdminEmail()
-    {
-        $this->canSortBy('admin_email');
-    }
-
-    public function testCanSortByAdminFirstName()
-    {
-        $this->canSortBy('admin_firstname');
-    }
-
-    public function testCanSortByAdminLastName()
-    {
-        $this->canSortBy('admin_lastname');
-    }
-
-    public function testCanSortByAgency()
-    {
-        $this->canSortBy('agency');
-    }
-
     public function testCanSortByNodeLastAddedAt()
     {
         $this->canSortBy('nodeLastAddedAt');

@@ -22,6 +22,7 @@ class Node extends BaseItem
     {
         if (!$this->assets) {
             $assets = array();
+
             foreach ($this->element->xpath('assets/file') as $asset) {
                 $type = (string)$asset['type'];
                 if (!isset($assets[$type])) {

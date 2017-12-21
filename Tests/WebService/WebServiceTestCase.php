@@ -2,9 +2,9 @@
 
 namespace Bpi\Sdk\Tests\WebService;
 
-use PHPUnit\Framework\TestCase;
+require_once __DIR__ . '/../../Bpi/Sdk/Bpi.php';
 
-abstract class WebServiceTestCase extends TestCase
+abstract class WebServiceTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Bpi
