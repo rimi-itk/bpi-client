@@ -40,38 +40,29 @@ class Bpi
     /**
      * Create Bpi Client
      *
-     * @param string|\GuzzleHttp\ClientInterface $endpoint
+     * @param string $endpoint URL
      * @param string $agencyId Agency ID
      * @param string $publicKey App key
      * @param string $secret
      */
-    public function __construct($endpoint, $agencyId = null, $publicKey = null, $secret = null)
+    public function __construct($endpoint, $agencyId, $publicKey, $secret)
     {
-        if ($endpoint instanceof HttpClientInterface) {
-            $this->client = $endpoint;
-        } else {
-            $this->endpoint = $endpoint;
-            $this->authorization = new Authorization(
-                $agencyId,
-                $publicKey,
-                $secret
-            );
-            $this->client = new HttpClient([
+        $this->endpoint = $endpoint;
+        $this->authorization = new Authorization($agencyId, $publicKey, $secret);
+    }
+
+    protected function request($method, $url, array $data = [])
+    {
+        try {
+            $this->client = new GuzzleHttpClient([
                 'base_uri' => $this->endpoint,
                 'headers' => [
                     'Auth' => $this->authorization->toHTTPHeader(),
                 ],
             ]);
-        }
-    }
-
-    private function request($method, $url, array $data = [])
-    {
-        try {
             $result = $this->client->request($method, $url, $data);
-
             return $result;
-        } catch (HttpClientException $e) {
+        } catch (GuzzleClientException $e) {
             throw new SDKException($e->getMessage(), $e->getCode(), $e);
         }
     }

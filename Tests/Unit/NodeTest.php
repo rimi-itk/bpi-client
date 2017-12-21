@@ -8,7 +8,7 @@ class NodeTest extends UnitTestCase
     {
         $client = $this->getClient(__DIR__ . '/Fixtures/GetNodes.response');
 
-        $bpi = new \Bpi($client);
+        $bpi = new BpiClient($client);
         $nodelist = $bpi->searchNodes([]);
         $this->assertEquals(3, count($nodelist));
         $this->assertEquals(2948, $nodelist->total);
@@ -23,7 +23,7 @@ class NodeTest extends UnitTestCase
     {
         $client = $this->getClient(__DIR__ . '/Fixtures/GetNodes.response');
 
-        $bpi = new \Bpi($client);
+        $bpi = new BpiClient($client);
         $nodelist = $bpi->searchNodes([]);
         $facets = $nodelist->getFacets()->getFacets();
         $this->assertEquals(5, count($facets));

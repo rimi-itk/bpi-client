@@ -8,7 +8,7 @@ class ChannelTest extends UnitTestCase
     {
         $client = $this->getClient(__DIR__ . '/Fixtures/GetChannels.response');
 
-        $bpi = new \Bpi($client);
+        $bpi = new BpiClient($client);
         $channels = $bpi->searchChannels([]);
         $this->assertEquals(11, $channels->total);
         $this->assertEquals(3, count($channels));
@@ -28,7 +28,7 @@ class ChannelTest extends UnitTestCase
     {
         $client = $this->getClient(__DIR__ . '/Fixtures/GetChannels.response');
 
-        $bpi = new \Bpi($client);
+        $bpi = new BpiClient($client);
         $channels = $bpi->searchChannels([]);
         $facets = $channels->getFacets()->getFacets();
         $this->assertEquals(1, count($facets));
