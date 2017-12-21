@@ -35,7 +35,6 @@ class Node extends BaseItem
                 }
                 $assets[$type][] = $properties;
             }
-
             $this->assets = $assets;
         }
 

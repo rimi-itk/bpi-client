@@ -34,4 +34,9 @@ abstract class WebServiceTestCase extends \PHPUnit_Framework_TestCase
             $this->client = new \Bpi($environment['BPI_WS_ENDPOINT'], $environment['BPI_WS_AGENCY_ID'], $environment['BPI_WS_API_KEY'], $environment['BPI_WS_SECRET_KEY']);
         }
     }
+
+    protected function getRandomName()
+    {
+        return uniqid(__METHOD__);
+    }
 }

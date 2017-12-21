@@ -1,0 +1,645 @@
+HTTP/1.1 200 OK
+Server: nginx/1.10.2
+Content-Type: application/xml
+Transfer-Encoding: chunked
+Connection: keep-alive
+Keep-Alive: timeout=120
+X-Powered-By: PHP/5.3.19
+cache-control: max-age=315360000
+date: Thu, 12 Jan 2017 19:27:08 GMT
+Expires: Thu, 31 Dec 2037 23:55:55 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<bpi version="1.1">
+  <item type="facet" name="category">
+    <properties>
+      <property type="string" name="Film" title=""><![CDATA[122]]></property>
+      <property type="string" name="Filosofi" title=""><![CDATA[11]]></property>
+      <property type="string" name="Geografi" title=""><![CDATA[5]]></property>
+      <property type="string" name="Håndarbejde" title=""><![CDATA[15]]></property>
+      <property type="string" name="Højtider" title=""><![CDATA[68]]></property>
+      <property type="string" name="Indenrigspolitik" title=""><![CDATA[19]]></property>
+      <property type="string" name="Krimi" title=""><![CDATA[69]]></property>
+      <property type="string" name="Litteratur" title=""><![CDATA[3224]]></property>
+      <property type="string" name="Malerkunst" title=""><![CDATA[8]]></property>
+      <property type="string" name="Musik" title=""><![CDATA[71]]></property>
+      <property type="string" name="Rejser" title=""><![CDATA[41]]></property>
+      <property type="string" name="Religion" title=""><![CDATA[3]]></property>
+      <property type="string" name="Samfund" title=""><![CDATA[174]]></property>
+      <property type="string" name="Spil" title=""><![CDATA[44]]></property>
+      <property type="string" name="Sport" title=""><![CDATA[69]]></property>
+      <property type="string" name="Test" title=""><![CDATA[151]]></property>
+      <property type="string" name="Test ny" title=""><![CDATA[8]]></property>
+      <property type="string" name="Udenrigspolitik" title=""><![CDATA[25]]></property>
+      <property type="string" name="Undervisning" title=""><![CDATA[65]]></property>
+      <property type="string" name="Vejret" title=""><![CDATA[33]]></property>
+    </properties>
+  </item>
+  <item type="facet" name="author">
+    <properties>
+      <property type="string" name="" title=""><![CDATA[4]]></property>
+      <property type="string" name="A. Lykkeboe" title=""><![CDATA[1]]></property>
+      <property type="string" name="A49B" title=""><![CDATA[2]]></property>
+      <property type="string" name="ACS" title=""><![CDATA[1]]></property>
+      <property type="string" name="Agnes Tegen Kristensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Agnete Hjorth" title=""><![CDATA[3]]></property>
+      <property type="string" name="Allan Thomsen Volhøj" title=""><![CDATA[2]]></property>
+      <property type="string" name="Andreas Toft" title=""><![CDATA[2]]></property>
+      <property type="string" name="Anette Thede" title=""><![CDATA[1]]></property>
+      <property type="string" name="Anja Ditte Rasmussen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Ann Luther Petersen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Ann Luther Torp" title=""><![CDATA[7]]></property>
+      <property type="string" name="Anne Birgitte Langkilde Hundahl" title=""><![CDATA[19]]></property>
+      <property type="string" name="Anne Grete Jacobsen" title=""><![CDATA[86]]></property>
+      <property type="string" name="Anne Grete Kristensen" title=""><![CDATA[3]]></property>
+      <property type="string" name="Anne Juul Andersen" title=""><![CDATA[20]]></property>
+      <property type="string" name="Anne Klara Bæhr" title=""><![CDATA[81]]></property>
+      <property type="string" name="Anne Lezuik" title=""><![CDATA[1]]></property>
+      <property type="string" name="Anne Mejlhede" title=""><![CDATA[21]]></property>
+      <property type="string" name="Anne Steen Himmelstrup" title=""><![CDATA[3]]></property>
+      <property type="string" name="Annebeth Larsen Møller" title=""><![CDATA[1]]></property>
+      <property type="string" name="Anny Skov Madsen" title=""><![CDATA[41]]></property>
+      <property type="string" name="Arendse Ørding" title=""><![CDATA[11]]></property>
+      <property type="string" name="Arne Larsen" title=""><![CDATA[270]]></property>
+      <property type="string" name="Astrid Bjørnskov Thorhauge" title=""><![CDATA[3]]></property>
+      <property type="string" name="Astrid Rode" title=""><![CDATA[7]]></property>
+      <property type="string" name="Barbara Rugholm Hessellund" title=""><![CDATA[9]]></property>
+      <property type="string" name="Benedicte Reffs" title=""><![CDATA[6]]></property>
+      <property type="string" name="Benny Pedersen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Beth Høst" title=""><![CDATA[97]]></property>
+      <property type="string" name="Betina Thorsager" title=""><![CDATA[1]]></property>
+      <property type="string" name="Bettina Graabech" title=""><![CDATA[1]]></property>
+      <property type="string" name="Bettina Schnegelsberg-Laursen" title=""><![CDATA[9]]></property>
+      <property type="string" name="Biblioteket" title=""><![CDATA[47]]></property>
+      <property type="string" name="Birgit Kringelbach" title=""><![CDATA[5]]></property>
+      <property type="string" name="Birgit Sloth" title=""><![CDATA[19]]></property>
+      <property type="string" name="Birgitte Rand" title=""><![CDATA[1]]></property>
+      <property type="string" name="Birgitte Tindbæk" title=""><![CDATA[8]]></property>
+      <property type="string" name="Blondie" title=""><![CDATA[1]]></property>
+      <property type="string" name="Bodil Tuxen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Bognørden" title=""><![CDATA[6]]></property>
+      <property type="string" name="Britta Voergaard Poulsen" title=""><![CDATA[34]]></property>
+      <property type="string" name="CJ" title=""><![CDATA[3]]></property>
+      <property type="string" name="CR7Y" title=""><![CDATA[2]]></property>
+      <property type="string" name="Camilla Laugesen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Carsten" title=""><![CDATA[7]]></property>
+      <property type="string" name="Cecilie Damgaard Carlsen" title=""><![CDATA[4]]></property>
+      <property type="string" name="Christine Karen Kofoed" title=""><![CDATA[2]]></property>
+      <property type="string" name="Cæcilie Hjorth Pedersen" title=""><![CDATA[4]]></property>
+      <property type="string" name="Dagmar" title=""><![CDATA[16]]></property>
+      <property type="string" name="Daniel Boysen" title=""><![CDATA[30]]></property>
+      <property type="string" name="DinnaM" title=""><![CDATA[18]]></property>
+      <property type="string" name="Ditte Krogh" title=""><![CDATA[9]]></property>
+      <property type="string" name="Dorrit Lauritsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="E50L" title=""><![CDATA[6]]></property>
+      <property type="string" name="Egedal Bibliotekerne" title=""><![CDATA[17]]></property>
+      <property type="string" name="Ellen Grete Aggerholm" title=""><![CDATA[3]]></property>
+      <property type="string" name="Else Marie" title=""><![CDATA[21]]></property>
+      <property type="string" name="Else Marie Cohen" title=""><![CDATA[10]]></property>
+      <property type="string" name="Emil Aalykke" title=""><![CDATA[2]]></property>
+      <property type="string" name="Emma" title=""><![CDATA[78]]></property>
+      <property type="string" name="Erling Mortensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Eva Nielsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Eydbjørg Mikkelsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Frederik Schøler" title=""><![CDATA[9]]></property>
+      <property type="string" name="Frederikssund Bibliotekerne" title=""><![CDATA[2]]></property>
+      <property type="string" name="Gitte Buur Rasmussen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Gitte Nielsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Hanne" title=""><![CDATA[10]]></property>
+      <property type="string" name="Hanne Guldhammer" title=""><![CDATA[20]]></property>
+      <property type="string" name="Hanne M. Sørensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Hanne Sørensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Heidi" title=""><![CDATA[12]]></property>
+      <property type="string" name="Helle Bjørn Thomsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Helle Post" title=""><![CDATA[26]]></property>
+      <property type="string" name="Helle Regitze Boesen" title=""><![CDATA[15]]></property>
+      <property type="string" name="Helle Søderberg" title=""><![CDATA[2]]></property>
+      <property type="string" name="HelleP" title=""><![CDATA[23]]></property>
+      <property type="string" name="Henriette Olesen" title=""><![CDATA[10]]></property>
+      <property type="string" name="Inga Thyra Nielsen" title=""><![CDATA[3]]></property>
+      <property type="string" name="Inge Christensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Inge Merete Olesen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Inge-Lise Westh Hansen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Inger Enemark" title=""><![CDATA[2]]></property>
+      <property type="string" name="JLO" title=""><![CDATA[29]]></property>
+      <property type="string" name="Jacob Tolstrup" title=""><![CDATA[3]]></property>
+      <property type="string" name="Jan M. Johansen" title=""><![CDATA[29]]></property>
+      <property type="string" name="Jane Kunze" title=""><![CDATA[1]]></property>
+      <property type="string" name="Jane Østgaard Sørensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Janne Hansen" title=""><![CDATA[16]]></property>
+      <property type="string" name="Jeanette Jensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Jens Henrik Holm" title=""><![CDATA[1]]></property>
+      <property type="string" name="Jens Hjøllund" title=""><![CDATA[14]]></property>
+      <property type="string" name="Jens R" title=""><![CDATA[2]]></property>
+      <property type="string" name="Jens Rasmussen" title=""><![CDATA[5]]></property>
+      <property type="string" name="Jens Yde" title=""><![CDATA[1]]></property>
+      <property type="string" name="Jesper Just Nielsen" title=""><![CDATA[4]]></property>
+      <property type="string" name="Jesper Meinertz Jensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Jesper Nielsen" title=""><![CDATA[13]]></property>
+      <property type="string" name="Jette S. F. Holst" title=""><![CDATA[91]]></property>
+      <property type="string" name="Jette37" title=""><![CDATA[1]]></property>
+      <property type="string" name="Joan Bak" title=""><![CDATA[10]]></property>
+      <property type="string" name="Johanne Thomsen" title=""><![CDATA[21]]></property>
+      <property type="string" name="Julie" title=""><![CDATA[2]]></property>
+      <property type="string" name="Julie Markussen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Jytte Bræmer" title=""><![CDATA[1]]></property>
+      <property type="string" name="Jytte Kjær Schou" title=""><![CDATA[115]]></property>
+      <property type="string" name="Jørgen Dissing" title=""><![CDATA[4]]></property>
+      <property type="string" name="Jørn Lybech Christensen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Kamilla Uttrup" title=""><![CDATA[11]]></property>
+      <property type="string" name="Karen Kærgård" title=""><![CDATA[19]]></property>
+      <property type="string" name="Karen Marchman" title=""><![CDATA[1]]></property>
+      <property type="string" name="Karin Hviid" title=""><![CDATA[9]]></property>
+      <property type="string" name="Karina Høyer" title=""><![CDATA[20]]></property>
+      <property type="string" name="Karina Thorlund Nielsen" title=""><![CDATA[3]]></property>
+      <property type="string" name="Karsten Stanley Andersen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Kenneth Larsen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Kenneth Lund Christensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Kim Heinrich" title=""><![CDATA[2]]></property>
+      <property type="string" name="Kim Nissen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Kirsten Dyhrberg Grønne" title=""><![CDATA[1]]></property>
+      <property type="string" name="Kirsten M. Dreier" title=""><![CDATA[6]]></property>
+      <property type="string" name="Kirsten Skovgaard Hansen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Laila Heskjær" title=""><![CDATA[2]]></property>
+      <property type="string" name="Lars Hune" title=""><![CDATA[10]]></property>
+      <property type="string" name="Lars Laursen" title=""><![CDATA[4]]></property>
+      <property type="string" name="Laura Michelsen" title=""><![CDATA[29]]></property>
+      <property type="string" name="Lene Frandsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Lene Sepstrup" title=""><![CDATA[1]]></property>
+      <property type="string" name="Lene Stengaard" title=""><![CDATA[4]]></property>
+      <property type="string" name="Lida Wengel" title=""><![CDATA[28]]></property>
+      <property type="string" name="Line Hoffgaard" title=""><![CDATA[67]]></property>
+      <property type="string" name="Line Thorup Vendelbo" title=""><![CDATA[5]]></property>
+      <property type="string" name="Linevp" title=""><![CDATA[1]]></property>
+      <property type="string" name="Lis K. Gregersen" title=""><![CDATA[5]]></property>
+      <property type="string" name="Lis Pilgaard" title=""><![CDATA[2]]></property>
+      <property type="string" name="Lisbeth Larsen" title=""><![CDATA[3]]></property>
+      <property type="string" name="Lise Falck Hansen" title=""><![CDATA[4]]></property>
+      <property type="string" name="Lise Lotte Larsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Lise Vandborg - Chefredaktør Litteratursiden" title=""><![CDATA[6]]></property>
+      <property type="string" name="Lise-Lotte Truelsen" title=""><![CDATA[10]]></property>
+      <property type="string" name="Littuna" title=""><![CDATA[51]]></property>
+      <property type="string" name="Lone Krøgh" title=""><![CDATA[3]]></property>
+      <property type="string" name="Lone Pedersen" title=""><![CDATA[5]]></property>
+      <property type="string" name="Lotte Thomhave" title=""><![CDATA[1]]></property>
+      <property type="string" name="Louise Tranborg" title=""><![CDATA[5]]></property>
+      <property type="string" name="Louise Østergaard" title=""><![CDATA[22]]></property>
+      <property type="string" name="MBN" title=""><![CDATA[1]]></property>
+      <property type="string" name="Maike Albertsen Zwoch" title=""><![CDATA[1]]></property>
+      <property type="string" name="Maja1984" title=""><![CDATA[1]]></property>
+      <property type="string" name="Margit Fischer" title=""><![CDATA[1]]></property>
+      <property type="string" name="Maria" title=""><![CDATA[12]]></property>
+      <property type="string" name="Maria Bjornsdottir" title=""><![CDATA[14]]></property>
+      <property type="string" name="Maria Guldager Rasmussen" title=""><![CDATA[111]]></property>
+      <property type="string" name="Marianne Jensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Marianne Majgaard Jensen" title=""><![CDATA[9]]></property>
+      <property type="string" name="Marianne Träff" title=""><![CDATA[20]]></property>
+      <property type="string" name="Marion Tirsgaard" title=""><![CDATA[17]]></property>
+      <property type="string" name="Marit Haugaard" title=""><![CDATA[21]]></property>
+      <property type="string" name="Marlene Andkjær Christensen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Merete Porsborg Arnoldi" title=""><![CDATA[4]]></property>
+      <property type="string" name="MereteTrap" title=""><![CDATA[20]]></property>
+      <property type="string" name="Mette" title=""><![CDATA[15]]></property>
+      <property type="string" name="Mette Davidsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Mette Fairgrieve" title=""><![CDATA[3]]></property>
+      <property type="string" name="Mette Kulmbach" title=""><![CDATA[3]]></property>
+      <property type="string" name="Mette Trier Konzack" title=""><![CDATA[4]]></property>
+      <property type="string" name="Mette Østgaard Henriksen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Michael Linde Larsen" title=""><![CDATA[3]]></property>
+      <property type="string" name="Michael Olsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Mie Henriksen" title=""><![CDATA[23]]></property>
+      <property type="string" name="Mie Møller Nielsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Monica Bruun" title=""><![CDATA[1]]></property>
+      <property type="string" name="Monica Severin" title=""><![CDATA[2]]></property>
+      <property type="string" name="Morten Bagger" title=""><![CDATA[2]]></property>
+      <property type="string" name="Morten Halskov Jensen" title=""><![CDATA[7]]></property>
+      <property type="string" name="Morten Kok" title=""><![CDATA[1]]></property>
+      <property type="string" name="Morten Langkilde" title=""><![CDATA[18]]></property>
+      <property type="string" name="Nadja Agerbak" title=""><![CDATA[1]]></property>
+      <property type="string" name="Nanna H" title=""><![CDATA[1]]></property>
+      <property type="string" name="Niels" title=""><![CDATA[24]]></property>
+      <property type="string" name="Niels Nobel-Jørgensen" title=""><![CDATA[3]]></property>
+      <property type="string" name="Nikolaj Deleuran" title=""><![CDATA[18]]></property>
+      <property type="string" name="Nikolaj Martini H. Petersen" title=""><![CDATA[13]]></property>
+      <property type="string" name="Nikolaj Petersen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Nina Maria Horn Jensen" title=""><![CDATA[22]]></property>
+      <property type="string" name="Nina Wegner" title=""><![CDATA[5]]></property>
+      <property type="string" name="Norman Christensen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Olav Vinderskov" title=""><![CDATA[1]]></property>
+      <property type="string" name="Ove Rasmussen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Pernille Jørgensen" title=""><![CDATA[21]]></property>
+      <property type="string" name="Pernille Lisborg" title=""><![CDATA[64]]></property>
+      <property type="string" name="Pernille Saabye" title=""><![CDATA[2]]></property>
+      <property type="string" name="Pernille Tind" title=""><![CDATA[1]]></property>
+      <property type="string" name="Pia Bechmann" title=""><![CDATA[150]]></property>
+      <property type="string" name="Pia Jepsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Rasmus" title=""><![CDATA[1]]></property>
+      <property type="string" name="René Øhlenschlæger" title=""><![CDATA[1]]></property>
+      <property type="string" name="Rikke" title=""><![CDATA[22]]></property>
+      <property type="string" name="Rikke Borup" title=""><![CDATA[4]]></property>
+      <property type="string" name="Rikke Bødker" title=""><![CDATA[71]]></property>
+      <property type="string" name="Rosa Andersen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Rubina Afzal" title=""><![CDATA[4]]></property>
+      <property type="string" name="Rune Staun Søndergaard" title=""><![CDATA[1]]></property>
+      <property type="string" name="SGN" title=""><![CDATA[1]]></property>
+      <property type="string" name="Sanne Caft" title=""><![CDATA[4]]></property>
+      <property type="string" name="Sanne Lindgreen" title=""><![CDATA[3]]></property>
+      <property type="string" name="Sesse Nisted Atkin" title=""><![CDATA[10]]></property>
+      <property type="string" name="Sofie" title=""><![CDATA[14]]></property>
+      <property type="string" name="Steffen Kronborg" title=""><![CDATA[1]]></property>
+      <property type="string" name="Stina" title=""><![CDATA[8]]></property>
+      <property type="string" name="Stine" title=""><![CDATA[16]]></property>
+      <property type="string" name="Stine H" title=""><![CDATA[1]]></property>
+      <property type="string" name="Stine Juhl Hall" title=""><![CDATA[1]]></property>
+      <property type="string" name="Susan von Magius" title=""><![CDATA[7]]></property>
+      <property type="string" name="Susanne" title=""><![CDATA[8]]></property>
+      <property type="string" name="Susanne Berthelsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Susanne Bogh" title=""><![CDATA[4]]></property>
+      <property type="string" name="Susanne Gilling" title=""><![CDATA[1]]></property>
+      <property type="string" name="Susannek" title=""><![CDATA[6]]></property>
+      <property type="string" name="Suzanne Bang" title=""><![CDATA[1]]></property>
+      <property type="string" name="Søren Davidsen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Søren Holm" title=""><![CDATA[2]]></property>
+      <property type="string" name="TVGlud" title=""><![CDATA[18]]></property>
+      <property type="string" name="Tanja Kate Jensen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Thomas Behrmann" title=""><![CDATA[16]]></property>
+      <property type="string" name="Thomas Damholt" title=""><![CDATA[5]]></property>
+      <property type="string" name="Thomas Olesen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Thomas Ry Andersen" title=""><![CDATA[17]]></property>
+      <property type="string" name="Thomas Tiedje" title=""><![CDATA[2]]></property>
+      <property type="string" name="Tina Brødsgaard Andersen" title=""><![CDATA[1]]></property>
+      <property type="string" name="Tina Schmidt" title=""><![CDATA[2]]></property>
+      <property type="string" name="Tina Skjærbæk Søeborg" title=""><![CDATA[5]]></property>
+      <property type="string" name="Tine Lunøe" title=""><![CDATA[9]]></property>
+      <property type="string" name="Tinna Hviid" title=""><![CDATA[1]]></property>
+      <property type="string" name="Tonny Hornbæk" title=""><![CDATA[16]]></property>
+      <property type="string" name="Torben Wendelboe" title=""><![CDATA[71]]></property>
+      <property type="string" name="Tove C Helms Kallehauge" title=""><![CDATA[1]]></property>
+      <property type="string" name="Tove Damgaard" title=""><![CDATA[4]]></property>
+      <property type="string" name="Trine Ulleriks" title=""><![CDATA[3]]></property>
+      <property type="string" name="Ulla Hasberg" title=""><![CDATA[4]]></property>
+      <property type="string" name="Ulla Kardel" title=""><![CDATA[1]]></property>
+      <property type="string" name="Vibeke Hove Hansen" title=""><![CDATA[4]]></property>
+      <property type="string" name="Vibeke Johansen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Vibeke Næsborg" title=""><![CDATA[2]]></property>
+      <property type="string" name="Walther Knudsen" title=""><![CDATA[2]]></property>
+      <property type="string" name="Webredaktionen" title=""><![CDATA[5]]></property>
+      <property type="string" name="ZJ0R" title=""><![CDATA[3]]></property>
+      <property type="string" name="Zenia Johnsen" title=""><![CDATA[8]]></property>
+      <property type="string" name="Zi5A" title=""><![CDATA[8]]></property>
+      <property type="string" name="aaseotto" title=""><![CDATA[2]]></property>
+      <property type="string" name="abh" title=""><![CDATA[2]]></property>
+      <property type="string" name="admin" title=""><![CDATA[94]]></property>
+      <property type="string" name="amk" title=""><![CDATA[4]]></property>
+      <property type="string" name="anne" title=""><![CDATA[1]]></property>
+      <property type="string" name="anon" title=""><![CDATA[1]]></property>
+      <property type="string" name="antj" title=""><![CDATA[1]]></property>
+      <property type="string" name="anyap" title=""><![CDATA[4]]></property>
+      <property type="string" name="bbo" title=""><![CDATA[10]]></property>
+      <property type="string" name="benkj" title=""><![CDATA[1]]></property>
+      <property type="string" name="bentbj" title=""><![CDATA[2]]></property>
+      <property type="string" name="bentej" title=""><![CDATA[10]]></property>
+      <property type="string" name="bp4e" title=""><![CDATA[12]]></property>
+      <property type="string" name="bpe" title=""><![CDATA[2]]></property>
+      <property type="string" name="britt" title=""><![CDATA[2]]></property>
+      <property type="string" name="ca" title=""><![CDATA[24]]></property>
+      <property type="string" name="carsten_kaa" title=""><![CDATA[2]]></property>
+      <property type="string" name="ce6d" title=""><![CDATA[2]]></property>
+      <property type="string" name="cffi" title=""><![CDATA[1]]></property>
+      <property type="string" name="chgh" title=""><![CDATA[4]]></property>
+      <property type="string" name="chkor" title=""><![CDATA[2]]></property>
+      <property type="string" name="ctma" title=""><![CDATA[2]]></property>
+      <property type="string" name="daat" title=""><![CDATA[2]]></property>
+      <property type="string" name="dabp" title=""><![CDATA[34]]></property>
+      <property type="string" name="dfhh" title=""><![CDATA[25]]></property>
+      <property type="string" name="doha" title=""><![CDATA[4]]></property>
+      <property type="string" name="dolan" title=""><![CDATA[28]]></property>
+      <property type="string" name="e34a" title=""><![CDATA[1]]></property>
+      <property type="string" name="eReolen" title=""><![CDATA[1]]></property>
+      <property type="string" name="edina" title=""><![CDATA[4]]></property>
+      <property type="string" name="eeb" title=""><![CDATA[6]]></property>
+      <property type="string" name="elau" title=""><![CDATA[1]]></property>
+      <property type="string" name="elte" title=""><![CDATA[2]]></property>
+      <property type="string" name="ena" title=""><![CDATA[4]]></property>
+      <property type="string" name="erlinglykke" title=""><![CDATA[21]]></property>
+      <property type="string" name="evaja" title=""><![CDATA[1]]></property>
+      <property type="string" name="fai" title=""><![CDATA[2]]></property>
+      <property type="string" name="fl" title=""><![CDATA[2]]></property>
+      <property type="string" name="gh" title=""><![CDATA[100]]></property>
+      <property type="string" name="gsoend" title=""><![CDATA[1]]></property>
+      <property type="string" name="haej" title=""><![CDATA[1]]></property>
+      <property type="string" name="hagmo" title=""><![CDATA[10]]></property>
+      <property type="string" name="hanne" title=""><![CDATA[50]]></property>
+      <property type="string" name="ibj" title=""><![CDATA[12]]></property>
+      <property type="string" name="im" title=""><![CDATA[2]]></property>
+      <property type="string" name="ink" title=""><![CDATA[1]]></property>
+      <property type="string" name="janneh" title=""><![CDATA[1]]></property>
+      <property type="string" name="janusandersen" title=""><![CDATA[1]]></property>
+      <property type="string" name="jba" title=""><![CDATA[13]]></property>
+      <property type="string" name="jespern" title=""><![CDATA[1]]></property>
+      <property type="string" name="jk" title=""><![CDATA[1]]></property>
+      <property type="string" name="jl" title=""><![CDATA[3]]></property>
+      <property type="string" name="jtra" title=""><![CDATA[1]]></property>
+      <property type="string" name="karenk" title=""><![CDATA[1]]></property>
+      <property type="string" name="karlu" title=""><![CDATA[2]]></property>
+      <property type="string" name="kdg" title=""><![CDATA[26]]></property>
+      <property type="string" name="la" title=""><![CDATA[5]]></property>
+      <property type="string" name="ladmin" title=""><![CDATA[23]]></property>
+      <property type="string" name="lebjoe" title=""><![CDATA[2]]></property>
+      <property type="string" name="lenejensen" title=""><![CDATA[112]]></property>
+      <property type="string" name="lenmad" title=""><![CDATA[1]]></property>
+      <property type="string" name="les@slks.dk" title=""><![CDATA[2]]></property>
+      <property type="string" name="lgf" title=""><![CDATA[4]]></property>
+      <property type="string" name="line A" title=""><![CDATA[1]]></property>
+      <property type="string" name="lisbeth" title=""><![CDATA[26]]></property>
+      <property type="string" name="lkf" title=""><![CDATA[2]]></property>
+      <property type="string" name="lkg" title=""><![CDATA[6]]></property>
+      <property type="string" name="lksc" title=""><![CDATA[2]]></property>
+      <property type="string" name="lokaladmin" title=""><![CDATA[20]]></property>
+      <property type="string" name="lone" title=""><![CDATA[44]]></property>
+      <property type="string" name="lonesoe" title=""><![CDATA[3]]></property>
+      <property type="string" name="louij" title=""><![CDATA[1]]></property>
+      <property type="string" name="lrchr" title=""><![CDATA[6]]></property>
+      <property type="string" name="lscho" title=""><![CDATA[4]]></property>
+      <property type="string" name="lth" title=""><![CDATA[22]]></property>
+      <property type="string" name="ltto" title=""><![CDATA[1]]></property>
+      <property type="string" name="lvj" title=""><![CDATA[1]]></property>
+      <property type="string" name="lyh" title=""><![CDATA[1]]></property>
+      <property type="string" name="mahk" title=""><![CDATA[4]]></property>
+      <property type="string" name="maivi" title=""><![CDATA[6]]></property>
+      <property type="string" name="makusk" title=""><![CDATA[2]]></property>
+      <property type="string" name="mamal" title=""><![CDATA[6]]></property>
+      <property type="string" name="maok" title=""><![CDATA[31]]></property>
+      <property type="string" name="marcam" title=""><![CDATA[4]]></property>
+      <property type="string" name="mec" title=""><![CDATA[1]]></property>
+      <property type="string" name="metsoe" title=""><![CDATA[1]]></property>
+      <property type="string" name="mfi" title=""><![CDATA[2]]></property>
+      <property type="string" name="mkj" title=""><![CDATA[62]]></property>
+      <property type="string" name="mm" title=""><![CDATA[3]]></property>
+      <property type="string" name="monicaseverin" title=""><![CDATA[15]]></property>
+      <property type="string" name="mope" title=""><![CDATA[2]]></property>
+      <property type="string" name="mortenlang" title=""><![CDATA[4]]></property>
+      <property type="string" name="mwar" title=""><![CDATA[2]]></property>
+      <property type="string" name="napet" title=""><![CDATA[2]]></property>
+      <property type="string" name="niels" title=""><![CDATA[1]]></property>
+      <property type="string" name="nikb" title=""><![CDATA[16]]></property>
+      <property type="string" name="nis" title=""><![CDATA[7]]></property>
+      <property type="string" name="nj" title=""><![CDATA[1]]></property>
+      <property type="string" name="nmev" title=""><![CDATA[2]]></property>
+      <property type="string" name="oefa" title=""><![CDATA[18]]></property>
+      <property type="string" name="otdh" title=""><![CDATA[1]]></property>
+      <property type="string" name="pac" title=""><![CDATA[1]]></property>
+      <property type="string" name="pernillej" title=""><![CDATA[2]]></property>
+      <property type="string" name="phe" title=""><![CDATA[6]]></property>
+      <property type="string" name="qvalitet" title=""><![CDATA[1]]></property>
+      <property type="string" name="redaktør" title=""><![CDATA[21]]></property>
+      <property type="string" name="rikkeandrup" title=""><![CDATA[1]]></property>
+      <property type="string" name="rlz" title=""><![CDATA[6]]></property>
+      <property type="string" name="rn" title=""><![CDATA[1]]></property>
+      <property type="string" name="rudbibadm" title=""><![CDATA[3]]></property>
+      <property type="string" name="sa" title=""><![CDATA[9]]></property>
+      <property type="string" name="sebo" title=""><![CDATA[2]]></property>
+      <property type="string" name="shunde" title=""><![CDATA[4]]></property>
+      <property type="string" name="signep" title=""><![CDATA[1]]></property>
+      <property type="string" name="smda" title=""><![CDATA[4]]></property>
+      <property type="string" name="sofie" title=""><![CDATA[2]]></property>
+      <property type="string" name="sr" title=""><![CDATA[2]]></property>
+      <property type="string" name="stni" title=""><![CDATA[6]]></property>
+      <property type="string" name="subuus" title=""><![CDATA[11]]></property>
+      <property type="string" name="susannek" title=""><![CDATA[2]]></property>
+      <property type="string" name="tablo" title=""><![CDATA[25]]></property>
+      <property type="string" name="teje" title=""><![CDATA[2]]></property>
+      <property type="string" name="tfpet" title=""><![CDATA[38]]></property>
+      <property type="string" name="thbe" title=""><![CDATA[2]]></property>
+      <property type="string" name="thk" title=""><![CDATA[16]]></property>
+      <property type="string" name="tschm" title=""><![CDATA[16]]></property>
+      <property type="string" name="tse" title=""><![CDATA[2]]></property>
+      <property type="string" name="twb" title=""><![CDATA[1]]></property>
+      <property type="string" name="web" title=""><![CDATA[4]]></property>
+      <property type="string" name="zy5b" title=""><![CDATA[1]]></property>
+    </properties>
+  </item>
+  <item type="facet" name="audience">
+    <properties>
+      <property type="string" name="Alle" title=""><![CDATA[500]]></property>
+      <property type="string" name="Børn" title=""><![CDATA[232]]></property>
+      <property type="string" name="Den 3. alder" title=""><![CDATA[5]]></property>
+      <property type="string" name="Erhvervslivet" title=""><![CDATA[3]]></property>
+      <property type="string" name="Studerende" title=""><![CDATA[97]]></property>
+      <property type="string" name="Test" title=""><![CDATA[130]]></property>
+      <property type="string" name="Unge" title=""><![CDATA[149]]></property>
+      <property type="string" name="Voksne" title=""><![CDATA[3109]]></property>
+    </properties>
+  </item>
+  <item type="facet" name="agency_internal">
+    <properties>
+      <property type="string" name="0" title=""><![CDATA[2733]]></property>
+      <property type="string" name="1" title=""><![CDATA[1492]]></property>
+    </properties>
+  </item>
+  <item type="facet" name="agency_id">
+    <properties>
+      <property type="string" name="150005" title="Litteratursiden"><![CDATA[2445]]></property>
+      <property type="string" name="150015" title="eReolen"><![CDATA[288]]></property>
+      <property type="string" name="700400" title="Dansk Centralbibliotek for Sydslesvig"><![CDATA[3]]></property>
+      <property type="string" name="710100" title="Københavns Biblioteker"><![CDATA[73]]></property>
+      <property type="string" name="715100" title="Ballerup Bibliotekerne"><![CDATA[47]]></property>
+      <property type="string" name="715300" title="Brøndby-Bibliotekerne"><![CDATA[46]]></property>
+      <property type="string" name="715700" title="Gentofte Bibliotekerne"><![CDATA[27]]></property>
+      <property type="string" name="715900" title="Gladsaxe Bibliotekerne"><![CDATA[7]]></property>
+      <property type="string" name="716700" title="HvidovreBibliotekerne"><![CDATA[12]]></property>
+      <property type="string" name="716900" title="Høje-Taastrup Kommunes Biblioteker"><![CDATA[4]]></property>
+      <property type="string" name="718300" title="Ishøj Bibliotek"><![CDATA[21]]></property>
+      <property type="string" name="718500" title="Tårnby Kommunebiblioteker"><![CDATA[49]]></property>
+      <property type="string" name="720100" title="Allerød Bibliotek"><![CDATA[13]]></property>
+      <property type="string" name="721000" title="Fredensborg Bibliotekerne"><![CDATA[2]]></property>
+      <property type="string" name="721700" title="Helsingør Kommunes Biblioteker"><![CDATA[48]]></property>
+      <property type="string" name="721900" title="Hillerød Bibliotekerne"><![CDATA[6]]></property>
+      <property type="string" name="722300" title="Hørsholm Bibliotek"><![CDATA[13]]></property>
+      <property type="string" name="723000" title="Rudersdal Bibliotekerne"><![CDATA[4]]></property>
+      <property type="string" name="724000" title="Egedal Bibliotekerne"><![CDATA[41]]></property>
+      <property type="string" name="725000" title="Frederikssund Bibliotekerne"><![CDATA[21]]></property>
+      <property type="string" name="725300" title="Greve Bibliotek"><![CDATA[9]]></property>
+      <property type="string" name="725900" title="Køge Bibliotekerne"><![CDATA[8]]></property>
+      <property type="string" name="726000" title="Halsnæs Kommune - Bibliotekerne"><![CDATA[68]]></property>
+      <property type="string" name="726500" title="Roskilde Bibliotekerne"><![CDATA[23]]></property>
+      <property type="string" name="726900" title="Solrød Bibliotek"><![CDATA[6]]></property>
+      <property type="string" name="730600" title="Odsherred Bibliotek"><![CDATA[1]]></property>
+      <property type="string" name="732000" title="Faxe Kommunes Biblioteker"><![CDATA[2]]></property>
+      <property type="string" name="732900" title="Ringsted Bibliotek"><![CDATA[12]]></property>
+      <property type="string" name="734000" title="Sorø Bibliotek"><![CDATA[8]]></property>
+      <property type="string" name="737000" title="Næstved Bibliotek og Borgerservice"><![CDATA[7]]></property>
+      <property type="string" name="739000" title="Vordingborg Bibliotekerne"><![CDATA[3]]></property>
+      <property type="string" name="742000" title="Assens Bibliotekerne"><![CDATA[10]]></property>
+      <property type="string" name="743000" title="Faaborg Midtfyn Bibliotekerne"><![CDATA[13]]></property>
+      <property type="string" name="744000" title="Kerteminde Bibliotekerne"><![CDATA[41]]></property>
+      <property type="string" name="746100" title="Odense Centralbibliotek"><![CDATA[124]]></property>
+      <property type="string" name="747900" title="Svendborg Bibliotekerne"><![CDATA[1]]></property>
+      <property type="string" name="748000" title="Nordfyns bibliotek og borgerservice"><![CDATA[1]]></property>
+      <property type="string" name="748200" title="Langeland Bibliotek"><![CDATA[6]]></property>
+      <property type="string" name="751000" title="Haderslev Bibliotekerne"><![CDATA[3]]></property>
+      <property type="string" name="753000" title="Billund Bibliotekerne og borgerservice"><![CDATA[4]]></property>
+      <property type="string" name="754000" title="Sønderborg"><![CDATA[4]]></property>
+      <property type="string" name="755000" title="Tønder Kommunes Biblioteker"><![CDATA[10]]></property>
+      <property type="string" name="756100" title="Esbjerg Kommunes Biblioteker"><![CDATA[8]]></property>
+      <property type="string" name="757300" title="Varde Bibliotek"><![CDATA[60]]></property>
+      <property type="string" name="757500" title="Vejen Kommunes Biblioteker"><![CDATA[19]]></property>
+      <property type="string" name="758000" title="Aabenraa Bibliotekerne"><![CDATA[17]]></property>
+      <property type="string" name="760700" title="Fredericia Bibliotek"><![CDATA[6]]></property>
+      <property type="string" name="761500" title="Horsens Bibliotek"><![CDATA[18]]></property>
+      <property type="string" name="762100" title="Koldingbibliotekerne"><![CDATA[16]]></property>
+      <property type="string" name="763000" title="Vejle Bibliotekerne"><![CDATA[15]]></property>
+      <property type="string" name="765700" title="Herning Bibliotekerne"><![CDATA[22]]></property>
+      <property type="string" name="766100" title="Holstebro Bibliotek"><![CDATA[1]]></property>
+      <property type="string" name="770600" title="Syddjurs Bibliotek"><![CDATA[1]]></property>
+      <property type="string" name="771000" title="Favrskov Bibliotekerne"><![CDATA[1]]></property>
+      <property type="string" name="773000" title="Randers Bibliotek"><![CDATA[152]]></property>
+      <property type="string" name="774000" title="Silkeborg Bibliotekerne"><![CDATA[1]]></property>
+      <property type="string" name="774600" title="Skanderborg Kommunes Biblioteker"><![CDATA[37]]></property>
+      <property type="string" name="775100" title="Aarhus Kommunes Biblioteker"><![CDATA[273]]></property>
+      <property type="string" name="781000" title="Brønderslev Bibliotek"><![CDATA[16]]></property>
+      <property type="string" name="784600" title="Mariagerfjord Bibliotekerne"><![CDATA[10]]></property>
+      <property type="string" name="999999" title="Test bibliotek"><![CDATA[18]]></property>
+    </properties>
+  </item>
+  <item type="collection" name="noname">
+    <properties>
+      <property type="integer" name="total" title=""><![CDATA[2948]]></property>
+    </properties>
+    <hypermedia>
+      <link rel="canonical" href="http://bpi1.inlead.dk/node/collection" title=""/>
+      <link rel="self" href="http://bpi1.inlead.dk/node/collection?amount=3" title=""/>
+      <query rel="refinement" href="http://bpi1.inlead.dk/node/collection" title="List refinements">
+        <params>
+          <param name="amount" type="single"/>
+          <param name="offset" type="single"/>
+          <param name="search" type="single"/>
+          <param name="filter" type="multiple"/>
+          <param name="sort" type="multiple"/>
+        </params>
+      </query>
+    </hypermedia>
+  </item>
+  <item type="entity" name="noname">
+    <properties>
+      <property type="string" name="id" title=""><![CDATA[58777a98c9ae97ba048b4582]]></property>
+      <property type="dateTime" name="pushed" title=""><![CDATA[2017-01-12T13:46:16+01:00]]></property>
+      <property type="boolean" name="editable" title=""><![CDATA[1]]></property>
+      <property type="string" name="author" title=""><![CDATA[bbo]]></property>
+      <property type="string" name="agency_id" title=""><![CDATA[773000]]></property>
+      <property type="string" name="agency_name" title=""><![CDATA[Randers Bibliotek]]></property>
+      <property type="boolean" name="agency_internal" title=""><![CDATA[1]]></property>
+      <property type="string" name="category" title=""><![CDATA[Litteratur]]></property>
+      <property type="string" name="audience" title=""><![CDATA[Voksne]]></property>
+      <property type="string" name="syndications" title=""><![CDATA[1]]></property>
+      <property type="string" name="title" title=""><![CDATA[Vintertid er læsetid]]></property>
+      <property type="string" name="body" title=""><![CDATA[<div>Det er ikke særlig fedt at være udenfor i disse dage. Det er mørkt, koldt og egentlig temmelig trist. Med andre ord – her er en rigtig god undskyldning for at blive indenfor og læse en masse gode bøger. Frem med plaid og varm kakao og find en god krog, hvor I kan sidde sammen og læse.</div>
+<div>Her er nogle forslag til humoristiske læseoplevelser, I kan dele sammen voksne og børn. Bøgerne er rigtig gode til at blive læst højt. </div>
+<div> </div>
+<div><a href="https://randersbib.dk/ting/object/870970-basis%3A52527899">Skurkistan</a></div>
+<div>I et land hvor loven siger, at alle skal være skurke, er man måske den største skurk, hvis man nægter at overholde loven og altid opfører sig pænt? En sjov og skør historie for børn og voksne der holder af eventyr og ballade</div>
+<div> </div>
+<div><a href="https://randersbib.dk/ting/object/870970-basis%3A51238397">Frygt og Bæven og en mand på strømpesokker</a></div>
+<div>En historie om en følsom og temperamentsfuld dreng. Han er knyttet meget tæt til sin adoptivmor Kis og vil have hende for sig selv. Han har det meget svært, når nogen ringer for at tale med Kis. Da Ole Madsen en dag ringer på døren, har drengen svært ved at overgive sig og dele Kis med ham. </div>
+<div> </div>
+<div><a href="https://randersbib.dk/ting/object/870970-basis%3A28283326">Megasnyd og mælkesnot</a></div>
+<div>Brødrene Olfert og Olfert, Karl og Max, er 11 og 9 år og hinandens bedste venner. De har deres eget regelsæt og filosofiske tilgang til verden, og så er de fulde af gode ideer til skæg og ballade</div>
+<div> </div>
+<div><a href="https://randersbib.dk/ting/object/773000-katalog%3A28517173">Hvad fætter gør er altid det rigtige</a></div>
+<div>Osama hjælper til i sin fars kiosk. Bedstemoren sidder på en kasse cola i baglokalet, ser tv og storbander. Osama skal ud og sælge en tyggegummiautomat for at skaffe penge til kioskens strøm. Osama forhandler sig igennem Vesterbros mange tilbud med en charme og en naturlighed, for at vende tilbage til kiosken, hvor Dennis Diller er sikker på, at den står på skideballe.</div>
+<div> </div>
+<div><a href="https://randersbib.dk/ting/object/870970-basis%3A51259270">Vilde Wilma</a></div>
+<div>Den 6-årige Wilma er en egenrådig og frygtløs pige, som ikke finder sig i hvad som helst. Hun bor sammen med sin far, som er tålmodig, venlig og en anelse ubeslutsom. Man kommer helt automatisk til at tænke på Alfons Åbergs far. Læseren hører bl.a. om en telttur med faren, en tur på biblioteket og om en tur i svømmehallen, hvor det er ved at gå galt.</div>
+<div> </div>
+<div><a href="https://randersbib.dk/ting/object/870970-basis%3A29470057">Dennis' dramatiske dage : flødeskumsedderkoppen og andre røverhistorier</a></div>
+<div>Dennis er den gennemgående hovedperson, og det er hans mere eller mindre heldige uge, der er omdrejningspunktet for løjerne. Han møder en flødeskumsedderkop, bliver kidnappet som cirkusartist, får briller efter utallige baldrede ruder og bliver en helt efter en tur i svømmehallen. Bogen slutter, hvor den begynder med mandag morgen, og en ny skoleuge starter</div>
+<div> </div>
+<div><a href="https://randersbib.dk/ting/object/870970-basis%3A26265827">Moren som hersede sig ihjel</a></div>
+<div>Fridas og Ellens mor herser rundt med dem og faderen især om morgenen, indtil hun en dag falder død om i en snedrive. Så følger en tid med totalt kaos, for moderen var jo den, der holdt snor i alting. Til sidst griber skolen ind, og så får faderen hanket op i hverdagen. Men samtidig har moderen problemer i himlen, hvor englene er ved at gå i strejke over hendes herseri. Så hun bliver returneret med beskeden om, at der kun må herses 5 gange om dagen</div>
+<div> </div>
+<div>Alle bøgerne kan lånes på biblioteket. Vi ses/<a href="https://randersbib.dk/users/bbo">Bettina</a></div>
+<div> </div>
+<div> </div>
+<p>Oprindeligt skrevet af bbo, Randers Bibliotek.</p>]]></property>
+      <property type="string" name="teaser" title=""><![CDATA[Bliv inde og læs højt]]></property>
+      <property type="dateTime" name="creation" title=""><![CDATA[2017-01-12T13:43:36+01:00]]></property>
+      <property type="string" name="type" title=""><![CDATA[article]]></property>
+    </properties>
+    <hypermedia>
+      <link rel="self" href="http://bpi1.inlead.dk/node/item/58777a98c9ae97ba048b4582" title=""/>
+      <link rel="collection" href="http://bpi1.inlead.dk/node/collection" title=""/>
+    </hypermedia>
+  </item>
+  <item type="entity" name="noname">
+    <properties>
+      <property type="string" name="id" title=""><![CDATA[5877743cc9ae97b8048b4590]]></property>
+      <property type="dateTime" name="pushed" title=""><![CDATA[2017-01-12T13:19:08+01:00]]></property>
+      <property type="boolean" name="editable" title=""><![CDATA[1]]></property>
+      <property type="string" name="author" title=""><![CDATA[mkj]]></property>
+      <property type="string" name="agency_id" title=""><![CDATA[775100]]></property>
+      <property type="string" name="agency_name" title=""><![CDATA[Aarhus Kommunes Biblioteker]]></property>
+      <property type="boolean" name="agency_internal" title=""><![CDATA[1]]></property>
+      <property type="string" name="category" title=""><![CDATA[Film]]></property>
+      <property type="string" name="audience" title=""><![CDATA[Alle]]></property>
+      <property type="string" name="syndications" title=""><![CDATA[0]]></property>
+      <property type="string" name="title" title=""><![CDATA[Fredagsanbefaling]]></property>
+      <property type="string" name="body" title=""><![CDATA[<p>Adam Lerner er 27 og har et godt arbejde, en smukke kæreste og gode venner. Alt det vendes der op og ned på, da han bliver diagnosticeret med en alvorlig kræftsygdom (på internettet gives en overlevelsesrate på 50%). Forholdet til hans familie, kæreste og bedste ven sættes alle under pres, og ikke alle forhold kan klare presset fra en mulig dødsdom.<br />Manuskriptforfatteren Will Reiser byggede 50/50 på hans egen kamp mod kræft, som 25 årig. Filmen er instrueret af Jonathan Levine og Adam spilles af Joseph Gordon-Levitt. Seth Rogen, Anna Kendrick og Anjelica Huston medvirker også.</p>
+<p>
+</p><div class="media-youtube-video media-element file-default media-youtube-1">
+<iframe class="media-youtube-player" width="640" height="390" title="50 / 50 - Official Trailer [HD]" src="//www.youtube.com/embed/Xa--ea9P7P4?wmode=opaque" frameborder="0" allowfullscreen="">Video of 50 / 50 - Official Trailer [HD]</iframe></div>
+
+<p>Se filmen på <a href="http://www.filmstriben.dk/fjernleje/film/details.aspx?id=9000004094">filmstriben</a>.</p>
+<p> </p>
+<p>D. 10. januar ​åbnede Filmstribens nye hjemmeside officielt <a href="http://fjernleje.filmstriben.dk/">fjernleje.filmstriben.dk</a>.</p>
+<p>Der er også en ny  iOS app "<a href="https://itunes.apple.com/dk/app/filmstriben-next/id1099142620?l=da&mt=8">Filmstriben Next</a>". De gamle apps "Filmstriben I lænestolen" og "Filmstriben På biblioteket" virke ikke efter den 10. januar (en infotekst i de gamle apps vil henvise til den nye app).</p>
+<p><em>Filmstriben understøttes på nuværende tidspunkt ikke på Android-platforme, men DBC forventer i første kvartal 2017 at lancere en Android-app med bl.a. <strong>Chromecast</strong>-funktionalitet, samtidig med at <strong>Airplay </strong>tilføjes i iOS-appen.</em></p>
+<p><em>Samtidig forventes en ny HTML5-baseret web-player lanceret til erstatning af Silverlight-playeren, <strong>hvilket vil gøre det muligt at benytte Filmstriben i alle browsere</strong>.</em></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p>Oprindeligt skrevet af Aarhus Kommunes Biblioteker.</p>]]></property>
+      <property type="string" name="teaser" title=""><![CDATA[Vi anbefaler en god film fra Filmstriben – en slags komedie om at få kræft]]></property>
+      <property type="dateTime" name="creation" title=""><![CDATA[2017-01-12T13:19:06+01:00]]></property>
+      <property type="string" name="type" title=""><![CDATA[article]]></property>
+      <property type="string" name="material" title=""><![CDATA[870970-basis:29090998]]></property>
+    </properties>
+    <hypermedia>
+      <link rel="self" href="http://bpi1.inlead.dk/node/item/5877743cc9ae97b8048b4590" title=""/>
+      <link rel="collection" href="http://bpi1.inlead.dk/node/collection" title=""/>
+    </hypermedia>
+  </item>
+  <item type="entity" name="noname">
+    <properties>
+      <property type="string" name="id" title=""><![CDATA[58774be4c9ae9732058b4579]]></property>
+      <property type="dateTime" name="pushed" title=""><![CDATA[2017-01-12T10:27:00+01:00]]></property>
+      <property type="boolean" name="editable" title=""><![CDATA[1]]></property>
+      <property type="string" name="author" title=""><![CDATA[Niels]]></property>
+      <property type="string" name="agency_id" title=""><![CDATA[150015]]></property>
+      <property type="string" name="agency_name" title=""><![CDATA[eReolen]]></property>
+      <property type="boolean" name="agency_internal" title=""><![CDATA[0]]></property>
+      <property type="string" name="category" title=""><![CDATA[Litteratur]]></property>
+      <property type="string" name="audience" title=""><![CDATA[Alle]]></property>
+      <property type="string" name="syndications" title=""><![CDATA[0]]></property>
+      <property type="string" name="title" title=""><![CDATA[Baseret på en sand historie]]></property>
+      <property type="string" name="body" title=""><![CDATA[<p>Forfatteren har brug for hjælp. Oven på succesen med en selvbiografisk bestseller er hun udkørt og ramt af skriveblokade. I denne tilstand møder hun den mystiske kvinde L, som hurtigt indtager en eksklusiv plads i hendes liv og hverdag. Men hvem er L, og har hun udelukkende gode intentioner på forfatterens vegne?</p>
+<p>Delphine de Vigan fik sit store gennembrud med den selvbiografiske "Alt må vige for natten", som udkom på dansk i 2013. Vigans mor begik selvmord i 2008, og i romanen forsøgte hun gennem interviews og erindringer at begribe morens liv og død. Efter denne meget personlige familiekrønike kom det derfor som en overraskelse for de fleste, da Vigan sidste år udkom med "Baseret på en sand historie", som er en nervepirrende psykologisk thriller - med litterære ambitioner. Bogen er et vellykket studie i paranoia og følelsesmæssig afhængighed, og samtidig leverer den et væsentligt bidrag til debatten om selvbiografisk fiktion.</p>
+<p>Her finder du "Baseret på en sand historie" i selskab med en række andre gode lydbøger, der eksemplificerer og udfordrer den selvbiografiske genre.</p>
+<p>Oprindeligt skrevet af eReolen.</p>]]></property>
+      <property type="string" name="teaser" title=""><![CDATA[]]></property>
+      <property type="dateTime" name="creation" title=""><![CDATA[2017-01-12T10:26:58+01:00]]></property>
+      <property type="string" name="type" title=""><![CDATA[article]]></property>
+      <property type="string" name="material" title=""><![CDATA[870970-basis:52785340]]></property>
+      <property type="string" name="material" title=""><![CDATA[870970-basis:50552497]]></property>
+      <property type="string" name="material" title=""><![CDATA[870970-basis:28480636]]></property>
+      <property type="string" name="material" title=""><![CDATA[870970-basis:28942419]]></property>
+      <property type="string" name="material" title=""><![CDATA[870970-basis:29883556]]></property>
+      <property type="string" name="material" title=""><![CDATA[870970-basis:51430395]]></property>
+      <property type="string" name="material" title=""><![CDATA[870970-basis:29980608]]></property>
+      <property type="string" name="material" title=""><![CDATA[870970-basis:52021731]]></property>
+    </properties>
+    <hypermedia>
+      <link rel="self" href="http://bpi1.inlead.dk/node/item/58774be4c9ae9732058b4579" title=""/>
+      <link rel="collection" href="http://bpi1.inlead.dk/node/collection" title=""/>
+    </hypermedia>
+  </item>
+</bpi>

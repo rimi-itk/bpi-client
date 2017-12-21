@@ -29,11 +29,26 @@ Install dev dependencies:
 composer install
 ```
 
-Run all unit tests:
+## Unit tests
+
+Run unit tests:
 
 ```
-./vendor/bin/phpunit
+./vendor/bin/phpunit Tests/Unit/
 ```
+
+## Web service tests
+
+These tests must be run against an actual BPI web service (see https://github.com/inleadmedia/rest-api) on the [`develop`](https://github.com/inleadmedia/rest-api/tree/develop) branch.
+
+First, load fixtures in the BPI web service and create the schema (!):
+
+```
+app/console doctrine:mongodb:fixtures:load
+app/console doctrine:mongodb:schema:create
+```
+
+When running the web service tests, the web service endpoint and user credentials (api key and secret) must be specified using environment variables. Adapt the example to match your actual setup.
 
 Run web service tests:
 
