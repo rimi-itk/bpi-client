@@ -1,4 +1,5 @@
 <?php
+
 namespace Bpi\Sdk\Item;
 
 /**
