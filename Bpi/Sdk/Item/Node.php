@@ -23,17 +23,17 @@ class Node extends BaseItem
         if (!$this->assets) {
             $assets = array();
 
-            foreach ($this->element->xpath('assets/file') as $asset) {
-                $type = (string)$asset['type'];
-                if (!isset($assets[$type])) {
-                    $assets[$type] = array();
-                }
+            foreach ($this->element->xpath('//property[@type="asset"]') as $asset) {
+                $nameAttribute = (string) $asset['name'];
+                $tagValue = (string) $asset;
+
                 // Convert attributes to associative array.
                 $properties = array();
                 foreach ($asset->attributes() as $name => $value) {
                     $properties[$name] = (string)$value;
                 }
-                $assets[$type][] = $properties;
+                $properties['path'] = $tagValue;
+                $assets[$nameAttribute][] = $properties;
             }
 
             $this->assets = $assets;
