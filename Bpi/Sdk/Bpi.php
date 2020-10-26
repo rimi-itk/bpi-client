@@ -4,6 +4,7 @@ use Bpi\Sdk\Authorization;
 use Bpi\Sdk\Exception\SDKException;
 use Bpi\Sdk\Item\BaseItem;
 use Bpi\Sdk\Item\Node;
+use Bpi\Sdk\Item\StatisticsExtendedItem;
 use Bpi\Sdk\NodeList;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
@@ -138,6 +139,33 @@ class Bpi
         $element = new \SimpleXMLElement((string)$result->getBody());
 
         return new BaseItem($element->item[0]);
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     * @param int $amount
+     * @param string $action
+     * @param string $aggregate
+     *
+     * @return \Bpi\Sdk\Item\StatisticsExtendedItem
+     *
+     * @throws SDKException
+     */
+    public function getStatisticsExtended(\DateTime $from, \DateTime $to, $amount = 5, $action = 'syndicate', $aggregate = 'agency', $ownerAgency = []) {
+        $query = [
+            'from' => $from->format(DATE_ISO8601),
+            'to' => $to->format(DATE_ISO8601),
+            'amount' => $amount,
+            'action' => $action,
+            'aggregateField' => $aggregate,
+            'contentOwnerAgency' => implode(',', $ownerAgency),
+        ];
+
+        $result = $this->request('GET', 'statisticsExtended', ['query' => $query]);
+        $element = new \SimpleXMLElement((string) $result->getBody());
+
+        return new StatisticsExtendedItem($element);
     }
 
     /**
