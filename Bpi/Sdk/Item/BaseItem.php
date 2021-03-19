@@ -43,6 +43,12 @@ class BaseItem
                     $properties[$name] = $value;
                 }
             };
+
+            if (isset($properties['material'])) {
+              // Force material to be an array.
+              $properties['material'] = (array)$properties['material'];
+            }
+
             $this->properties = $properties;
         }
 
